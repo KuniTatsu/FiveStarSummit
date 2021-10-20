@@ -13,10 +13,13 @@ public:
 
     bool changeSceneFlag=false;
 
+    //新しく一日分のセルを作る関数
     DayCell* createDayCell(int cellnum);
 
+    //一日経過すると一つセルを消去する
     void CellDelete();
   
+    //すべてのセルを入れておくリスト
     std::list<DayCell*> cell_;
 
     //一番左の画像のx座標
@@ -33,24 +36,18 @@ public:
         {mass_x + mass_width * 4, 50, 0},
         {mass_x + mass_width * 5, 50, 0},
         {mass_x + mass_width * 6, 50, 0},
-
-        /*{30, 50, 0},
-        {100, 50, 0},
-        {170, 50, 0},
-        {240, 50, 0},
-        {310, 50, 0},
-        {380, 50, 0},
-        {450, 50, 0},*/
-
     };
 
+    //初期シークエンスを設定
     t2k::Sequence<TrainingScene*> main_sequence_ =
         t2k::Sequence<TrainingScene*>(this, &TrainingScene::Seq_Training_Main);
 
     TrainingScene();
     ~TrainingScene();
 
+    //メインシークエンス 各処理へ移行する
     bool Seq_Training_Main(const float deltatime);
+    //日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
     bool Seq_LoopDay(const float deltatime);
 
     int loopdaycount = 0;
@@ -63,5 +60,5 @@ public:
     void Draw();    //メニュー画面、背景画像、タイトル文字の描画
 
 private:
-
+    int time_ = 0;
 };

@@ -17,7 +17,10 @@ public:
 
 	void MakeCharacter();
 
-	void StatusSet(int setType);
+	//ステータス変化関数
+	//setType→どのステータスを上げるか
+	//valueEx→ステータス上昇係数 1→等倍(+10*1),2→倍(+10*2),3→3倍(+10*3)
+	void StatusSet(int setType,int valueEx);
 
 	void Update();
 	void Draw();

@@ -8,6 +8,8 @@ class EventManager {
 
 public:
 
+	EventManager();
+
 	//std::list<EventManager*>event_;
 	std::vector< std::vector<std::string> > blue_event;
 	std::vector< std::vector<std::string> > red_event;
@@ -19,7 +21,17 @@ public:
 	//DayCellが作られるたびに呼ぶイベントセット関数
 	int setEvent(int eventType);
 
+
+	//0→ステータス上昇,
+	//1→やる気パラメータup,
+	//2→特殊能力獲得
+	//3→アイテム獲得
+	//...
 	void DoEvent(int eventID);
+
+
+private:
+	int Random(int rangeMax);
 
 
 

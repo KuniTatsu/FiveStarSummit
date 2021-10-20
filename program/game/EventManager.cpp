@@ -4,9 +4,18 @@
 #include"DxLib.h"
 #include"../library//t2klib.h"
 #include"GameManager.h"
+#include "DxLib.h"
+#include<time.h>
+#include <iostream>
 
 extern GameManager* gManager;
 
+
+EventManager::EventManager()
+{
+	SRand(time(0));
+
+}
 
 void EventManager::loadEvent()
 {
@@ -36,19 +45,30 @@ int EventManager::setEvent(int eventType)
 void EventManager::DoEvent(int eventID)
 {
 	if (0 == eventID) {
-
-		//チーム全員の攻撃力が上がる
-		gManager->StatusSet(0);
-
-	}
-	else if (1 == eventID) {
-
-
-
-
+		//ここでどのステータスが上がるかランダムで決定する
+		int statusType = Random(6);
+		//ステータスが上がる関数を呼び出す
+		//あんまり良くないので今後変更予定
+		gManager->StatusSet(statusType, 1);
 
 	}
+	else {
+
+		std::cout << "イベント" << "%d\n" << eventID << "が実行されたよ" << std::endl;
 
 
 
+	}
+
+
+
+}
+
+int EventManager::Random(int rangeMax)
+{
+	//0からrangeMaxまでの数の乱数を返す
+	int hoge = GetRand(rangeMax);
+
+
+	return hoge;
 }

@@ -35,8 +35,18 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	todo :DayCellにイベントidをもたせる,イベントidを読んで実行する関数を作る
 	//	→3番目にプレイヤーを常に置くため
 
-	if (loopdaycount != 0) {
-		main_sequence_.change(&TrainingScene::Seq_Training_Main);
+
+
+
+	//ループ日数決定後にループが開始し、0になるまでここが回る
+	if (loopdaycount != 0) 
+	{
+		//一日経過する間隔
+		time_++;
+		if (time_ > 40) {
+			time_ = 0;
+			main_sequence_.change(&TrainingScene::Seq_LoopDay);
+		}
 	}
 	else {
 
@@ -51,7 +61,16 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 		int event = (*it)->eventID;
 		//イベント実行関数->どこに置くか考え中
-		// DoEvent(event);
+		eManager->DoEvent(event);
+
+		//ループ日数を決定する所
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+
+			//経過させる日数を出す
+			loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
+			main_sequence_.change(&TrainingScene::Seq_LoopDay);
+		}
+
 	}
 
 
@@ -107,6 +126,8 @@ void TrainingScene::CellDelete()
 
 void TrainingScene::Update()
 {
+	//--------------debug------------------------//
+
 	//本来はカードを選ぶ->カードの進行日数が決まる->変数に代入->シーケンス変数が0になるまで止まるシーケンス→動くシーケンス→止まるシーケンスを繰り返す
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		//新しく1つDayCellを作る
@@ -144,7 +165,7 @@ void TrainingScene::Draw()
 	//------debug------
 	int k = 0;
 	for (auto c : cell_) {
-		
+
 		DrawStringEx(100, 400 + k * 50, -1, "%d", c->eventID);
 		++k;
 	}

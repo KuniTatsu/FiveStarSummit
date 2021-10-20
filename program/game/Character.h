@@ -36,7 +36,11 @@ public:
 		int VSINFIGH;	//対近距離の強さ 0:G,1:F,2:E,3:D,4:C,5:B,6:A
 		int VSRANGE;	//対遠距離の強さ 0:G,1:F,2:E,3:D,4:C,5:B,6:A
 //---------特殊能力-------------------1
-		//std::vector<int> SKILL;	//所持スキル
+		std::vector<int> SKILL;	//所持スキル
+//---------変動値-------------------1
+	//悪い--------------->良い
+		//0...1...2...3...4
+		int tension=2;//default
 
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
