@@ -1,7 +1,7 @@
 #pragma once
 #include<vector>
 class SceneManager;
-class Character;
+class Chara;
 
 class GameManager {
 
@@ -11,8 +11,9 @@ public:
 	~GameManager();
 
 	SceneManager* sManager = nullptr;
+	Chara* chara_ = nullptr;
 
-	std::vector<Character> chara = {};
+	std::vector<Chara*> chara = {};
 
 	void MakeCharacter();
 

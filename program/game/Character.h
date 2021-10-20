@@ -2,11 +2,11 @@
 #include<string>
 #include<vector>
 
-class Character {
+class Chara {
 
 public:
-	Character();
-	~Character();
+	Chara();
+	~Chara();
 
 	typedef struct {
 		std::string name_;	//–¼‘O
@@ -40,7 +40,6 @@ public:
 
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
-
 
 
 };

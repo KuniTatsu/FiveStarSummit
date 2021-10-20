@@ -142,9 +142,11 @@ void TrainingScene::Draw()
 		cell->Draw();
 	}
 	//------debug------
+	int k = 0;
 	for (auto c : cell_) {
-		int i = 0;
-		DrawStringEx(100, 400 + i * 50, -1, "%d", c->eventID);
+		
+		DrawStringEx(100, 400 + k * 50, -1, "%d", c->eventID);
+		++k;
 	}
 
 

@@ -4,8 +4,9 @@
 //playerdata = new SaveData_t;
 //*playerdata = { "プレイヤー",100.0f,100.0f , 10/*1000*/,10, 0,0, 1,1,0,0,0 };
 
-Character::Character()
+Chara::Chara()
 {
+
 	charadata = new SaveData_t;
 
 	//実際は生成時にランダムで値を決める
@@ -15,9 +16,10 @@ Character::Character()
 					 0, 0, 0, 0, 0, 0, 0,
 					0,0,0,0
 		/*{}*/ };
+
 }
 
-Character::~Character()
+Chara::~Chara()
 {
 
 
