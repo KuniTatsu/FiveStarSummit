@@ -24,7 +24,7 @@ void GameManager::MakeCharacter()
 	chara.emplace_back(chara_);
 }
 
-void GameManager::StatusSet(int setType, int valueEx)
+void GameManager::StatusSet(int setType, int value)
 {
 	//‚à‚µATACKã¸‚³‚¹‚½‚¢‚È‚ç
 	//0:ATACK,...
@@ -36,43 +36,43 @@ void GameManager::StatusSet(int setType, int valueEx)
 	//int VITALITY;	//Ž‹v—Í
 	if (0 == setType) {
 		for (auto c : chara) {
-			c->charadata->ATACK += 10 * valueEx;
+			c->charadata->ATACK += value;
 		}
 	}
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
-			c->charadata->DEFENCE += 10 * valueEx;
+			c->charadata->DEFENCE += value;
 		}
 	}
 	//MAGIATACK
 	else if (2 == setType) {
 		for (auto c : chara) {
-			c->charadata->MAGIATACK += 10 * valueEx;
+			c->charadata->MAGIATACK += value;
 		}
 	}
 	//MAGIDEFENCE
 	else if (3 == setType) {
 		for (auto c : chara) {
-			c->charadata->MAGIDEFENCE += 10 * valueEx;
+			c->charadata->MAGIDEFENCE += value;
 		}
 	}
 	//SPEED
 	else if (4 == setType) {
 		for (auto c : chara) {
-			c->charadata->SPEED += 10 * valueEx;
+			c->charadata->SPEED += value;
 		}
 	}
 	//MIND
 	else if (5 == setType) {
 		for (auto c : chara) {
-			c->charadata->MIND += 10 * valueEx;
+			c->charadata->MIND += value;
 		}
 	}
 	//VITALITY
 	else if (6 == setType) {
 		for (auto c : chara) {
-			c->charadata->VITALITY += 10 * valueEx;
+			c->charadata->VITALITY += value;
 
 		}
 	}

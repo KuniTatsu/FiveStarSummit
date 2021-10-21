@@ -84,6 +84,7 @@
     <ClCompile Include="program\game\DayCard.cpp" />
     <ClCompile Include="program\game\EventManager.cpp" />
     <ClCompile Include="program\game\Character.cpp" />
+    <ClCompile Include="program\game\Event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="program\support\FrameRateController.h">
@@ -173,5 +174,6 @@
     <ClInclude Include="program\game\DayCard.h" />
     <ClInclude Include="program\game\EventManager.h" />
     <ClInclude Include="program\game\Character.h" />
+    <ClInclude Include="program\game\Event.h" />
   </ItemGroup>
 </Project>

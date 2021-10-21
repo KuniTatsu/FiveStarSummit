@@ -17,6 +17,7 @@
     <ClCompile Include="program\game\DayCard.cpp" />
     <ClCompile Include="program\game\DayCell.cpp" />
     <ClCompile Include="program\game\Effect.cpp" />
+    <ClCompile Include="program\game\Event.cpp" />
     <ClCompile Include="program\game\EventManager.cpp" />
     <ClCompile Include="program\game\GameManager.cpp" />
     <ClCompile Include="program\game\game_main.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="program\game\DayCard.h" />
     <ClInclude Include="program\game\DayCell.h" />
     <ClInclude Include="program\game\Effect.h" />
+    <ClInclude Include="program\game\Event.h" />
     <ClInclude Include="program\game\EventManager.h" />
     <ClInclude Include="program\game\GameManager.h" />
     <ClInclude Include="program\game\game_main.h" />

@@ -89,13 +89,16 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			//   2:loopdaycountが0になったときに色を取得してイベントリストを決め、ランダムでイベントを設定する
 
 		int event = (*it)->eventID;
-		
+
 		//イベント実行関数->どこに置くか考え中
 		//今は何回も呼ばれてしまうので一回だけ呼ばれるように変更する
 			//シークエンスをもう一つ作るか、bool型変数で制御するか
 			//debugではbool型で制御する
 		if (doneEvent == false) {
-			eManager->DoEvent(event);
+			//eventIDは0,1,2
+			int size = eManager->eventList[eventID].size();
+			int rand = GetRand(size - 1);
+			eManager->DoEvent(event,rand);
 			doneEvent = true;
 		}
 
@@ -137,14 +140,15 @@ DayCell* TrainingScene::createDayCell(int cellnum) {
 
 	int eventType = 0;
 
+	//ここいらなくなる
 	if (cellnum == 0) {
-		eventType = GetRand(3);
+		eventType = GetRand(7);
 	}
 	else if (cellnum == 1) {
-		eventType = GetRand(3) + 4;
+		eventType = GetRand(6) + 8;
 	}
 	else if (cellnum == 2) {
-		eventType = GetRand(3) + 8;
+		eventType = GetRand(7) + 15;
 	}
 
 	//eManager->setEvent(eventType);
@@ -229,4 +233,5 @@ void TrainingScene::Draw()
 
 	DrawStringEx(200, 400, -1, "イベントIDは%d", eManager->eventdebugID);
 
+	DrawRotaGraph(190, 50, 1, 0, playergh[2], true);
 }
