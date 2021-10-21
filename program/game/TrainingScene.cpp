@@ -17,6 +17,8 @@ TrainingScene::TrainingScene()
 
 	SRand(time(0));
 
+	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
+
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < 7; ++k) {
 		int random = GetRand(2);
@@ -39,14 +41,29 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		sequenceID = 0;
 	}
 
+#if 0
+	if (isnowLoop == false) {
+		DrawStringEx(200, 500, -1, "日数を入力してね");
+		std::cin >> loopdaycount;
+
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+			main_sequence_.change(&TrainingScene::Seq_LoopDay);
+			isnowLoop = true;
+		}
+	}
+
+#endif
+
 	//ループ日数を決定する所
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
 		isnowLoop = true;
+		doneEvent = false;
 		//経過させる日数を出す
 		loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
 		main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
 	}
+
 
 	//DrawStringEx(200, 350, -1, "Seq_Training_Main");
 	//ループ日数決定後にループが開始し、0になるまでここが回る
@@ -72,8 +89,15 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			//   2:loopdaycountが0になったときに色を取得してイベントリストを決め、ランダムでイベントを設定する
 
 		int event = (*it)->eventID;
+		
 		//イベント実行関数->どこに置くか考え中
-		eManager->DoEvent(event);
+		//今は何回も呼ばれてしまうので一回だけ呼ばれるように変更する
+			//シークエンスをもう一つ作るか、bool型変数で制御するか
+			//debugではbool型で制御する
+		if (doneEvent == false) {
+			eManager->DoEvent(event);
+			doneEvent = true;
+		}
 
 		////ループ日数を決定する所
 		//if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
@@ -84,8 +108,6 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		//}
 		isnowLoop = false;
 	}
-
-
 	return true;
 }
 
@@ -96,8 +118,6 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
 	}
-	
-
 	//ここにDayCellを追加したり消したりする処理を入れる
 	//新しく1つDayCellを作る
 	int random = GetRand(2);
@@ -152,8 +172,6 @@ void TrainingScene::CellDelete()
 void TrainingScene::Update()
 {
 	main_sequence_.update(gManager->deitatime_);
-	
-
 	//--------------debug------------------------//
 
 #if 0
@@ -183,10 +201,6 @@ void TrainingScene::Update()
 			delete hoge;
 		}
 	}
-
-
-
-
 }
 
 void TrainingScene::Draw()
@@ -214,7 +228,5 @@ void TrainingScene::Draw()
 	}
 
 	DrawStringEx(200, 400, -1, "イベントIDは%d", eManager->eventdebugID);
-
-
 
 }

@@ -19,7 +19,4 @@ public:
 
 	void Draw();
 
-
-
-
 };

@@ -12,6 +12,7 @@ public:
 
 
     bool changeSceneFlag=false;
+    int playergh[4] = {};
 
     //V‚µ‚­ˆê“ú•ª‚ÌƒZƒ‹‚ğì‚éŠÖ”
     DayCell* createDayCell(int cellnum);
@@ -63,4 +64,5 @@ private:
     int time_ = 0;
     int sequenceID=0;
     bool isnowLoop = false;
+    bool doneEvent = false;
 };

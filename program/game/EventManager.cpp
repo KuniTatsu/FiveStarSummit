@@ -14,7 +14,6 @@ extern GameManager* gManager;
 EventManager::EventManager()
 {
 	SRand(time(0));
-
 }
 
 void EventManager::loadEvent()
@@ -27,8 +26,6 @@ void EventManager::loadEvent()
 
 int EventManager::setEvent(int eventType)
 {
-
-
 	for (int i = 0; i < 12; ++i) {
 		if (i == eventType) {
 			return i;
@@ -38,8 +35,6 @@ int EventManager::setEvent(int eventType)
 			continue;
 		}
 	}
-
-
 }
 
 void EventManager::DoEvent(int eventID)

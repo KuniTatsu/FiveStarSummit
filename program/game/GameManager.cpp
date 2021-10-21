@@ -10,7 +10,7 @@
 GameManager::GameManager()
 {
 	//sManager = new SceneManager();
-	
+	deitatime_ = 0;
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 }
 
