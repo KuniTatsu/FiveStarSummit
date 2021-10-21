@@ -51,7 +51,7 @@ public:
     bool Seq_LoopDay(const float deltatime);
 
     int loopdaycount = 0;
-
+    
 
 
 
@@ -61,4 +61,6 @@ public:
 
 private:
     int time_ = 0;
+    int sequenceID=0;
+    bool isnowLoop = false;
 };

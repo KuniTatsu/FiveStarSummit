@@ -50,13 +50,15 @@ void EventManager::DoEvent(int eventID)
 		//ステータスが上がる関数を呼び出す
 		//あんまり良くないので今後変更予定
 		gManager->StatusSet(statusType, 1);
-
+		//------debug------
+		eventdebugID = eventID;
+		//-------------------
 	}
 	else {
+		//------debug------
+		eventdebugID = eventID;
 
-		std::cout << "イベント" << "%d\n" << eventID << "が実行されたよ" << std::endl;
-
-
+		//std::cout << "イベント" << "%d\n" << eventID << "が実行されたよ" << std::endl;
 
 	}
 

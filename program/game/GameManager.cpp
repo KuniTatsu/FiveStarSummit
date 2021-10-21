@@ -1,12 +1,16 @@
 #include "GameManager.h"
 #include"SceneManager.h"
 #include"Character.h"
-
+#include"DxLib.h"
+#include "../library/t2klib.h"
+#include"../support/Support.h"
+#include<string>
 
 
 GameManager::GameManager()
 {
 	//sManager = new SceneManager();
+	
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 }
 
@@ -69,9 +73,36 @@ void GameManager::StatusSet(int setType, int valueEx)
 	else if (6 == setType) {
 		for (auto c : chara) {
 			c->charadata->VITALITY += 10 * valueEx;
+
 		}
 	}
 	//else if
+
+}
+
+void GameManager::CharactorStatusDraw()
+{
+	int i = 0;
+	for (auto c : chara) {
+		std::string name = c->charadata->name_;
+		int ATK = c->charadata->ATACK;
+		int DEF = c->charadata->DEFENCE;
+		int MATK = c->charadata->MAGIATACK;
+		int MDEF = c->charadata->MAGIDEFENCE;
+		int SPEED = c->charadata->SPEED;
+		int MIND = c->charadata->MIND;
+		int VIT = c->charadata->VITALITY;
+		DrawStringEx(500 + i * 200, 200, -1, "–¼‘O:%s", name.c_str());
+		DrawStringEx(500 + i * 200, 240, -1, "UŒ‚—Í:%d", ATK);
+		DrawStringEx(500 + i * 200, 280, -1, "–hŒä—Í:%d", DEF);
+		DrawStringEx(500 + i * 200, 320, -1, "–‚UŒ‚—Í:%d", MATK);
+		DrawStringEx(500 + i * 200, 360, -1, "–‚–hŒä—Í:%d", MDEF);
+		DrawStringEx(500 + i * 200, 400, -1, "‘¬“x:%d", SPEED);
+		DrawStringEx(500 + i * 200, 440, -1, "Œ«‚³:%d", MIND);
+		DrawStringEx(500 + i * 200, 480, -1, "‹v—Í:%d", VIT);
+
+		++i;
+	}
 
 }
 
@@ -83,4 +114,6 @@ void GameManager::Update()
 void GameManager::Draw()
 {
 	SceneManager::Render();
+	if (chara.empty())return;
+	CharactorStatusDraw();
 }

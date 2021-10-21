@@ -29,10 +29,11 @@ public:
 	//...
 	void DoEvent(int eventID);
 
-
+	int eventdebugID = 0;
 private:
 	int Random(int rangeMax);
 
+	
 
 
 };
