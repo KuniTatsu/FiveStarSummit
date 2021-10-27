@@ -15,6 +15,8 @@ extern GameManager* gManager;
 EventManager::EventManager()
 {
 	SRand(time(0));
+	//予めイベントリストの2次元配列のうちの最初のカラムを3つ(0,1,2)作っておく
+	//eventList[0][],eventList[1][],eventList[2][] が作られる
 	eventList.resize(3);
 
 	loadEvent();
@@ -32,6 +34,7 @@ void EventManager::loadEvent()
 	event_all = t2k::loadCsv("Csv/event.csv");
 	for (int i = 1; i < event_all.size(); ++i) {
 
+		//excelから読み取った列を一つずつ変数に格納→イベントクラスを生成するときの引数にぶち込む
 		//id
 		int a = std::atoi(event_all[i][0].c_str());
 		//eventType:0,1,2
@@ -43,6 +46,7 @@ void EventManager::loadEvent()
 
 		Event* event = new Event(a, b, c, d, event_all[i][4]);
 
+		//eventtypeごとにリストに格納
 		eventList[b].emplace_back(event);
 
 		/*int size = eventList[0].size();
@@ -67,35 +71,11 @@ int EventManager::setEvent(int eventType)
 	}
 }
 //イベントを実行する関数 いずれイベントクラスのメンバーを呼び出すようにしたい
-void EventManager::DoEvent(int eventID,int randomnum)
+void EventManager::DoEvent(int eventID, int randomnum)
 {
-	//ここを移植する
-	//int size = eventList[eventID].size();
-	//int rand = GetRand(size - 1);
-
-
+	//eventID:0,1,2 randomnum:eventnumber
+	//どのイベントを行うかexcelから決定する
 	eventList[eventID][randomnum]->run_Event();
-
-
-	//if (0 == eventID) {
-	//	//ここでどのステータスが上がるかランダムで決定する
-	//	int statusType = Random(6);
-	//	//ステータスが上がる関数を呼び出す
-	//	//あんまり良くないので今後変更予定
-	//	gManager->StatusSet(statusType, 1);
-	//	//------debug------
-	//	eventdebugID = eventID;
-	//	//-------------------
-	//}
-	//else {
-	//	//------debug------
-	//	eventdebugID = eventID;
-
-	//	//std::cout << "イベント" << "%d\n" << eventID << "が実行されたよ" << std::endl;
-
-	//}
-
-
 
 }
 

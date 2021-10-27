@@ -96,7 +96,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			//debugではbool型で制御する
 		if (doneEvent == false) {
 			//eventIDは0,1,2
-			int size = eManager->eventList[eventID].size();
+			int size = eManager->eventList[event].size();
 			int rand = GetRand(size - 1);
 			eManager->DoEvent(event,rand);
 			doneEvent = true;
@@ -138,24 +138,9 @@ DayCell* TrainingScene::createDayCell(int cellnum) {
 	//cellnum:0→青,1→赤,2→白
 	DayCell* new_obj = new DayCell(cellnum);
 
-	int eventType = 0;
-
-	//ここいらなくなる
-	if (cellnum == 0) {
-		eventType = GetRand(7);
-	}
-	else if (cellnum == 1) {
-		eventType = GetRand(6) + 8;
-	}
-	else if (cellnum == 2) {
-		eventType = GetRand(7) + 15;
-	}
-
-	//eManager->setEvent(eventType);
-
 	//DayCell自体のeventIDを決定する
-	//ここいる？？？？？？？？
-	new_obj->eventID = eManager->setEvent(eventType);
+
+	new_obj->eventID = eManager->setEvent(cellnum);
 
 	cell_.emplace_back(new_obj);
 	return new_obj;
