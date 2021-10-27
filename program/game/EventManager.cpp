@@ -58,18 +58,30 @@ void EventManager::loadEvent()
 
 int EventManager::setEvent(int eventType)
 {
+	//0->5 =>0
+	//6->8 =>1
+	//9->15 =>2
 
 	//ここ後で変える→受け取ったイベントタイプを元に、excelから読み込んだイベントに振り分けて返す
-
-	for (int i = 0; i < 12; ++i) {
-		if (i == eventType) {
-			return i;
-
-		}
-		else {
-			continue;
-		}
+	if (0 <= eventType && eventType <= 5) {
+		return 0;
 	}
+	else if (6 <= eventType && eventType <= 8) {
+		return 1;
+	}
+	else if (9 <= eventType && eventType <= 15) {
+		return 2;
+	}
+
+	//for (int i = 0; i < 15; ++i) {
+	//	if (i == eventType) {
+	//		return i;
+
+	//	}
+	//	else {
+	//		continue;
+	//	}
+	//}
 }
 //イベントを実行する関数 いずれイベントクラスのメンバーを呼び出すようにしたい
 void EventManager::DoEvent(int eventID, int randomnum)

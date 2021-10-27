@@ -36,42 +36,49 @@ void GameManager::StatusSet(int setType, int value)
 	//int VITALITY;	//Ž‹v—Í
 	if (0 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->ATACK <= 0)return;
 			c->charadata->ATACK += value;
 		}
 	}
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->DEFENCE <= 0)return;
 			c->charadata->DEFENCE += value;
 		}
 	}
 	//MAGIATACK
 	else if (2 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->MAGIATACK <= 0)return;
 			c->charadata->MAGIATACK += value;
 		}
 	}
 	//MAGIDEFENCE
 	else if (3 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->MAGIDEFENCE <= 0)return;
 			c->charadata->MAGIDEFENCE += value;
 		}
 	}
 	//SPEED
 	else if (4 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->SPEED <= 0)return;
 			c->charadata->SPEED += value;
 		}
 	}
 	//MIND
 	else if (5 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->MIND <= 0)return;
 			c->charadata->MIND += value;
 		}
 	}
 	//VITALITY
 	else if (6 == setType) {
 		for (auto c : chara) {
+			if (c->charadata->VITALITY <= 0)return;
 			c->charadata->VITALITY += value;
 
 		}
@@ -79,7 +86,7 @@ void GameManager::StatusSet(int setType, int value)
 	//else if
 
 }
-
+//debug
 void GameManager::CharactorStatusDraw()
 {
 	int i = 0;

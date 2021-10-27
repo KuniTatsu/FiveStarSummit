@@ -8,6 +8,7 @@
 #include <iostream>
 #include"GameManager.h"
 #include"Event.h"
+#include"DayCard.h"
 
 extern GameManager* gManager;
 
@@ -22,8 +23,11 @@ TrainingScene::TrainingScene()
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < 7; ++k) {
-		int random = GetRand(2);
+		int random = GetRand(15);
 		createDayCell(random);
+	}
+	for (int k = 0; k < 5; ++k) {
+		createDayCard();
 	}
 }
 
@@ -35,8 +39,7 @@ TrainingScene::~TrainingScene()
 bool TrainingScene::Seq_Training_Main(const float deltatime)
 {
 	//loopdaycountが0でなければシークエンスをLoopDayにする
-	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	todo :DayCellにイベントidをもたせる,イベントidを読んで実行する関数を作る
-	//	→3番目にプレイヤーを常に置くため
+	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	
 
 	if (main_sequence_.isStart()) {
 		sequenceID = 0;
@@ -60,9 +63,22 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		isnowLoop = true;
 		doneFirstEvent = true;
 		doneEvent = false;
+
+		//*********Debug******************//
 		//経過させる日数を出す
 		loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
+		//*********************************//
+
+		//現在選択中のカードの経過日数を読み込む
+		//loopdaycountに代入
+
+
+
+
+
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
+
+		//カードが持ち上がり、拡大して一定以上の大きさになると消えるシークエンスをはさみたい
 		main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
 	}
@@ -93,10 +109,6 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 		int event = (*it)->eventID;
 
-		//イベント実行関数->どこに置くか考え中
-		//今は何回も呼ばれてしまうので一回だけ呼ばれるように変更する
-			//シークエンスをもう一つ作るか、bool型変数で制御するか
-			//debugではbool型で制御する
 		if (doneEvent == false) {
 			//eventIDは0,1,2
 			int size = eManager->eventList[event].size();
@@ -115,15 +127,16 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			doneEvent = true;
 		}
 
-		////ループ日数を決定する所
-		//if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
-
-		//	//経過させる日数を出す
-		//	loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
-		//	main_sequence_.change(&TrainingScene::Seq_LoopDay);
-		//}
 		isnowLoop = false;
 	}
+	return true;
+}
+
+bool TrainingScene::Seq_CardDisappear(const float deltatime)
+{
+	//カードを大きくする
+
+	main_sequence_.change(&TrainingScene::Seq_LoopDay);
 	return true;
 }
 
@@ -136,7 +149,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	}
 	//ここにDayCellを追加したり消したりする処理を入れる
 	//新しく1つDayCellを作る
-	int random = GetRand(2);
+	int random = GetRand(15);
 	createDayCell(random);
 	//DayCell* p = new DayCell(0);
 	//リストの1番をリストから外してdeleteする生成
@@ -169,24 +182,23 @@ void TrainingScene::CellDelete()
 	cell_.erase(it);
 }
 
+DayCard* TrainingScene::createDayCard()
+{
+	DayCard* new_card = new DayCard();
+	int daynum = GetRand(4)+1;
+	new_card->passedDayNum = daynum;
+
+	card_.emplace_back(new_card);
+
+	return new_card;
+}
+
 
 //シークエンスに依存しないシーン内の全般処理をここで行う
 void TrainingScene::Update()
 {
 	main_sequence_.update(gManager->deitatime_);
-	//--------------debug------------------------//
 
-#if 0
-	//本来はカードを選ぶ->カードの進行日数が決まる->変数に代入->シーケンス変数が0になるまで止まるシーケンス→動くシーケンス→止まるシーケンスを繰り返す
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
-		//新しく1つDayCellを作る
-		int random = GetRand(2);
-		createDayCell(random);
-		//DayCell* p = new DayCell(0);
-		//リストの1番をリストから外してdeleteする生成
-		CellDelete();
-	}
-#endif
 
 	//暫定的なキャラ作成
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
@@ -212,26 +224,35 @@ void TrainingScene::Draw()
 		cell->pos_ = tbl[i++];
 		cell->Draw();
 	}
+	int hogehoge = 0;
+	for (auto card : card_) {
+		card->pos_ = cardtbl[hogehoge++];
+		card->Draw();
+		
+	}
+
+
 	//------debug------
 	int k = 0;
 	for (auto c : cell_) {
 
-		DrawStringEx(100, 400 + k * 50, -1, "%d", c->eventID);
+		DrawStringEx(50, 400 + k * 50, -1, "%d", c->eventID);
 		++k;
 	}
-	DrawStringEx(200, 300, -1, "%d", loopdaycount);
+	DrawStringEx(100, 300, -1, "%d", loopdaycount);
 	//if(main_sequence_==&TrainingScene::Seq_Training_Main)
 	//現在のシークエンスをif分で評価したい
 	if (sequenceID == 0) {
-		DrawStringEx(200, 350, -1, "SeqTrainingMain");
+		DrawStringEx(100, 350, -1, "SeqTrainingMain");
 	}
 	else {
-		DrawStringEx(200, 350, -1, "SeqLoopDay");
+		DrawStringEx(100, 350, -1, "SeqLoopDay");
 	}
 
-	DrawStringEx(200, 400, -1, "イベントIDは%d", eManager->eventdebugID);
+	DrawStringEx(100, 400, -1, "イベントIDは%d", eManager->eventdebugID);
 
 	DrawRotaGraph(190, 50, 1, 0, playergh[2], true);
+	//--------------------
 
 	LogDraw();
 }
@@ -265,8 +286,16 @@ void TrainingScene::addLog(std::string log)
 void TrainingScene::LogDraw()
 {
 	for (int i = 0; i < 9; ++i) {
-		DrawStringEx(200, 500 + (i * 20), -1, "%s", Log[i].c_str());
+		DrawStringEx(100, 500 + (i * 20), -1, "%s", Log[i].c_str());
 	}
+}
+
+void TrainingScene::cardSelect()
+{
+
+
+
+
 }
 
 

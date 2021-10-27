@@ -10,15 +10,15 @@ DayCell::DayCell(int cell_gh)
 {
 	//SRand(time(0));
 
-	if (0 == cell_gh) {
+	if (0 <= cell_gh&&cell_gh<=5) {
 		//0は青マス プラス効果のイベントが発生する
 		gh = LoadGraph("graphics/blue.png");
 	}
-	else if (1 == cell_gh) {
+	else if (6 <= cell_gh&& cell_gh <=8) {
 		//1は赤マス マイナス効果のイベントが発生する
 		gh = LoadGraph("graphics/red.png");
 	}
-	else if (2 == cell_gh) {
+	else if (9 <= cell_gh&& cell_gh<=15) {
 		//2は白マス プラス効果とマイナス効果がランダムで選ばれる
 		//出来れば4~10月はプラスが7割,11月~3月はマイナスが7割くらいに偏らせたい
 		gh = LoadGraph("graphics/white.png");
