@@ -63,6 +63,16 @@ public:
 private:
     int time_ = 0;
     int sequenceID=0;
+
+    std::string Log[9] = {};
+    //ループ中か否か
     bool isnowLoop = false;
+    //イベント完了フラグ→複数回実行しないためのフラグ
     bool doneEvent = false;
+    //起動時に最初のイベントが走ってしまわないようにするためのフラグ
+    bool doneFirstEvent = false;
+
+    void addLog(std::string log);
+    void LogDraw();
+
 };

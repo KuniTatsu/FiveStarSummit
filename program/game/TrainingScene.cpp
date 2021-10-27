@@ -7,6 +7,7 @@
 #include"EventManager.h"
 #include <iostream>
 #include"GameManager.h"
+#include"Event.h"
 
 extern GameManager* gManager;
 
@@ -57,9 +58,11 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	//ループ日数を決定する所
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
 		isnowLoop = true;
+		doneFirstEvent = true;
 		doneEvent = false;
 		//経過させる日数を出す
 		loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
+		addLog(std::to_string(loopdaycount) + "日経過するよ");
 		main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
 	}
@@ -78,7 +81,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		}
 	}
 	else {
-
+		if (doneFirstEvent == false)return true;
 		std::list<DayCell*>::iterator it = cell_.begin();
 		//it += 2;　できない
 		++it;
@@ -98,7 +101,17 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			//eventIDは0,1,2
 			int size = eManager->eventList[event].size();
 			int rand = GetRand(size - 1);
-			eManager->DoEvent(event,rand);
+			eManager->DoEvent(event, rand);
+
+			//起きたイベントの内容をログで出力したい
+
+			if (eManager->eventList[event][rand]->num_ > 0) {
+				addLog(eManager->eventList[event][rand]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand]->num_) + "増加した");
+			}
+			else {
+				int hoge = eManager->eventList[event][rand]->num_ * (-1);
+				addLog(eManager->eventList[event][rand]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
+			}
 			doneEvent = true;
 		}
 
@@ -219,4 +232,43 @@ void TrainingScene::Draw()
 	DrawStringEx(200, 400, -1, "イベントIDは%d", eManager->eventdebugID);
 
 	DrawRotaGraph(190, 50, 1, 0, playergh[2], true);
+
+	LogDraw();
 }
+
+//7つまでログを生成する関数,古い方から消える
+void TrainingScene::addLog(std::string log)
+{
+	if (!Log[8].empty()) {
+		Log[0] = Log[1];
+		Log[1] = Log[2];
+		Log[2] = Log[3];
+		Log[3] = Log[4];
+		Log[4] = Log[5];
+		Log[5] = Log[6];
+		Log[6] = Log[7];
+		Log[7] = Log[8];
+		Log[8] = log;
+		return;
+	}
+	for (int i = 0; i < 10; i++) {
+
+		if (Log[i].empty()) {
+
+			Log[i] = log;
+			return;
+		}
+	}
+
+}
+//生成したログを表示する関数
+void TrainingScene::LogDraw()
+{
+	for (int i = 0; i < 9; ++i) {
+		DrawStringEx(200, 500 + (i * 20), -1, "%s", Log[i].c_str());
+	}
+}
+
+
+
+

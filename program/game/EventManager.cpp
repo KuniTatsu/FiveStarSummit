@@ -44,7 +44,8 @@ void EventManager::loadEvent()
 		//extraStatus_num:increase number;
 		int d = std::atoi(event_all[i][3].c_str());
 
-		Event* event = new Event(a, b, c, d, event_all[i][4]);
+		//id,eventType,extraStatus_type,extraStatus_num,desc
+		Event* event = new Event(a, b, c, d, event_all[i][4], event_all[i][5]);
 
 		//eventtypeごとにリストに格納
 		eventList[b].emplace_back(event);
@@ -75,7 +76,8 @@ void EventManager::DoEvent(int eventID, int randomnum)
 {
 	//eventID:0,1,2 randomnum:eventnumber
 	//どのイベントを行うかexcelから決定する
-	eventList[eventID][randomnum]->run_Event();
+	eventList[eventID][randomnum]->run_Status_Event();
+	eventList[0][1]->StatusName_;
 
 }
 

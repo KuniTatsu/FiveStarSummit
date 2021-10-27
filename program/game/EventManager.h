@@ -32,12 +32,15 @@ public:
 	int setEvent(int eventType);
 
 
-	//0→ステータス上昇,
+	//0→ステータス上昇,いいイベント
+	//1→ステータス上昇,わるいイベント
+	//2→ステータス上昇,ランダムイベント
+	void DoEvent(int eventID,int randomnum);
+	//いずれ追加する
 	//1→やる気パラメータup,
 	//2→特殊能力獲得
 	//3→アイテム獲得
-	//...
-	void DoEvent(int eventID,int randomnum);
+
 
 	int eventdebugID = 0;
 private:
