@@ -89,6 +89,7 @@ public:
 private:
 	int time_ = 0;
 	int sequenceID = 0;
+	int selectNum = 0;
 
 	std::string Log[9] = {};
 	//ƒ‹[ƒv’†‚©”Û‚©

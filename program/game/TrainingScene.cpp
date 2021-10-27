@@ -66,15 +66,19 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 		//*********Debug******************//
 		//経過させる日数を出す
-		loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
+		//loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
 		//*********************************//
 
 		//現在選択中のカードの経過日数を読み込む
 		//loopdaycountに代入
-
-
-
-
+		int c = 0;
+		for (auto card : card_) {
+			if (c == selectNum) {
+				loopdaycount = card->passedDayNum;
+			}
+			
+			c++;
+		}
 
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
 
@@ -185,8 +189,9 @@ void TrainingScene::CellDelete()
 DayCard* TrainingScene::createDayCard()
 {
 	DayCard* new_card = new DayCard();
-	int daynum = GetRand(4)+1;
+	int daynum = GetRand(4) + 1;
 	new_card->passedDayNum = daynum;
+	new_card->pos_.y = 620;
 
 	card_.emplace_back(new_card);
 
@@ -205,7 +210,8 @@ void TrainingScene::Update()
 
 		gManager->MakeCharacter();
 		//出力欄にメッセージ出したいんだけど出ないんだけど！
-		std::cout << "キャラが作成されました" << std::endl;
+		//std::cout << "キャラが作成されました" << std::endl;
+		t2k::debugTrace("\nキャラが作成されました\n");
 	}
 
 	//--------------debugend------------------------//
@@ -226,11 +232,11 @@ void TrainingScene::Draw()
 	}
 	int hogehoge = 0;
 	for (auto card : card_) {
-		card->pos_ = cardtbl[hogehoge++];
+		card->pos_.x = cardtbl[hogehoge++].x;
 		card->Draw();
-		
-	}
 
+	}
+	cardSelect();
 
 	//------debug------
 	int k = 0;
@@ -292,8 +298,25 @@ void TrainingScene::LogDraw()
 
 void TrainingScene::cardSelect()
 {
+	//左右キーで選択中のカードを変える処理を書く
 
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RIGHT)) {
+		selectNum = (selectNum + 1) % 5;
+	}
+	else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_LEFT)) {
+		selectNum = (selectNum + 4) % 5;
+	}
 
+	int c = 0;
+	for (auto card : card_) {
+		if (c == selectNum) {
+			card->pos_.y = 600;
+		}
+		else {
+			card->pos_.y = 620;
+		}
+		c++;
+	}
 
 
 }
