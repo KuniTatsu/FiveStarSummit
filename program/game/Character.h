@@ -1,12 +1,15 @@
 #pragma once
 #include<string>
 #include<vector>
+class CharaWindow;
 
 class Chara {
 
 public:
 	Chara();
 	~Chara();
+
+	CharaWindow* cWindow;
 
 	typedef struct {
 		std::string name_;	//–¼‘O

@@ -6,11 +6,14 @@
 class DayCell;
 class DayCard;
 class EventManager;
+class CharaMenuManager;
+class CharaWindow;
+class Chara;
 
 class TrainingScene : public BaseScene {
 public:
 	EventManager* eManager = nullptr;
-
+	CharaMenuManager* cMenuManager = nullptr;
 
 
 	bool changeSceneFlag = false;
@@ -25,11 +28,16 @@ public:
 	//新しく行動カードを作る関数
 	DayCard* createDayCard(int cardEventNum);
 
+	CharaWindow* createCharaWindow();
+
 	//すべてのセルを入れておくリスト
 	std::list<DayCell*> cell_;
 
 	//すべてのカードを入れておくリスト
-	std::list<DayCard*> card_;
+	std::list<DayCard*> card_;	
+	
+	////すべてのキャラクターを入れておくリスト
+	//std::list<Chara*> chara_;
 
 	//一番左のマスの画像のx座標
 	const float mass_x = 50;
@@ -60,6 +68,8 @@ public:
 		{card_x + card_width * 4, 620, 0},
 
 	};
+
+	
 
 	//初期シークエンスを設定
 	t2k::Sequence<TrainingScene*> main_sequence_ =
@@ -107,5 +117,8 @@ private:
 	void LogDraw();
 
 	void cardSelect();
+
+	//キャラクターのステータス画面を描画する関数
+	void DrawWindow();
 
 };

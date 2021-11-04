@@ -7,6 +7,7 @@
 #include<string>
 
 
+
 GameManager::GameManager()
 {
 	//sManager = new SceneManager();
@@ -87,6 +88,7 @@ void GameManager::StatusSet(int setType, int value)
 
 }
 //debug
+//TrainingScene‚©‚çˆø”‚ÅÀ•W‚ğ‚Á‚Ä‚­‚é
 void GameManager::CharactorStatusDraw()
 {
 	int i = 0;

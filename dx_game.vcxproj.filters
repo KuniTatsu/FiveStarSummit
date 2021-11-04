@@ -85,6 +85,8 @@
     <ClCompile Include="program\game\EventManager.cpp" />
     <ClCompile Include="program\game\Character.cpp" />
     <ClCompile Include="program\game\Event.cpp" />
+    <ClCompile Include="program\game\CharaMenuManager.cpp" />
+    <ClCompile Include="program\game\CharaWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="program\support\FrameRateController.h">
@@ -175,5 +177,7 @@
     <ClInclude Include="program\game\EventManager.h" />
     <ClInclude Include="program\game\Character.h" />
     <ClInclude Include="program\game\Event.h" />
+    <ClInclude Include="program\game\CharaMenuManager.h" />
+    <ClInclude Include="program\game\CharaWindow.h" />
   </ItemGroup>
 </Project>

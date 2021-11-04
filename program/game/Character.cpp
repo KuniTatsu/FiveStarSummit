@@ -1,4 +1,5 @@
 #include "Character.h"
+#include"CharaWindow.h"
 //
 //
 //playerdata = new SaveData_t;
@@ -16,7 +17,11 @@ Chara::Chara()
 					 0, 0, 0, 0, 0, 0, 0,
 					0,0,0,0,
 					{} ,
-					2};
+					2 };
+
+	cWindow = new CharaWindow();
+
+
 
 }
 

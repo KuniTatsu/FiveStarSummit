@@ -9,6 +9,9 @@
 #include"GameManager.h"
 #include"Event.h"
 #include"DayCard.h"
+#include"CharaMenuManager.h"
+#include"CharaWindow.h"
+#include"Character.h"
 
 extern GameManager* gManager;
 
@@ -16,6 +19,7 @@ extern GameManager* gManager;
 TrainingScene::TrainingScene()
 {
 	eManager = new EventManager();
+	cMenuManager = new CharaMenuManager();
 
 	SRand(time(0));
 
@@ -30,6 +34,11 @@ TrainingScene::TrainingScene()
 		int random = GetRand(15);
 		createDayCard(random);
 	}
+	//Debug
+
+	/*createCharaWindow();
+	createCharaWindow();*/
+	//
 }
 
 TrainingScene::~TrainingScene()
@@ -176,7 +185,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
-		
+
 
 
 
@@ -234,6 +243,14 @@ DayCard* TrainingScene::createDayCard(int cardEventNum)
 	return new_card;
 }
 
+CharaWindow* TrainingScene::createCharaWindow()
+{
+	CharaWindow* new_charaWindow = new CharaWindow();
+	cMenuManager->AddList(new_charaWindow);
+
+	return new_charaWindow;
+}
+
 
 //シークエンスに依存しないシーン内の全般処理をここで行う
 void TrainingScene::Update()
@@ -245,12 +262,20 @@ void TrainingScene::Update()
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
 
 		gManager->MakeCharacter();
+
 		//出力欄にメッセージ出したいんだけど出ないんだけど！
 		//std::cout << "キャラが作成されました" << std::endl;
 		t2k::debugTrace("\nキャラが作成されました\n");
 	}
 
-	//--------------debugend------------------------//
+	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
+		cMenuManager->StatusMenuPos.y -= 10;
+	}
+	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
+		cMenuManager->StatusMenuPos.y += 10;
+	}
+
+	//--------------debug end------------------------//
 
 	for (auto hoge : cell_) {
 		if (hoge->is_alive_ == false) {
@@ -273,7 +298,7 @@ void TrainingScene::Draw()
 
 	}
 	//cardSelect();
-
+	DrawWindow();
 	//------debug------
 	int k = 0;
 	for (auto c : cell_) {
@@ -282,8 +307,7 @@ void TrainingScene::Draw()
 		++k;
 	}
 	DrawStringEx(100, 300, -1, "%d", loopdaycount);
-	//if(main_sequence_==&TrainingScene::Seq_Training_Main)
-	//現在のシークエンスをif分で評価したい
+
 	if (sequenceID == 0) {
 		DrawStringEx(100, 350, -1, "SeqTrainingMain");
 	}
@@ -297,6 +321,8 @@ void TrainingScene::Draw()
 	//--------------------
 
 	LogDraw();
+
+	cMenuManager->DrawWindow();
 }
 
 //7つまでログを生成する関数,古い方から消える
@@ -359,4 +385,39 @@ void TrainingScene::cardSelect()
 
 
 
+void TrainingScene::DrawWindow()
+{
+	//Charactor* p = nullptr;
+
+	int i = 0;
+	if (gManager->chara.empty())return;
+	for (auto c : gManager->chara) {
+		//c->cWindow->windowPos.x;
+		c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
+		//c->windowPos.x = StatusMenuPos.x;
+		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));;
+		//c->windowPos.y = StatusMenuPos.y + (20 * (i + 1)) + ((CharaWindowHeight) * (i));
+		i++;
+		DrawBox(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y,
+			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);
+		
+		std::string name = c->charadata->name_;
+		int ATK = c->charadata->ATACK;
+		int DEF = c->charadata->DEFENCE;
+		int MATK = c->charadata->MAGIATACK;
+		int MDEF = c->charadata->MAGIDEFENCE;
+		int SPEED = c->charadata->SPEED;
+		int MIND = c->charadata->MIND;
+		int VIT = c->charadata->VITALITY;
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2)+10, c->cWindow->windowPos.y+10, -1, "名前:%s", name.c_str());
+		DrawStringEx(500 + i * 200, 240, -1, "攻撃力:%d", ATK);
+		DrawStringEx(500 + i * 200, 280, -1, "防御力:%d", DEF);
+		DrawStringEx(500 + i * 200, 320, -1, "魔攻撃力:%d", MATK);
+		DrawStringEx(500 + i * 200, 360, -1, "魔防御力:%d", MDEF);
+		DrawStringEx(500 + i * 200, 400, -1, "速度:%d", SPEED);
+		DrawStringEx(500 + i * 200, 440, -1, "賢さ:%d", MIND);
+		DrawStringEx(500 + i * 200, 480, -1, "持久力:%d", VIT);
+	}
+
+}
 

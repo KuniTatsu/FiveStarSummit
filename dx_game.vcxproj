@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="program\game\BattleScene.cpp" />
     <ClCompile Include="program\game\Character.cpp" />
+    <ClCompile Include="program\game\CharaMenuManager.cpp" />
+    <ClCompile Include="program\game\CharaWindow.cpp" />
     <ClCompile Include="program\game\DataManager.cpp" />
     <ClCompile Include="program\game\DayCard.cpp" />
     <ClCompile Include="program\game\DayCell.cpp" />
@@ -46,6 +48,8 @@
   <ItemGroup>
     <ClInclude Include="program\game\BattleScene.h" />
     <ClInclude Include="program\game\Character.h" />
+    <ClInclude Include="program\game\CharaMenuManager.h" />
+    <ClInclude Include="program\game\CharaWindow.h" />
     <ClInclude Include="program\game\DataManager.h" />
     <ClInclude Include="program\game\DayCard.h" />
     <ClInclude Include="program\game\DayCell.h" />
