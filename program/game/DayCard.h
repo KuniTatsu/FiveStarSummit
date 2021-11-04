@@ -6,7 +6,7 @@ class DayCard {
 
 public:
 
-	DayCard();
+	DayCard(int randomNum);
 	~DayCard();
 
 	//カードの画面内の位置
@@ -25,12 +25,12 @@ public:
 
 	//経過日数
 	int passedDayNum = 0;
+
 	//カードを使ったときに起こるイベントのid
 	int cardEventId = 0;
 
 	//カード生存フラグ
 	bool isLive = true;
-
 	//選ばれたフラグ
 	bool isSelected = false;
 

@@ -89,7 +89,7 @@ void EventManager::DoEvent(int eventID, int randomnum)
 	//eventID:0,1,2 randomnum:eventnumber
 	//どのイベントを行うかexcelから決定する
 	eventList[eventID][randomnum]->run_Status_Event();
-	eventList[0][1]->StatusName_;
+	//eventList[0][1]->StatusName_;
 
 }
 

@@ -22,7 +22,8 @@ public:
 	//一日経過すると一つセルを消去する
 	void CellDelete();
 
-	DayCard* createDayCard();
+	//新しく行動カードを作る関数
+	DayCard* createDayCard(int cardEventNum);
 
 	//すべてのセルを入れておくリスト
 	std::list<DayCell*> cell_;
@@ -90,6 +91,9 @@ private:
 	int time_ = 0;
 	int sequenceID = 0;
 	int selectNum = 0;
+
+	int cellNum = 7;
+	int cardNum = 5;
 
 	std::string Log[9] = {};
 	//ループ中か否か

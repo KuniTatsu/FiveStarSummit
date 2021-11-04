@@ -3,7 +3,7 @@
 #include "../library/t2klib.h"
 #include"../support/Support.h"
 
-DayCard::DayCard()
+DayCard::DayCard(int randomNum)
 {
 
 	gh = LoadGraph("graphics/dayCard.png");

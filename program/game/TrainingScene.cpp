@@ -22,17 +22,19 @@ TrainingScene::TrainingScene()
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
 
 	//最初に7個リストに入れる処理を書く
-	for (int k = 0; k < 7; ++k) {
+	for (int k = 0; k < cellNum; ++k) {
 		int random = GetRand(15);
 		createDayCell(random);
 	}
-	for (int k = 0; k < 5; ++k) {
-		createDayCard();
+	for (int k = 0; k < cardNum; ++k) {
+		int random = GetRand(15);
+		createDayCard(random);
 	}
 }
 
 TrainingScene::~TrainingScene()
 {
+	delete eManager;
 }
 
 //日程カードが選ばれるまでのシークエンス(日数移動済み)
@@ -100,18 +102,31 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		if (doneEvent == false) {
 			//eventIDは0,1,2
 			int size = eManager->eventList[event].size();
-			int rand = GetRand(size - 1);
-			eManager->DoEvent(event, rand);
+
+			int rand_cellEvent = GetRand(size - 1);
+			int rand_cardEvent = GetRand(size - 1);
+
+			eManager->DoEvent(event, rand_cellEvent);
+			eManager->DoEvent(event, rand_cardEvent);
 
 			//起きたイベントの内容をログで出力したい
-
-			if (eManager->eventList[event][rand]->num_ > 0) {
-				addLog(eManager->eventList[event][rand]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand]->num_) + "増加した");
+			//*************cellEventのログ表示**************
+			if (eManager->eventList[event][rand_cellEvent]->num_ > 0) {
+				addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
 			}
 			else {
-				int hoge = eManager->eventList[event][rand]->num_ * (-1);
-				addLog(eManager->eventList[event][rand]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
+				int hoge = eManager->eventList[event][rand_cellEvent]->num_ * (-1);
+				addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
 			}
+			//*************cardEventのログ表示**************
+			if (eManager->eventList[event][rand_cardEvent]->num_ > 0) {
+				addLog(eManager->eventList[event][rand_cardEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cardEvent]->num_) + "増加した");
+			}
+			else {
+				int hoge = eManager->eventList[event][rand_cardEvent]->num_ * (-1);
+				addLog(eManager->eventList[event][rand_cardEvent]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
+			}
+
 			doneEvent = true;
 		}
 
@@ -145,8 +160,6 @@ bool TrainingScene::Seq_CardDisappear(const float deltatime)
 		c++;
 	}
 
-
-
 	t2k::debugTrace("\nカードの拡大処理が終わりました\n");
 	//カードを消す
 	//新しくカードを生成する
@@ -163,6 +176,10 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
+		
+
+
+
 	}
 	//ここにDayCellを追加したり消したりする処理を入れる
 	//新しく1つDayCellを作る
@@ -199,12 +216,18 @@ void TrainingScene::CellDelete()
 	cell_.erase(it);
 }
 
-DayCard* TrainingScene::createDayCard()
+DayCard* TrainingScene::createDayCard(int cardEventNum)
 {
-	DayCard* new_card = new DayCard();
+	DayCard* new_card = new DayCard(cardEventNum);
+	//経過日数をランダムで決定
 	int daynum = GetRand(4) + 1;
 	new_card->passedDayNum = daynum;
+
+	//カードのy座標を決定
 	new_card->pos_.y = 620;
+
+	//イベントタイプ0,1,2を決定
+	new_card->cardEventId = eManager->setEvent(cardEventNum);
 
 	card_.emplace_back(new_card);
 
