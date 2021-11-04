@@ -44,45 +44,29 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	if (main_sequence_.isStart()) {
 		sequenceID = 0;
 	}
-
-#if 0
-	if (isnowLoop == false) {
-		DrawStringEx(200, 500, -1, "日数を入力してね");
-		std::cin >> loopdaycount;
-
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
-			main_sequence_.change(&TrainingScene::Seq_LoopDay);
-			isnowLoop = true;
-		}
-	}
-
-#endif
-
+	cardSelect();
 	//ループ日数を決定する所
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
 		isnowLoop = true;
 		doneFirstEvent = true;
 		doneEvent = false;
 
-		//*********Debug******************//
-		//経過させる日数を出す
-		//loopdaycount = GetRand(4) + 1;//一時的に1~5日の間で経過日数が決まるように設定
-		//*********************************//
-
 		//現在選択中のカードの経過日数を読み込む
 		//loopdaycountに代入
 		int c = 0;
 		for (auto card : card_) {
-			if (c == selectNum) {
+			if (c == selectNum)
+			{
 				loopdaycount = card->passedDayNum;
+				card->isSelected = true;
 			}
-			
 			c++;
 		}
 
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
 
 		//カードが持ち上がり、拡大して一定以上の大きさになると消えるシークエンスをはさみたい
+		//main_sequence_.change(&TrainingScene::Seq_CardDisappear);
 		main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
 	}
@@ -136,14 +120,43 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	return true;
 }
 
+//**********************Seq_CardDisapper*****************************//
 bool TrainingScene::Seq_CardDisappear(const float deltatime)
 {
 	//カードを大きくする
+	int c = 0;
+	for (auto card : card_) {
+		if (c == selectNum)
+		{
+
+			if (card->isSelected == true) {
+				float timecount = 0;
+
+				while (card->exRate <= 5.0)
+				{
+					timecount++;
+					if (timecount < 40)continue;
+					card->exRate += 0.01;
+					timecount = 0;
+
+				}
+			}
+		}
+		c++;
+	}
+
+
+
+	t2k::debugTrace("\nカードの拡大処理が終わりました\n");
+	//カードを消す
+	//新しくカードを生成する
+	//リストに入れる
 
 	main_sequence_.change(&TrainingScene::Seq_LoopDay);
 	return true;
 }
 
+//**********************Seq_LoopDay**********************************//
 //日程カードが選ばれたあとのシークエンス(日数移動)
 bool TrainingScene::Seq_LoopDay(const float deltatime)
 {
@@ -236,7 +249,7 @@ void TrainingScene::Draw()
 		card->Draw();
 
 	}
-	cardSelect();
+	//cardSelect();
 
 	//------debug------
 	int k = 0;

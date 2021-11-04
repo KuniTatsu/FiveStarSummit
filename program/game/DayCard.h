@@ -16,6 +16,8 @@ public:
 	const int CardWidth = 100;
 	const int CardHeight = 120;
 
+	double exRate = 1;
+
 	unsigned int Color = 0;
 
 	//カードの中の数字の場所を決めるvector
@@ -26,10 +28,11 @@ public:
 	//カードを使ったときに起こるイベントのid
 	int cardEventId = 0;
 
-	//
+	//カード生存フラグ
+	bool isLive = true;
 
-
-
+	//選ばれたフラグ
+	bool isSelected = false;
 
 	void Update();
 	void Draw();

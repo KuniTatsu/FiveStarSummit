@@ -16,10 +16,6 @@ DayCard::~DayCard()
 
 void DayCard::Update()
 {
-	//選択中の行動カードのy座標を他よりも少し上に移動させる
-	//pos_.y -= 20;
-	//カードが実行されたらカードの日数(int)をSceneに渡す
-
 
 }
 
@@ -32,7 +28,7 @@ void DayCard::Draw()
 	//選択中の行動カードのy座標を他よりも少し上に移動させる
 
 	//通常のカード表示
-	DrawRotaGraph(pos_.x, pos_.y, 1, 0, gh, false);
+	DrawRotaGraph(pos_.x, pos_.y, exRate, 0, gh, false);
 	
 	DrawStringEx(pos_.x + initpos.x, pos_.y + initpos.y, Color, "%d", passedDayNum);
 	
