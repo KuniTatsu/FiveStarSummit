@@ -13,7 +13,6 @@ Event::Event(int ID, int Eventtype, int Statustype, int num, std::string desc,st
 	desc_ = desc;
 	StatusName_ = StatusName;
 
-
 }
 
 Event::~Event()
