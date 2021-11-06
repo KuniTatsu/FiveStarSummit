@@ -51,5 +51,6 @@ public:
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
 
-
+private:
+	int StatusRandom(int maxnum,int randomtype);
 };

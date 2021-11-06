@@ -188,9 +188,6 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
 
-
-
-
 	}
 	//ここにDayCellを追加したり消したりする処理を入れる
 	//新しく1つDayCellを作る
@@ -271,10 +268,11 @@ void TrainingScene::Update()
 	}
 
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
-		cMenuManager->StatusMenuPos.y -= 10;
+		if (cMenuManager->StatusMenuPos.y > 15)return;
+		cMenuManager->StatusMenuPos.y += 10;
 	}
 	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
-		cMenuManager->StatusMenuPos.y += 10;
+		cMenuManager->StatusMenuPos.y -= 10;
 	}
 
 	//--------------debug end------------------------//
@@ -326,13 +324,13 @@ void TrainingScene::Draw()
 
 	cMenuManager->DrawWindow();
 
-	if (gManager->isInput== true) {
-		//入力モードの描画
-		DrawKeyInputModeString(640, 480);
+	//if (gManager->isInput== true) {
+	//	//入力モードの描画
+	//	DrawKeyInputModeString(640, 480);
 
-		//入力途中の文字列の描画
-		DrawKeyInputString(0, 0, gManager->InputHandle);
-	}
+	//	//入力途中の文字列の描画
+	//	DrawKeyInputString(0, 0, gManager->InputHandle);
+	//}
 }
 
 //7つまでログを生成する関数,古い方から消える

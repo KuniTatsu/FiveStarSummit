@@ -18,7 +18,7 @@ public:
 	float deitatime_;
 
 	bool isInput = false;
-	int InputHandle;
+	int InputHandle=0;
 	void MakeCharacter();
 
 	//–¼‘O‚ğ“ü—Í‚·‚éŠÖ”

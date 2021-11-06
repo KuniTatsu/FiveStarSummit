@@ -22,11 +22,14 @@ GameManager::~GameManager()
 void GameManager::MakeCharacter()
 {
 
-	InputName();
-	
-	//string型に変換
-	std::string name(String, sizeof(String) / sizeof(String[0]));
-	isInput = false;
+	//InputName();
+	//
+	////string型に変換
+	//std::string name(String, sizeof(String) / sizeof(String[0]));
+	//isInput = false;
+	 
+	//******debug*****
+	std::string name = "test";
 
 	chara_ = new Chara(name);
 	chara.emplace_back(chara_);
@@ -37,7 +40,7 @@ void GameManager::InputName()
 	isInput = true;
 
 	InputHandle = MakeKeyInput(50, FALSE, FALSE, FALSE);
-
+	//DrawStringEx(800, 600, -1, "入力中だよ");
 
 	//入力を始めたいところで
 	SetActiveKeyInput(InputHandle);
@@ -46,14 +49,20 @@ void GameManager::InputName()
 
 	while (!ProcessMessage()) {
 
+
 		//文字入力が終了しているならwhileループを抜ける
 		if (CheckKeyInput(InputHandle) != 0)break;
 
-		//入力モードの描画
+		//入力モードの描画↓出ない
 		DrawKeyInputModeString(640, 480);
+		//↓出ない
+		DrawBox(200, 200, 640, 480, -1, true);
 
-		//入力途中の文字列の描画
-		DrawKeyInputString(0, 0, InputHandle);
+		//↓出る
+		//t2k::debugTrace("\n入力中\n");
+
+		//入力途中の文字列の描画↓出ない
+		DrawKeyInputString(640, 480, InputHandle);
 
 	}
 

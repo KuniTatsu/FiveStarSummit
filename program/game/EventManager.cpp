@@ -20,8 +20,6 @@ EventManager::EventManager()
 	eventList.resize(3);
 
 	loadEvent();
-
-
 }
 
 void EventManager::loadEvent()
