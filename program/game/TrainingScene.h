@@ -105,6 +105,8 @@ private:
 	int cellNum = 7;
 	int cardNum = 5;
 
+	int String_Color_Black;
+
 	std::string Log[9] = {};
 	//ƒ‹[ƒv’†‚©”Û‚©
 	bool isnowLoop = false;

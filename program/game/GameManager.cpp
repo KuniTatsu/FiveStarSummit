@@ -21,8 +21,48 @@ GameManager::~GameManager()
 
 void GameManager::MakeCharacter()
 {
-	chara_ = new Chara();
+
+	InputName();
+	
+	//stringŒ^‚É•ÏŠ·
+	std::string name(String, sizeof(String) / sizeof(String[0]));
+	isInput = false;
+
+	chara_ = new Chara(name);
 	chara.emplace_back(chara_);
+}
+
+void GameManager::InputName()
+{
+	isInput = true;
+
+	InputHandle = MakeKeyInput(50, FALSE, FALSE, FALSE);
+
+
+	//“ü—Í‚ğn‚ß‚½‚¢‚Æ‚±‚ë‚Å
+	SetActiveKeyInput(InputHandle);
+
+	//ˆÈ~‚Ì“ü—Í‚Í‚·‚×‚ÄInputHandle‚És‚­
+
+	while (!ProcessMessage()) {
+
+		//•¶š“ü—Í‚ªI—¹‚µ‚Ä‚¢‚é‚È‚çwhileƒ‹[ƒv‚ğ”²‚¯‚é
+		if (CheckKeyInput(InputHandle) != 0)break;
+
+		//“ü—Íƒ‚[ƒh‚Ì•`‰æ
+		DrawKeyInputModeString(640, 480);
+
+		//“ü—Í“r’†‚Ì•¶š—ñ‚Ì•`‰æ
+		DrawKeyInputString(0, 0, InputHandle);
+
+	}
+
+	//“ü—Í‚³‚ê‚½•¶š—ñ‚Ìæ“¾
+	GetKeyInputString(String, InputHandle);
+
+	DeleteKeyInput(InputHandle);
+
+	
 }
 
 void GameManager::StatusSet(int setType, int value)
@@ -87,6 +127,8 @@ void GameManager::StatusSet(int setType, int value)
 	//else if
 
 }
+
+/*************Character‚É˜g‚²‚ÆÀ‘•‚µ‚½‚½‚ß‚±‚±‚Å‚Í•\¦‚µ‚È‚¢************
 //debug
 //TrainingScene‚©‚çˆø”‚ÅÀ•W‚ğ‚Á‚Ä‚­‚é
 void GameManager::CharactorStatusDraw()
@@ -114,6 +156,7 @@ void GameManager::CharactorStatusDraw()
 	}
 
 }
+*/
 
 void GameManager::Update()
 {
@@ -122,7 +165,14 @@ void GameManager::Update()
 
 void GameManager::Draw()
 {
+	if (isInput == false) {
+		DrawStringEx(800, 500, -1, "false");
+	}
+	else {
+		DrawStringEx(800, 500, -1, "true");
+	}
 	SceneManager::Render();
-	if (chara.empty())return;
-	CharactorStatusDraw();
+	/*if (chara.empty())return;
+	CharactorStatusDraw();*/
+	
 }

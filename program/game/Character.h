@@ -6,7 +6,7 @@ class CharaWindow;
 class Chara {
 
 public:
-	Chara();
+	Chara(std::string name);
 	~Chara();
 
 	CharaWindow* cWindow;

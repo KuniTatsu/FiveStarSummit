@@ -17,7 +17,12 @@ public:
 
 	float deitatime_;
 
+	bool isInput = false;
+	int InputHandle;
 	void MakeCharacter();
+
+	//名前を入力する関数
+	void InputName();
 
 	//ステータス変化関数
 	//setType→どのステータスを変化させるか
@@ -25,10 +30,15 @@ public:
 	void StatusSet(int setType, int value);
 
 	//debug用に一旦ここで作る
-	void CharactorStatusDraw();
+	//void CharactorStatusDraw();
 
 	void Update();
 	void Draw();
+
+private:
+	char String[256] = {};
+	
+	
 
 
 };

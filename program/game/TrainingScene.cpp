@@ -23,6 +23,8 @@ TrainingScene::TrainingScene()
 
 	SRand(time(0));
 
+	String_Color_Black = GetColor(0, 0, 0);
+
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
 
 	//Å‰‚É7ŒÂƒŠƒXƒg‚É“ü‚ê‚éˆ—‚ğ‘‚­
@@ -323,6 +325,14 @@ void TrainingScene::Draw()
 	LogDraw();
 
 	cMenuManager->DrawWindow();
+
+	if (gManager->isInput== true) {
+		//“ü—Íƒ‚[ƒh‚Ì•`‰æ
+		DrawKeyInputModeString(640, 480);
+
+		//“ü—Í“r’†‚Ì•¶š—ñ‚Ì•`‰æ
+		DrawKeyInputString(0, 0, gManager->InputHandle);
+	}
 }
 
 //7‚Â‚Ü‚ÅƒƒO‚ğ¶¬‚·‚éŠÖ”,ŒÃ‚¢•û‚©‚çÁ‚¦‚é
@@ -409,14 +419,15 @@ void TrainingScene::DrawWindow()
 		int SPEED = c->charadata->SPEED;
 		int MIND = c->charadata->MIND;
 		int VIT = c->charadata->VITALITY;
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2)+10, c->cWindow->windowPos.y+10, -1, "–¼‘O:%s", name.c_str());
-		DrawStringEx(500 + i * 200, 240, -1, "UŒ‚—Í:%d", ATK);
-		DrawStringEx(500 + i * 200, 280, -1, "–hŒä—Í:%d", DEF);
-		DrawStringEx(500 + i * 200, 320, -1, "–‚UŒ‚—Í:%d", MATK);
-		DrawStringEx(500 + i * 200, 360, -1, "–‚–hŒä—Í:%d", MDEF);
-		DrawStringEx(500 + i * 200, 400, -1, "‘¬“x:%d", SPEED);
-		DrawStringEx(500 + i * 200, 440, -1, "Œ«‚³:%d", MIND);
-		DrawStringEx(500 + i * 200, 480, -1, "‹v—Í:%d", VIT);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2)+10, c->cWindow->windowPos.y+10, String_Color_Black, "–¼‘O:%s", name.c_str());
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 50, String_Color_Black, "UŒ‚—Í:%d", ATK);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "–hŒä—Í:%d", DEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "–‚UŒ‚—Í:%d", MATK);
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "–‚–hŒä—Í:%d", MDEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 50, String_Color_Black, "‘¬“x:%d", SPEED);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 90, String_Color_Black, "Œ«‚³:%d", MIND);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 130, String_Color_Black, "‹v—Í:%d", VIT);
 	}
 
 }
