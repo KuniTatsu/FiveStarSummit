@@ -30,7 +30,7 @@ public:
 	int cardEventId = 0;
 
 	//カード生存フラグ
-	bool isLive = true;
+	bool is_alive_ = true;
 	//選ばれたフラグ
 	bool isSelected = false;
 

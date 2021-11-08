@@ -2,6 +2,7 @@
 #include<vector>
 class SceneManager;
 class Chara;
+class AbilityManager;
 
 class GameManager {
 
@@ -12,6 +13,7 @@ public:
 
 	SceneManager* sManager = nullptr;
 	Chara* chara_ = nullptr;
+	AbilityManager* aManager = nullptr;
 
 	std::vector<Chara*> chara = {};
 

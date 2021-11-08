@@ -32,7 +32,7 @@ void AbilityManager::LoadAbility()
 
 		//id(int)	AbilityType(int)	Ability_Name	ATACK	DEFENCE	MATACK	MDEFENCE	SPEED	MIND	VITALITY	Ability_Desc	Desc rank
 
-		//excelから読み取った列を一つずつ変数に格納→イベントクラスを生成するときの引数にぶち込む
+		//excelから読み取った列を一つずつ変数に格納→アビリティクラスを生成するときの引数にぶち込む
 		//id
 		int a = std::atoi(ability_all[i][0].c_str());
 		//AbilityType:0,1,2
@@ -54,12 +54,12 @@ void AbilityManager::LoadAbility()
 		//rank:0,1
 		int k = std::atoi(ability_all[i][12].c_str());
 
-		
-		Ability* ability = new Ability(a,b,ability_all[i][2],c,d,e,f,g,h,j, ability_all[i][10], ability_all[i][11],k);
 
-		//eventtypeごとにリストに格納
-		abilityList[b].emplace_back(ability);
+		Ability* abi = new Ability(a, b, ability_all[i][2], c, d, e, f, g, h, j, ability_all[i][10], ability_all[i][11], k);
 
-		
+		//abilitytypeごとにリストに格納
+		abilityList[b].emplace_back(abi);
+
+
 	}
 }

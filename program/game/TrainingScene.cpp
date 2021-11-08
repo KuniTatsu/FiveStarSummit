@@ -12,6 +12,7 @@
 #include"CharaMenuManager.h"
 #include"CharaWindow.h"
 #include"Character.h"
+//#include"AbilityManager.h"
 
 extern GameManager* gManager;
 
@@ -20,6 +21,7 @@ TrainingScene::TrainingScene()
 {
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
+
 
 	SRand(time(0));
 
@@ -72,11 +74,15 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			{
 				loopdaycount = card->passedDayNum;
 				card->isSelected = true;
+				selectedCardPos = selectNum;
 			}
 			c++;
 		}
-
+		CardDelete();
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
+
+		int randomnum = GetRand(15);
+		createDayCard(randomnum);
 
 		//カードが持ち上がり、拡大して一定以上の大きさになると消えるシークエンスをはさみたい
 		//main_sequence_.change(&TrainingScene::Seq_CardDisappear);
@@ -242,6 +248,24 @@ DayCard* TrainingScene::createDayCard(int cardEventNum)
 	return new_card;
 }
 
+void TrainingScene::CardDelete()
+{
+	//選択中のカードを消す
+	std::list<DayCard*>::iterator it = card_.begin();
+	for (auto card : card_) {
+		if (card->isSelected == true)
+		{
+			card->is_alive_ = false;
+			//std::list<DayCard*>::iterator it = card_.begin();
+			for (int i = 0; i < selectedCardPos; ++i) {
+				if (selectedCardPos == 0)break;
+				it++;
+			}
+		}
+	}
+	card_.erase(it);
+}
+
 CharaWindow* TrainingScene::createCharaWindow()
 {
 	CharaWindow* new_charaWindow = new CharaWindow();
@@ -278,6 +302,11 @@ void TrainingScene::Update()
 	//--------------debug end------------------------//
 
 	for (auto hoge : cell_) {
+		if (hoge->is_alive_ == false) {
+			delete hoge;
+		}
+	}
+	for (auto hoge : card_) {
 		if (hoge->is_alive_ == false) {
 			delete hoge;
 		}
@@ -400,15 +429,15 @@ void TrainingScene::DrawWindow()
 	int i = 0;
 	if (gManager->chara.empty())return;
 	for (auto c : gManager->chara) {
-		//c->cWindow->windowPos.x;
+
 		c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
-		//c->windowPos.x = StatusMenuPos.x;
+
 		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));;
-		//c->windowPos.y = StatusMenuPos.y + (20 * (i + 1)) + ((CharaWindowHeight) * (i));
+
 		i++;
 		DrawBox(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y,
 			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);
-		
+
 		std::string name = c->charadata->name_;
 		int ATK = c->charadata->ATACK;
 		int DEF = c->charadata->DEFENCE;
@@ -417,16 +446,25 @@ void TrainingScene::DrawWindow()
 		int SPEED = c->charadata->SPEED;
 		int MIND = c->charadata->MIND;
 		int VIT = c->charadata->VITALITY;
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2)+10, c->cWindow->windowPos.y+10, String_Color_Black, "名前:%s", name.c_str());
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 10, String_Color_Black, "名前:%s", name.c_str());
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力:%d", ATK);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "防御力:%d", DEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "魔攻撃力:%d", MATK);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力:%d", DEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "魔法攻撃力:%d", MATK);
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "魔防御力:%d", MDEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 50, String_Color_Black, "速度:%d", SPEED);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 90, String_Color_Black, "賢さ:%d", MIND);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 130, String_Color_Black, "持久力:%d", VIT);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 110, String_Color_Black, "魔法防御力:%d", MDEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "速度:%d", SPEED);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "賢さ:%d", MIND);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "持久力:%d", VIT);
+
+		DrawAbility(c);
 	}
+
+}
+
+void TrainingScene::DrawAbility(Chara* c)
+{
+
+
 
 }
 

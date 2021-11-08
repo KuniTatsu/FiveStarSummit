@@ -15,7 +15,7 @@ public:
 		std::string name_;	//名前
 //---------全般ステ-------------------2
 		int RANGETYPE;	//レンジ適正 0:短,1:中,2:長
-		int STANCE;		//戦闘スタンス 0:速攻,1:堅実,2:反撃
+		int STANCE;		//戦闘スタンス 0:速攻,1:堅実,2:反撃,3:普通
 //---------基礎ステ-------------------7
 		int ATACK;      //物理攻撃力 
 		int DEFENCE;	//物理防御力
@@ -53,4 +53,6 @@ public:
 
 private:
 	int StatusRandom(int maxnum,int randomtype);
+
+
 };

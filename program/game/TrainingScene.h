@@ -10,11 +10,11 @@ class CharaMenuManager;
 class CharaWindow;
 class Chara;
 
+
 class TrainingScene : public BaseScene {
 public:
 	EventManager* eManager = nullptr;
 	CharaMenuManager* cMenuManager = nullptr;
-
 
 	bool changeSceneFlag = false;
 	int playergh[4] = {};
@@ -27,6 +27,8 @@ public:
 
 	//新しく行動カードを作る関数
 	DayCard* createDayCard(int cardEventNum);
+
+	void CardDelete();
 
 	CharaWindow* createCharaWindow();
 
@@ -107,6 +109,8 @@ private:
 
 	int String_Color_Black;
 
+	int selectedCardPos = 0;
+
 	std::string Log[9] = {};
 	//ループ中か否か
 	bool isnowLoop = false;
@@ -122,5 +126,8 @@ private:
 
 	//キャラクターのステータス画面を描画する関数
 	void DrawWindow();
+
+	//キャラクターのアビリティ描画関数
+	void DrawAbility(Chara* c);
 
 };

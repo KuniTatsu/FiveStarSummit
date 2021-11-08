@@ -5,11 +5,14 @@
 #include "../library/t2klib.h"
 #include"../support/Support.h"
 #include<string>
+#include"AbilityManager.h"
+#include"Ability.h"
 
 
 
 GameManager::GameManager()
 {
+	aManager = new AbilityManager();
 	//sManager = new SceneManager();
 	deitatime_ = 0;
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
@@ -30,6 +33,7 @@ void GameManager::MakeCharacter()
 	 
 	//******debug*****
 	std::string name = "test";
+
 
 	chara_ = new Chara(name);
 	chara.emplace_back(chara_);
@@ -183,5 +187,9 @@ void GameManager::Draw()
 	SceneManager::Render();
 	/*if (chara.empty())return;
 	CharactorStatusDraw();*/
+
+	//debug
+	/*std::string hoge = aManager->abilityList[0][0]->ability_name;
+	DrawStringEx(800, 700, -1, "%s", hoge);*/
 	
 }

@@ -8,7 +8,7 @@ class CharaMenuManager {
 
 public:
 	const int CharaWindowWidth = 600;
-	const int CharaWindowHeight = 200;
+	const int CharaWindowHeight = 250;
 
 	const int WindowPadding = 20;
 
