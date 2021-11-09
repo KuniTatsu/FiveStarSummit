@@ -30,7 +30,7 @@ void GameManager::MakeCharacter()
 	////stringŒ^‚É•ÏŠ·
 	//std::string name(String, sizeof(String) / sizeof(String[0]));
 	//isInput = false;
-	 
+
 	//******debug*****
 	std::string name = "test";
 
@@ -75,7 +75,7 @@ void GameManager::InputName()
 
 	DeleteKeyInput(InputHandle);
 
-	
+
 }
 
 void GameManager::StatusSet(int setType, int value)
@@ -90,50 +90,57 @@ void GameManager::StatusSet(int setType, int value)
 	//int VITALITY;	//Ž‹v—Í
 	if (0 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->ATACK <= 0)return;
+
 			c->charadata->ATACK += value;
+			if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
 		}
 	}
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->DEFENCE <= 0)return;
+			
 			c->charadata->DEFENCE += value;
+			if (c->charadata->DEFENCE <= 0)c->charadata->DEFENCE = 0;
 		}
 	}
 	//MAGIATACK
 	else if (2 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->MAGIATACK <= 0)return;
+			
 			c->charadata->MAGIATACK += value;
+			if (c->charadata->MAGIATACK <= 0)c->charadata->MAGIATACK = 0;
 		}
 	}
 	//MAGIDEFENCE
 	else if (3 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->MAGIDEFENCE <= 0)return;
+			
 			c->charadata->MAGIDEFENCE += value;
+			if (c->charadata->MAGIDEFENCE <= 0)c->charadata->MAGIDEFENCE = 0;
 		}
 	}
 	//SPEED
 	else if (4 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->SPEED <= 0)return;
+			
 			c->charadata->SPEED += value;
+			if (c->charadata->SPEED <= 0)c->charadata->SPEED = 0;
 		}
 	}
 	//MIND
 	else if (5 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->MIND <= 0)return;
+			
 			c->charadata->MIND += value;
+			if (c->charadata->MIND <= 0)c->charadata->MIND = 0;
 		}
 	}
 	//VITALITY
 	else if (6 == setType) {
 		for (auto c : chara) {
-			if (c->charadata->VITALITY <= 0)return;
+			
 			c->charadata->VITALITY += value;
+			if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;
 
 		}
 	}
@@ -191,5 +198,5 @@ void GameManager::Draw()
 	//debug
 	/*std::string hoge = aManager->abilityList[0][0]->ability_name;
 	DrawStringEx(800, 700, -1, "%s", hoge);*/
-	
+
 }

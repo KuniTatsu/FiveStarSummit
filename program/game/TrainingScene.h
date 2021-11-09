@@ -36,8 +36,8 @@ public:
 	std::list<DayCell*> cell_;
 
 	//すべてのカードを入れておくリスト
-	std::list<DayCard*> card_;	
-	
+	std::list<DayCard*> card_;
+
 	////すべてのキャラクターを入れておくリスト
 	//std::list<Chara*> chara_;
 
@@ -71,7 +71,7 @@ public:
 
 	};
 
-	
+
 
 	//初期シークエンスを設定
 	t2k::Sequence<TrainingScene*> main_sequence_ =
@@ -89,10 +89,9 @@ public:
 
 	//日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
 	bool Seq_LoopDay(const float deltatime);
-
 	int loopdaycount = 0;
 
-
+	bool Seq_DoEvent(const float deltatime);
 
 
 	void Update();
@@ -104,12 +103,15 @@ private:
 	int sequenceID = 0;
 	int selectNum = 0;
 
+	int event = 0;
+
 	int cellNum = 7;
 	int cardNum = 5;
 
 	int String_Color_Black;
 
 	int selectedCardPos = 0;
+	int selectedCardEvent = 0;
 
 	std::string Log[9] = {};
 	//ループ中か否か
