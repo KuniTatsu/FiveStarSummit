@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<string>
 class SceneManager;
 class Chara;
 class AbilityManager;
@@ -39,8 +40,7 @@ public:
 
 private:
 	char String[256] = {};
-	
-	
+
 
 
 };

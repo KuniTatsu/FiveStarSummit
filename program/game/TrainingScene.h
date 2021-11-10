@@ -9,6 +9,7 @@ class EventManager;
 class CharaMenuManager;
 class CharaWindow;
 class Chara;
+class Menu;
 
 
 class TrainingScene : public BaseScene {
@@ -92,6 +93,7 @@ public:
 	int loopdaycount = 0;
 
 	bool Seq_DoEvent(const float deltatime);
+	bool Seq_EventFrameDraw(const float deltatime);
 
 
 	void Update();
@@ -100,18 +102,27 @@ public:
 
 private:
 	int time_ = 0;
+	//今のシークエンスのID
 	int sequenceID = 0;
+	//選択中のカードのナンバー
 	int selectNum = 0;
 
+	//0,1,2:イベント種類
 	int event = 0;
+	//実行イベントの残り個数
+	int remainEventNum = 2;
 
+	//表示するセルの最大数
 	int cellNum = 7;
+	//表示するカードの最大数
 	int cardNum = 5;
 
 	int String_Color_Black;
 
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
+
+	Menu* eventframe = nullptr;
 
 	std::string Log[9] = {};
 	//ループ中か否か

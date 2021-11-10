@@ -16,6 +16,7 @@ GameManager::GameManager()
 	//sManager = new SceneManager();
 	deitatime_ = 0;
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
+
 }
 
 GameManager::~GameManager()
@@ -25,24 +26,26 @@ GameManager::~GameManager()
 void GameManager::MakeCharacter()
 {
 
-	//InputName();
-	//
-	////string型に変換
-	//std::string name(String, sizeof(String) / sizeof(String[0]));
-	//isInput = false;
+	InputName();
+	
+		////string型に変換
+		//std::string name(String, sizeof(String) / sizeof(String[0]));
+		//isInput = false;
 
-	//******debug*****
-	std::string name = "test";
+		//////******debug*****
+		////std::string name = "test";
 
 
-	chara_ = new Chara(name);
-	chara.emplace_back(chara_);
+		//chara_ = new Chara(name);
+		//chara.emplace_back(chara_);
+		
+	
 }
 
 void GameManager::InputName()
 {
 	isInput = true;
-
+	if (InputHandle != 0)return ;
 	InputHandle = MakeKeyInput(50, FALSE, FALSE, FALSE);
 	//DrawStringEx(800, 600, -1, "入力中だよ");
 
@@ -51,11 +54,14 @@ void GameManager::InputName()
 
 	//以降の入力はすべてInputHandleに行く
 
+	//毎フレーム実行が必要なのでUpdateに移動
+#if 0
+	
 	while (!ProcessMessage()) {
 
 
 		//文字入力が終了しているならwhileループを抜ける
-		if (CheckKeyInput(InputHandle) != 0)break;
+		//if (CheckKeyInput(InputHandle) != 0)break;
 
 		//入力モードの描画↓出ない
 		DrawKeyInputModeString(640, 480);
@@ -66,7 +72,7 @@ void GameManager::InputName()
 		//t2k::debugTrace("\n入力中\n");
 
 		//入力途中の文字列の描画↓出ない
-		DrawKeyInputString(640, 480, InputHandle);
+		DrawKeyInputString(0, 0, InputHandle);
 
 	}
 
@@ -74,8 +80,9 @@ void GameManager::InputName()
 	GetKeyInputString(String, InputHandle);
 
 	DeleteKeyInput(InputHandle);
+#endif
 
-
+	
 }
 
 void GameManager::StatusSet(int setType, int value)
@@ -98,7 +105,7 @@ void GameManager::StatusSet(int setType, int value)
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->DEFENCE += value;
 			if (c->charadata->DEFENCE <= 0)c->charadata->DEFENCE = 0;
 		}
@@ -106,7 +113,7 @@ void GameManager::StatusSet(int setType, int value)
 	//MAGIATACK
 	else if (2 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->MAGIATACK += value;
 			if (c->charadata->MAGIATACK <= 0)c->charadata->MAGIATACK = 0;
 		}
@@ -114,7 +121,7 @@ void GameManager::StatusSet(int setType, int value)
 	//MAGIDEFENCE
 	else if (3 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->MAGIDEFENCE += value;
 			if (c->charadata->MAGIDEFENCE <= 0)c->charadata->MAGIDEFENCE = 0;
 		}
@@ -122,7 +129,7 @@ void GameManager::StatusSet(int setType, int value)
 	//SPEED
 	else if (4 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->SPEED += value;
 			if (c->charadata->SPEED <= 0)c->charadata->SPEED = 0;
 		}
@@ -130,7 +137,7 @@ void GameManager::StatusSet(int setType, int value)
 	//MIND
 	else if (5 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->MIND += value;
 			if (c->charadata->MIND <= 0)c->charadata->MIND = 0;
 		}
@@ -138,7 +145,7 @@ void GameManager::StatusSet(int setType, int value)
 	//VITALITY
 	else if (6 == setType) {
 		for (auto c : chara) {
-			
+
 			c->charadata->VITALITY += value;
 			if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;
 
@@ -181,6 +188,41 @@ void GameManager::CharactorStatusDraw()
 void GameManager::Update()
 {
 	SceneManager::Update();
+
+	//文字入力が終了しているならwhileループを抜ける
+	if (InputHandle != 0 && CheckKeyInput(InputHandle) != 0) {
+
+		//入力された文字列の取得
+		GetKeyInputString(String, InputHandle);
+
+		DeleteKeyInput(InputHandle);
+		InputHandle = 0;
+		//string型に変換
+		std::string name(String, sizeof(String) / sizeof(String[0]));
+		isInput = false;
+
+		////******debug*****
+		//std::string name = "test";
+
+
+		chara_ = new Chara(name);
+		chara.emplace_back(chara_);
+
+		
+	}
+	else {
+
+
+		//入力モードの描画↓出ない
+		DrawKeyInputModeString(640, 480);
+		
+		//↓出る
+		//t2k::debugTrace("\n入力中\n");
+
+		//入力途中の文字列の描画↓出ない
+		DrawKeyInputString(0, 0, InputHandle);
+	}
+
 }
 
 void GameManager::Draw()

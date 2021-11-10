@@ -12,6 +12,7 @@
 #include"CharaMenuManager.h"
 #include"CharaWindow.h"
 #include"Character.h"
+#include"MenuWindow.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -27,6 +28,8 @@ TrainingScene::TrainingScene()
 
 	String_Color_Black = GetColor(0, 0, 0);
 
+
+	//プレイヤー画像のロード
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
 
 	//最初に7個リストに入れる処理を書く
@@ -120,7 +123,12 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 
 		if (doneEvent == false) {
+			//今居るセルのイベントを読み込む
 			event = (*it)->eventID;
+			//実行するイベントの総個数→いずれ動的に変わる
+			remainEventNum = 2;
+
+			//DoEventに移動
 			main_sequence_.change(&TrainingScene::Seq_DoEvent);
 			//eventIDは0,1,2
 
@@ -217,24 +225,43 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 bool TrainingScene::Seq_DoEvent(const float deltatime)
 {
+	int size = 0;
+	int rand_cellEvent = 0;
+	int rand_cardEvent = 0;
+
 	//イベントを処理するシークエンス
 	//イベントの画像を表示
 	//イベントの内容を文章で表示
 	if (main_sequence_.isStart()) {
 		sequenceID = 2;
+		size = eManager->eventList[event].size();
 
+		rand_cellEvent = GetRand(size - 1);
+		rand_cardEvent = GetRand(size - 1);
 	}
 
+	//イベント処理シーンのウィンドウを出す
+	//ウィンドウ内メッセージを読む
+	//なにかのキーもしくはクリックでウィンドウが閉じる
+	//このウィンドウはイベントごとに開く
+	if (sequenceID == 3)return true;
+	if (remainEventNum == 2) {
+		//イベント1の実行処理
+		eManager->DoEvent(event, rand_cellEvent);
+		sequenceID = 3;
+		main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
+		return true;
 
-	int size = eManager->eventList[event].size();
+	}
+	else if (remainEventNum == 1) {
+		//イベントの2実行処理
+		eManager->DoEvent(selectedCardEvent, rand_cardEvent);
+		addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(rand_cardEvent));
 
-	int rand_cellEvent = GetRand(size - 1);
-	int rand_cardEvent = GetRand(size - 1);
+		//イベント2の描画処理
 
-	eManager->DoEvent(event, rand_cellEvent);
-	eManager->DoEvent(selectedCardEvent, rand_cardEvent);
-	addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(rand_cardEvent));
-
+		remainEventNum--;
+	}
 	//起きたイベントの内容をログで出力したい
 	//Debug
 	//*************cellEventのログ表示**************
@@ -256,7 +283,29 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 
 	doneEvent = true;
 
+
+
 	main_sequence_.change(&TrainingScene::Seq_Training_Main);
+
+	return true;
+}
+
+bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
+{
+	
+	//イベント1の描画処理 
+	if (main_sequence_.isStart()) {
+		eventframe = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
+		eventframe->menu_live = true;
+	}
+
+	eventframe->Menu_Draw();
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		remainEventNum--;
+		eventframe->menu_live = false;
+		main_sequence_.change(&TrainingScene::Seq_DoEvent);
+	}
 
 	return true;
 }
@@ -410,13 +459,16 @@ void TrainingScene::Draw()
 
 	cMenuManager->DrawWindow();
 
-	//if (gManager->isInput== true) {
-	//	//入力モードの描画
-	//	DrawKeyInputModeString(640, 480);
+	//もし今のシークエンスが〇〇なら描画する
 
-	//	//入力途中の文字列の描画
-	//	DrawKeyInputString(0, 0, gManager->InputHandle);
-	//}
+
+		//if (gManager->isInput== true) {
+		//	//入力モードの描画
+		//	DrawKeyInputModeString(640, 480);
+
+		//	//入力途中の文字列の描画
+		//	DrawKeyInputString(0, 0, gManager->InputHandle);
+		//}
 }
 
 //7つまでログを生成する関数,古い方から消える

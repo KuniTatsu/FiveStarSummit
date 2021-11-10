@@ -1,5 +1,6 @@
 #include"MenuWindow.h"
 #include "../library/t2klib.h"
+#include "../support/Support.h"
 #include"SoundManager.h"
 
 //extern Sound* sound;
@@ -10,7 +11,7 @@ Menu::Menu(int menu_window_x, int menu_window_y, int menu_window_width, int menu
 	menu_y = menu_window_y;
 	menu_width = menu_window_width;
 	menu_height = menu_window_height;
-	LoadDivGraph(gh_path.c_str(), 9, 3, 3, 16, 16, menu_gh);
+	int n = LoadDivGraph(gh_path.c_str(), 9, 3, 3, 16, 16, menu_gh);
 	menu_live = false;
 
 
