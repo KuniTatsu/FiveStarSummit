@@ -84,6 +84,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		}
 		CardDelete();
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
+		day += loopdaycount;
 
 		int randomnum = GetRand(15);
 		createDayCard(randomnum);
@@ -110,19 +111,16 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	else {
 		//もし一回も移動をしていないならイベントを行わない
 		if (doneFirstEvent == false)return true;
-		std::list<DayCell*>::iterator it = cell_.begin();
-		//it += 2;　できない
-		++it;
-		++it;//iteratorを3番目に移動
-		//イベントIDを取得
-		//考えること:どこで実際に実行されるイベントを決定するか
-			// ○1:newしたときにcellの色によってイベントリストが決まり、ランダムでイベントが設定される
-			//   2:loopdaycountが0になったときに色を取得してイベントリストを決め、ランダムでイベントを設定する
-
-
-
+		//std::list<DayCell*>::iterator it = cell_.begin();
+		//
+		//++it;
+		//++it;//iteratorを3番目に移動
 
 		if (doneEvent == false) {
+			std::list<DayCell*>::iterator it = cell_.begin();
+			
+			++it;
+			++it;//iteratorを3番目に移動
 			//今居るセルのイベントを読み込む
 			event = (*it)->eventID;
 			//実行するイベントの総個数→いずれ動的に変わる
@@ -164,6 +162,11 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		}
 
 		isnowLoop = false;
+
+		if (day > 30) {
+			day = 1;
+			now_month=(now_month+1)%12;
+		}
 	}
 	return true;
 }
@@ -256,15 +259,17 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	else if (remainEventNum == 1) {
 		//イベントの2実行処理
 		eManager->DoEvent(selectedCardEvent, rand_cardEvent);
-		addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(rand_cardEvent));
+		sequenceID = 3;
+		t2k::debugTrace("\nイベント2つめの画面処理\n");
 
-		//イベント2の描画処理
-
-		remainEventNum--;
+		main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
+		return true;
+		
 	}
 	//起きたイベントの内容をログで出力したい
 	//Debug
 	//*************cellEventのログ表示**************
+	addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(rand_cardEvent));
 	if (eManager->eventList[event][rand_cellEvent]->num_ > 0) {
 		addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
 	}
@@ -304,6 +309,7 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		remainEventNum--;
 		eventframe->menu_live = false;
+		delete eventframe;
 		main_sequence_.change(&TrainingScene::Seq_DoEvent);
 	}
 
@@ -431,6 +437,9 @@ void TrainingScene::Draw()
 	}
 	//cardSelect();
 	DrawWindow();
+
+	DrawStringEx(900, 150, -1, "%s", month[now_month].c_str());
+
 	//------debug------
 	int k = 0;
 	for (auto c : cell_) {

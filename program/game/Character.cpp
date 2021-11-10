@@ -9,7 +9,7 @@
 
 Chara::Chara(std::string name)
 {
-	SRand(time(0));
+	//SRand(time(0));
 	charadata = new SaveData_t;
 
 	int rangetype = StatusRandom(2, 0);
