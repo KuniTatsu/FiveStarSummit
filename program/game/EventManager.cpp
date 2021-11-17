@@ -71,15 +71,14 @@ int EventManager::setEvent(int eventType)
 		return 2;
 	}
 
-	//for (int i = 0; i < 15; ++i) {
-	//	if (i == eventType) {
-	//		return i;
+	
+}
+void EventManager::loadCardEvent()
+{
+	cardEvent_all=t2k::loadCsv("Csv/cardEvent.csv");
 
-	//	}
-	//	else {
-	//		continue;
-	//	}
-	//}
+
+
 }
 //イベントを実行する関数 いずれイベントクラスのメンバーを呼び出すようにしたい
 void EventManager::DoEvent(int eventID, int randomnum)

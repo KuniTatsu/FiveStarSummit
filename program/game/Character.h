@@ -17,6 +17,8 @@ public:
 		int RANGETYPE;	//ƒŒƒ“ƒW“K³ 0:’Z,1:’†,2:’·
 		int STANCE;		//í“¬ƒXƒ^ƒ“ƒX 0:‘¬U,1:Œ˜À,2:”½Œ‚,3:•’Ê
 //---------Šî‘bƒXƒe-------------------7
+		/*class status{
+		public:*/
 		int ATACK;      //•¨—UŒ‚—Í 
 		int DEFENCE;	//•¨—–hŒä—Í
 		int MAGIATACK;	//–‚–@UŒ‚—Í
@@ -24,6 +26,9 @@ public:
 		int SPEED;		//‘f‘‚³
 		int MIND;		//Œ«‚³
 		int VITALITY;	//‹v—Í
+	//};
+
+		/*status sta;*/
 //---------Šî‘bƒXƒeŒoŒ±’l-------------------7
 		int EXP_ATACK;		//•¨—UŒ‚—ÍŒoŒ±’l
 		int EXP_DEFENCE;	//•¨—–hŒä—ÍŒoŒ±’l
@@ -43,7 +48,7 @@ public:
 //---------ƒeƒ“ƒVƒ‡ƒ“---------------------1
 	//ˆ«‚¢--------------->—Ç‚¢
 		//0...1...2...3...4
-		int tension=2;//default
+		int tension = 2;//default
 //---------‹­‰»€–Ú---------------------1
 		//int training_ToDo = 0;
 
@@ -52,7 +57,7 @@ public:
 	SaveData_t* charadata = nullptr;
 
 private:
-	int StatusRandom(int maxnum,int randomtype);
+	int StatusRandom(int maxnum, int randomtype);
 
 
 };

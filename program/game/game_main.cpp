@@ -16,6 +16,8 @@ void gameMain( float deltatime ) {
 
 		gManager = new GameManager();
 
+		gManager->initGameManager();
+
 		init = true;
 	}
 	

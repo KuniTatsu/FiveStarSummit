@@ -49,13 +49,13 @@ public:
 
 	//マス画像を表示するための中心座標
 	t2k::Vector3 tbl[7] = {
-		{mass_x, 50, 0},
-		{mass_x + mass_width * 1, 50, 0},
-		{mass_x + mass_width * 2, 50, 0},
-		{mass_x + mass_width * 3, 50, 0},
-		{mass_x + mass_width * 4, 50, 0},
-		{mass_x + mass_width * 5, 50, 0},
-		{mass_x + mass_width * 6, 50, 0},
+		{mass_x, 70, 0},
+		{mass_x + mass_width * 1, 70, 0},
+		{mass_x + mass_width * 2, 70, 0},
+		{mass_x + mass_width * 3, 70, 0},
+		{mass_x + mass_width * 4, 70, 0},
+		{mass_x + mass_width * 5, 70, 0},
+		{mass_x + mass_width * 6, 70, 0},
 	};
 	//カードの一番左の画像のx座標
 	const float card_x = 400;
@@ -78,6 +78,10 @@ public:
 	//今の月
 	int now_month = 0;
 
+	std::string days[7] = { "月","火","水","木","金","土","日" };
+
+	//一週間のどこにいるか
+	int week = 0;//1~7
 	//今の日
 	int day = 1;//1~30
 
@@ -117,6 +121,8 @@ private:
 
 	//0,1,2:イベント種類
 	int event = 0;
+	//カードのイベントid
+	int size_card = 0;
 	//実行イベントの残り個数
 	int remainEventNum = 2;
 

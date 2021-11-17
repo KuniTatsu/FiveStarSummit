@@ -1,7 +1,9 @@
 #include "DataManager.h"
+#include"DxLib.h"
 
 DataManager::DataManager()
 {
+	
 }
 
 DataManager::~DataManager()

@@ -1,9 +1,11 @@
 #pragma once
 #include<vector>
 #include<string>
+#include<unordered_map>
 class SceneManager;
 class Chara;
 class AbilityManager;
+class DataManager;
 
 class GameManager {
 
@@ -15,8 +17,11 @@ public:
 	SceneManager* sManager = nullptr;
 	Chara* chara_ = nullptr;
 	AbilityManager* aManager = nullptr;
+	DataManager* dManager = nullptr;
 
 	std::vector<Chara*> chara = {};
+
+	std::unordered_map<std::string, int> ghmap;
 
 	float deitatime_;
 
@@ -37,6 +42,8 @@ public:
 
 	void Update();
 	void Draw();
+	void initGameManager();
+	int LoadGraphEx(std::string gh);
 
 private:
 	char String[256] = {};

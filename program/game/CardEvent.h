@@ -1,14 +1,14 @@
 #pragma once
 #include<string>
 
-class Event {
+class CardEvent {
 
 public:
-	Event(int ID, int Eventtype, int Statustype, int num, std::string desc,std::string StatusName);
-	~Event();
-
-	Event(int ID, int Eventtype, int Statustype, int num, std::string desc, std::string StatusName,
+	CardEvent(int ID, int Eventtype, int Statustype, int num, std::string desc, std::string StatusName,
 		int ID2, int Eventtype2, int Statustype2, int num2, std::string desc2, std::string StatusName2);
+	~CardEvent();
+
+	
 
 	//eventID
 	int id_ = 0;
@@ -21,7 +21,7 @@ public:
 	//説明
 	std::string desc_ = {};
 	//変化するステータスの名前
-	std::string StatusName_ ;
+	std::string StatusName_;
 
 	//******カード用ステータス*****//
 	//２つ目の変化するステータス
@@ -33,8 +33,6 @@ public:
 	//変化するステータスの名前
 	std::string StatusName_second_;
 
-
-
-	void run_Status_Event();
+	void run_Card_Event();
 
 };

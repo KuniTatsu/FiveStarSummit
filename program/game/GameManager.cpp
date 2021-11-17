@@ -7,16 +7,18 @@
 #include<string>
 #include"AbilityManager.h"
 #include"Ability.h"
+#include"DataManager.h"
 
 
 
 GameManager::GameManager()
 {
-	aManager = new AbilityManager();
-	//sManager = new SceneManager();
-	deitatime_ = 0;
-	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
+	//aManager = new AbilityManager();
+	////dManager = new DataManager();
+	////sManager = new SceneManager();
+	//deitatime_ = 0;
 
+	//SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 }
 
 GameManager::~GameManager()
@@ -27,25 +29,25 @@ void GameManager::MakeCharacter()
 {
 
 	InputName();
-	
-		////string型に変換
-		//std::string name(String, sizeof(String) / sizeof(String[0]));
-		//isInput = false;
 
-		//////******debug*****
-		////std::string name = "test";
+	////string型に変換
+	//std::string name(String, sizeof(String) / sizeof(String[0]));
+	//isInput = false;
+
+	//////******debug*****
+	////std::string name = "test";
 
 
-		//chara_ = new Chara(name);
-		//chara.emplace_back(chara_);
-		
-	
+	//chara_ = new Chara(name);
+	//chara.emplace_back(chara_);
+
+
 }
 
 void GameManager::InputName()
 {
 	isInput = true;
-	if (InputHandle != 0)return ;
+	if (InputHandle != 0)return;
 	InputHandle = MakeKeyInput(50, FALSE, FALSE, FALSE);
 	//DrawStringEx(800, 600, -1, "入力中だよ");
 
@@ -56,7 +58,7 @@ void GameManager::InputName()
 
 	//毎フレーム実行が必要なのでUpdateに移動
 #if 0
-	
+
 	while (!ProcessMessage()) {
 
 
@@ -82,8 +84,10 @@ void GameManager::InputName()
 	DeleteKeyInput(InputHandle);
 #endif
 
-	
+
 }
+
+//スキル付与イベントは負の値だった場合無視するコードを冒頭に入れる
 
 void GameManager::StatusSet(int setType, int value)
 {
@@ -208,14 +212,14 @@ void GameManager::Update()
 		chara_ = new Chara(name);
 		chara.emplace_back(chara_);
 
-		
+
 	}
 	else {
 
 
 		//入力モードの描画↓出ない
 		DrawKeyInputModeString(640, 480);
-		
+
 		//↓出る
 		//t2k::debugTrace("\n入力中\n");
 
@@ -241,4 +245,33 @@ void GameManager::Draw()
 	/*std::string hoge = aManager->abilityList[0][0]->ability_name;
 	DrawStringEx(800, 700, -1, "%s", hoge);*/
 
+}
+
+void GameManager::initGameManager()
+{
+	aManager = new AbilityManager();
+	//dManager = new DataManager();
+	//sManager = new SceneManager();
+	deitatime_ = 0;
+
+	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
+
+
+}
+
+int GameManager::LoadGraphEx(std::string gh)
+{
+
+	auto it = ghmap.find(gh);
+	if (it != ghmap.end()) {
+		return ghmap[gh];
+	}
+
+	else {
+		int loadgh = LoadGraph(gh.c_str());
+		ghmap.insert(std::make_pair(gh, loadgh));
+	}
+
+
+	return ghmap[gh];
 }

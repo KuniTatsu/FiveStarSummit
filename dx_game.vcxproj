@@ -14,6 +14,7 @@
     <ClCompile Include="program\game\Ability.cpp" />
     <ClCompile Include="program\game\AbilityManager.cpp" />
     <ClCompile Include="program\game\BattleScene.cpp" />
+    <ClCompile Include="program\game\CardEvent.cpp" />
     <ClCompile Include="program\game\Character.cpp" />
     <ClCompile Include="program\game\CharaMenuManager.cpp" />
     <ClCompile Include="program\game\CharaWindow.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="program\game\Ability.h" />
     <ClInclude Include="program\game\AbilityManager.h" />
     <ClInclude Include="program\game\BattleScene.h" />
+    <ClInclude Include="program\game\CardEvent.h" />
     <ClInclude Include="program\game\Character.h" />
     <ClInclude Include="program\game\CharaMenuManager.h" />
     <ClInclude Include="program\game\CharaWindow.h" />

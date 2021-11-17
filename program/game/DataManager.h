@@ -9,6 +9,7 @@ public:
 	DataManager();
 	~DataManager();
 
+
 	void Save();
 	void Load();
 
