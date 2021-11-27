@@ -57,6 +57,8 @@ public:
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
 
+	std::string recentAddedAbility = {};
+
 private:
 	int StatusRandom(int maxnum, int randomtype);
 

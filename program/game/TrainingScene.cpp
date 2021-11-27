@@ -14,6 +14,7 @@
 #include"CharaWindow.h"
 #include"Character.h"
 #include"MenuWindow.h"
+#include"Ability.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -65,7 +66,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	}
 	cardSelect();
 	//ループ日数を決定する所
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_NUMPAD0) && isnowLoop == false) {
 		isnowLoop = true;
 		doneFirstEvent = true;
 		doneEvent = false;
@@ -316,19 +317,30 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	}
 
 
-	//もしアビリティが追加されてたら
+	//もしアビリティが追加されるイベントが実行されていたら
 	if (eManager->cardEventList[selectedCardEvent][selectedCardEventId]->AbilityType != -1) {
 		int abitype = eManager->cardEventList[selectedCardEvent][selectedCardEventId]->AbilityType;
 		int abiid = eManager->cardEventList[selectedCardEvent][selectedCardEventId]->AbilityId;
+		//どのアビリティが追加されたか名前を取得
 		std::string hoge = gManager->GetAbility(abitype, abiid);
+		std::string addedAbilityName = "";
+		for (auto c : gManager->chara) {
+			if (c->recentAddedAbility.empty())continue;
+			addedAbilityName = c->recentAddedAbility;
+			//うまくログ表示されない
+			addLog(c->charadata->name_ + "が" + addedAbilityName + "を習得した。");
+		}
 
-		
-		
 	}
 
-		doneEvent = true;
+	doneEvent = true;
 
+	//直近で追加されたアビリティ履歴を消去する　
+	for (auto c : gManager->chara) {
+		if (c->recentAddedAbility.empty()) continue;
+		c->recentAddedAbility = c->recentAddedAbility.erase(0);
 
+	}
 
 	main_sequence_.change(&TrainingScene::Seq_Training_Main);
 
@@ -611,6 +623,14 @@ void TrainingScene::DrawWindow()
 		int SPEED = c->charadata->SPEED;
 		int MIND = c->charadata->MIND;
 		int VIT = c->charadata->VITALITY;
+		std::string abi1 = {};
+		//アビリティがあれば取得
+		//将来的にはすべての持っているアビリティを表示させるように変更する
+		if (c->charadata->Ability.empty() == false) {
+			abi1 = c->charadata->Ability[0]->ability_name;
+			DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 70, c->cWindow->windowPos.y + 10, String_Color_Black, "アビリティ:", abi1);
+		}
+
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 10, String_Color_Black, "名前:%s", name.c_str());
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力:%d", ATK);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力:%d", DEF);
@@ -620,6 +640,9 @@ void TrainingScene::DrawWindow()
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "速度:%d", SPEED);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "賢さ:%d", MIND);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "持久力:%d", VIT);
+
+
+
 
 		DrawAbility(c);
 	}

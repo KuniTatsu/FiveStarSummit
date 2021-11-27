@@ -192,6 +192,7 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 		if (random > 8) {
 
 			c->charadata->Ability.emplace_back(aManager->abilityList[abilityType][abilityId]);
+			c->recentAddedAbility = aManager->abilityList[abilityType][abilityId]->ability_name;
 			count += 1;
 		}
 		
