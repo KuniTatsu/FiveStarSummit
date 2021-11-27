@@ -185,22 +185,30 @@ void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd,
 
 void GameManager::AbilitySet(int abilityType, int abilityId)
 {
+	//最後のキャラの時点でcountが0ならそのキャラにアビリティを付与する？？
 	int count = 0;
 	for (auto c : chara) {
 		//1/10の確率でアビリティを付与する
 		int random = GetRand(10);
 		if (random > 8) {
 
+			
+			bool checkAlreadyhave = false;
+			int i = 0;
+			//すでに持っているアビリティだったら追加せずに飛ばす
+			for (auto abi : c->charadata->Ability) {
+
+				if (abi[i].ability_name == aManager->abilityList[abilityType][abilityId]->ability_name)checkAlreadyhave = true;
+				i++;
+			}
+			if (checkAlreadyhave)return;
 			c->charadata->Ability.emplace_back(aManager->abilityList[abilityType][abilityId]);
 			c->recentAddedAbility = aManager->abilityList[abilityType][abilityId]->ability_name;
 			count += 1;
 		}
-		
+
 	}
 }
-
-
-
 void GameManager::Update()
 {
 	SceneManager::Update();

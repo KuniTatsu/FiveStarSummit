@@ -626,10 +626,9 @@ void TrainingScene::DrawWindow()
 		std::string abi1 = {};
 		//アビリティがあれば取得
 		//将来的にはすべての持っているアビリティを表示させるように変更する
-		if (c->charadata->Ability.empty() == false) {
-			abi1 = c->charadata->Ability[0]->ability_name;
-			DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 70, c->cWindow->windowPos.y + 10, String_Color_Black, "アビリティ:", abi1);
-		}
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "アビリティ:");
+
 
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 10, String_Color_Black, "名前:%s", name.c_str());
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力:%d", ATK);
@@ -651,7 +650,16 @@ void TrainingScene::DrawWindow()
 
 void TrainingScene::DrawAbility(Chara* c)
 {
+	if (c->charadata->Ability.empty() == false) {
+		
+		int i = 0;
+		for (auto abi : c->charadata->Ability) {
 
+			DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 300, c->cWindow->windowPos.y + 10 + (20 * i),
+				String_Color_Black, "%s", abi->ability_name.c_str());
+			++i;
+		}
+	}
 
 
 }

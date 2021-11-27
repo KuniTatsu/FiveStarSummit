@@ -158,4 +158,7 @@ private:
 	//キャラクターのアビリティ描画関数
 	void DrawAbility(Chara* c);
 
+
+
+
 };
