@@ -26,8 +26,12 @@ public:
 	//経過日数
 	int passedDayNum = 0;
 
-	//カードを使ったときに起こるイベントのid
+	//カードを使ったときに起こるイベントのtypeid
+	int cardEventTypeId = 0;
+
 	int cardEventId = 0;
+
+	
 
 	//カード生存フラグ
 	bool is_alive_ = true;

@@ -2,6 +2,7 @@
 #include"CharaWindow.h"
 #include<time.h>
 #include"DxLib.h"
+#include"Ability.h"
 //
 //
 //playerdata = new SaveData_t;

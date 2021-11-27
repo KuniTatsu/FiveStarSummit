@@ -37,6 +37,14 @@ public:
 	//value¨•Ï‰»—Ê
 	void StatusSet(int setType, int value);
 
+	void StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit);
+
+	void AbilitySet(int abilityType, int abilityId);
+
+
+
+
+
 	//debug—p‚Éˆê’U‚±‚±‚Åì‚é
 	//void CharactorStatusDraw();
 
@@ -44,6 +52,8 @@ public:
 	void Draw();
 	void initGameManager();
 	int LoadGraphEx(std::string gh);
+
+	std::string GetAbility(int abilityType, int abilityId);
 
 private:
 	char String[256] = {};

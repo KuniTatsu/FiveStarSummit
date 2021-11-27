@@ -8,6 +8,7 @@
 #include<time.h>
 #include <iostream>
 #include"Event.h"
+#include "CardEvent.h"
 
 extern GameManager* gManager;
 
@@ -19,15 +20,17 @@ EventManager::EventManager()
 	//eventList[0][],eventList[1][],eventList[2][] が作られる
 	eventList.resize(3);
 
+	cardEventList.resize(3);
+
+
+
 	loadEvent();
+	loadCardEvent();
 }
 
 void EventManager::loadEvent()
 {
-	//イベントCSVは一つでよくね？
-	/*blue_event = t2k::loadCsv("Csv/blueEvent.csv");
-	red_event = t2k::loadCsv("Csv/redEvent.csv");
-	white_event = t2k::loadCsv("Csv/whiteEvent.csv");*/
+	
 
 	event_all = t2k::loadCsv("Csv/event.csv");
 	for (int i = 1; i < event_all.size(); ++i) {
@@ -76,7 +79,46 @@ int EventManager::setEvent(int eventType)
 void EventManager::loadCardEvent()
 {
 	cardEvent_all=t2k::loadCsv("Csv/cardEvent.csv");
+	for (int i = 1; i < cardEvent_all.size(); ++i) {
 
+		//excelから読み取った列を一つずつ変数に格納→イベントクラスを生成するときの引数にぶち込む
+		//id
+		int a = std::atoi(cardEvent_all[i][0].c_str());
+		//eventType:0,1,2
+		int b = std::atoi(cardEvent_all[i][1].c_str());
+		//atk
+		int c = std::atoi(cardEvent_all[i][2].c_str());
+		//def
+		int d = std::atoi(cardEvent_all[i][3].c_str());
+		//matk
+		int e = std::atoi(cardEvent_all[i][4].c_str());
+		//mdef
+		int f = std::atoi(cardEvent_all[i][5].c_str());
+		//spd
+		int g = std::atoi(cardEvent_all[i][6].c_str());
+		//mind
+		int h = std::atoi(cardEvent_all[i][7].c_str());
+		//vit
+		int j = std::atoi(cardEvent_all[i][8].c_str());
+		//AbilityType
+		int k = std::atoi(cardEvent_all[i][10].c_str());
+		//AbilityId
+		int l = std::atoi(cardEvent_all[i][11].c_str());
+		//tension
+		int m = std::atoi(cardEvent_all[i][12].c_str());
+		//ItemId
+		int n = std::atoi(cardEvent_all[i][13].c_str());
+
+		//id(int)	eventType(int)	atk	def	matk	mdef	spd	mind	vit	desc(std::string)	Abilitytype(int)	Abilityid(int)	tension(int)	itemid(int)
+		CardEvent* event = new CardEvent(a, b, c, d, e,f,g,h,j,cardEvent_all[i][9], k,l,m,n);
+
+		//eventtypeごとにリストに格納
+		cardEventList[b].emplace_back(event);
+
+		/*int size = eventList[0].size();
+		int rand = GetRand(size-1);
+		eventList[0][rand]->run_Event();*/
+	}
 
 
 }
@@ -87,6 +129,13 @@ void EventManager::DoEvent(int eventID, int randomnum)
 	//どのイベントを行うかexcelから決定する
 	eventList[eventID][randomnum]->run_Status_Event();
 	//eventList[0][1]->StatusName_;
+
+}
+
+void EventManager::DoCardEvent(int eventType, int eventId)
+{
+
+	cardEventList[eventType][eventId]->run_Card_Event();
 
 }
 

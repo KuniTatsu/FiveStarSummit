@@ -159,35 +159,46 @@ void GameManager::StatusSet(int setType, int value)
 
 }
 
-/*************Character‚É˜g‚²‚ÆŽÀ‘•‚µ‚½‚½‚ß‚±‚±‚Å‚Í•\Ž¦‚µ‚È‚¢************
-//debug
-//TrainingScene‚©‚çˆø”‚ÅÀ•W‚ðŽ‚Á‚Ä‚­‚é
-void GameManager::CharactorStatusDraw()
+void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit)
 {
-	int i = 0;
-	for (auto c : chara) {
-		std::string name = c->charadata->name_;
-		int ATK = c->charadata->ATACK;
-		int DEF = c->charadata->DEFENCE;
-		int MATK = c->charadata->MAGIATACK;
-		int MDEF = c->charadata->MAGIDEFENCE;
-		int SPEED = c->charadata->SPEED;
-		int MIND = c->charadata->MIND;
-		int VIT = c->charadata->VITALITY;
-		DrawStringEx(500 + i * 200, 200, -1, "–¼‘O:%s", name.c_str());
-		DrawStringEx(500 + i * 200, 240, -1, "UŒ‚—Í:%d", ATK);
-		DrawStringEx(500 + i * 200, 280, -1, "–hŒä—Í:%d", DEF);
-		DrawStringEx(500 + i * 200, 320, -1, "–‚UŒ‚—Í:%d", MATK);
-		DrawStringEx(500 + i * 200, 360, -1, "–‚–hŒä—Í:%d", MDEF);
-		DrawStringEx(500 + i * 200, 400, -1, "‘¬“x:%d", SPEED);
-		DrawStringEx(500 + i * 200, 440, -1, "Œ«‚³:%d", MIND);
-		DrawStringEx(500 + i * 200, 480, -1, "Ž‹v—Í:%d", VIT);
 
-		++i;
+	for (auto c : chara) {
+
+		c->charadata->ATACK += atk;
+		c->charadata->DEFENCE += def;
+		c->charadata->MAGIATACK += magiatk;
+		c->charadata->MAGIDEFENCE += magidef;
+		c->charadata->SPEED += spd;
+		c->charadata->MIND += mind;
+		c->charadata->VITALITY += vit;
+
+		if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
+		if (c->charadata->DEFENCE <= 0)c->charadata->DEFENCE = 0;
+		if (c->charadata->MAGIATACK <= 0)c->charadata->MAGIATACK = 0;
+		if (c->charadata->MAGIDEFENCE <= 0)c->charadata->MAGIDEFENCE = 0;
+		if (c->charadata->SPEED <= 0)c->charadata->SPEED = 0;
+		if (c->charadata->MIND <= 0)c->charadata->MIND = 0;
+		if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;
 	}
 
 }
-*/
+
+void GameManager::AbilitySet(int abilityType, int abilityId)
+{
+	int count = 0;
+	for (auto c : chara) {
+		//1/10‚ÌŠm—¦‚ÅƒAƒrƒŠƒeƒB‚ð•t—^‚·‚é
+		int random = GetRand(10);
+		if (random > 8) {
+
+			c->charadata->Ability.emplace_back(aManager->abilityList[abilityType][abilityId]);
+			count += 1;
+		}
+		
+	}
+}
+
+
 
 void GameManager::Update()
 {
@@ -274,4 +285,11 @@ int GameManager::LoadGraphEx(std::string gh)
 
 
 	return ghmap[gh];
+}
+
+std::string GameManager::GetAbility(int abilityType, int abilityId)
+{
+	std::string ability = aManager->abilityList[abilityType][abilityId]->ability_name;
+
+	return ability;
 }

@@ -33,6 +33,6 @@ void DayCard::Draw()
 	DrawStringEx(pos_.x + initpos.x, pos_.y + initpos.y, Color, "%d", passedDayNum);
 	DrawStringEx(pos_.x + initpos.x, pos_.y + initpos.y+20, Color, "ƒCƒxƒ“ƒgid:");
 
-	DrawStringEx(pos_.x + initpos.x, pos_.y + initpos.y+40, Color, "%d", cardEventId);
+	DrawStringEx(pos_.x + initpos.x, pos_.y + initpos.y+40, Color, "%d", cardEventTypeId);
 	
 }

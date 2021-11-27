@@ -135,6 +135,7 @@ private:
 
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
+	int selectedCardEventId = 0;
 
 	Menu* eventframe = nullptr;
 
