@@ -192,7 +192,7 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 		int random = GetRand(10);
 		if (random > 8) {
 
-			
+			//なんか複数個同じアビリティが登録されてるバグある
 			bool checkAlreadyhave = false;
 			int i = 0;
 			//すでに持っているアビリティだったら追加せずに飛ばす
