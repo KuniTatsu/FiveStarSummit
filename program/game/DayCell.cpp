@@ -56,7 +56,10 @@ void DayCell::Draw()
 {
 	//	DrawGraph()
 	DrawRotaGraph(pos_.x, pos_.y, 1, 0, gh, false);
-	DrawStringEx(pos_.x, pos_.y - 40, -1, "%s", myday.c_str());
+	DrawStringEx(pos_.x, pos_.y - 40, -1, "%s", myDayName.c_str());
+	DrawStringEx(pos_.x-40, pos_.y + 40, -1, "%s", myMonthName.c_str());
+	DrawStringEx(pos_.x+10, pos_.y + 40, -1, "%d“ú", myDay);
+
 	//DrawGraph(pos_.x, pos_.y, gh, false);
 }
 

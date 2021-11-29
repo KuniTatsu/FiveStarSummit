@@ -189,10 +189,11 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 	int count = 0;
 	for (auto c : chara) {
 		//1/10の確率でアビリティを付与する
-		int random = GetRand(10);
+		//int random = GetRand(10);
+		int random = 9;
 		if (random > 8) {
 
-			//なんか複数個同じアビリティが登録されてるバグある
+			//*******なんか複数個同じアビリティが登録されてるバグある*******//
 			bool checkAlreadyhave = false;
 			int i = 0;
 			//すでに持っているアビリティだったら追加せずに飛ばす
@@ -201,10 +202,14 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 				if (abi[i].ability_name == aManager->abilityList[abilityType][abilityId]->ability_name)checkAlreadyhave = true;
 				i++;
 			}
-			if (checkAlreadyhave)return;
+			if (checkAlreadyhave) {
+				checkAlreadyhave = false;
+				continue;
+			}
 			c->charadata->Ability.emplace_back(aManager->abilityList[abilityType][abilityId]);
 			c->recentAddedAbility = aManager->abilityList[abilityType][abilityId]->ability_name;
 			count += 1;
+
 		}
 
 	}

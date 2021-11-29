@@ -87,7 +87,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		}
 		CardDelete();
 		addLog(std::to_string(loopdaycount) + "日経過するよ");
-		day += loopdaycount;
+		//day += loopdaycount;
 
 
 		int randomnum = GetRand(15);
@@ -132,45 +132,15 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 			//DoEventに移動
 			main_sequence_.change(&TrainingScene::Seq_DoEvent);
-			//eventIDは0,1,2
 
-			//int size = eManager->eventList[event].size();
-
-			//int rand_cellEvent = GetRand(size - 1);
-			//int rand_cardEvent = GetRand(size - 1);
-
-			//eManager->DoEvent(event, rand_cellEvent);
-			//eManager->DoEvent(selectedCardEvent, rand_cardEvent);
-			//addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(rand_cardEvent));
-
-			////起きたイベントの内容をログで出力したい
-			////Debug
-			////*************cellEventのログ表示**************
-			//if (eManager->eventList[event][rand_cellEvent]->num_ > 0) {
-			//	addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
-			//}
-			//else {
-			//	int hoge = eManager->eventList[event][rand_cellEvent]->num_ * (-1);
-			//	addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
-			//}
-			////*************cardEventのログ表示**************
-			//if (eManager->eventList[event][rand_cardEvent]->num_ > 0) {
-			//	addLog(eManager->eventList[event][rand_cardEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cardEvent]->num_) + "増加した");
-			//}
-			//else {
-			//	int hoge = eManager->eventList[event][rand_cardEvent]->num_ * (-1);
-			//	addLog(eManager->eventList[event][rand_cardEvent]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
-			//}
-
-			//doneEvent = true;
 		}
 
 		isnowLoop = false;
 
-		if (day > 30) {
+		/*if (day > 30) {
 			day = 1;
 			now_month = (now_month + 1) % 12;
-		}
+		}*/
 
 	}
 	return true;
@@ -226,6 +196,9 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	//DayCell* p = new DayCell(0);
 	//リストの1番をリストから外してdeleteする生成
 	CellDelete();
+
+	//もし次が必ず止まる日ならloopdaycountを0にする
+	//
 	loopdaycount--;
 	main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	return true;
@@ -376,8 +349,17 @@ DayCell* TrainingScene::createDayCell(int cellnum) {
 	//DayCell自体のeventIDを決定する
 
 	new_obj->eventID = eManager->setEvent(cellnum);
-	new_obj->myday = days[week];
+	new_obj->myDayName = days[week];
+	new_obj->myDay = day;
+	new_obj->myMonthName = month[now_month];
+
+	day++;
 	week = (week + 1) % 7;
+
+	if (day > 30) {
+		day = 1;
+		now_month = (now_month + 1) % 12;
+	}
 
 	cell_.emplace_back(new_obj);
 	return new_obj;

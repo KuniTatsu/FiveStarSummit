@@ -20,7 +20,10 @@ public:
 	//0,1,2‚©‚ç‘I‚Î‚ê‚é
 	int eventID = 0;
 
-	std::string myday = "";
+	std::string myDayName = "";
+
+	int myDay = 0;
+	std::string myMonthName = "";
 
 	void Update();
 
