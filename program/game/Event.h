@@ -23,16 +23,7 @@ public:
 	//変化するステータスの名前
 	std::string StatusName_ ;
 
-	//******カード用ステータス*****//
-	//２つ目の変化するステータス
-	int event_type_second_ = 0;
-	int status_type_second_ = 0;
-	int num_second_ = 0;
-	//説明
-	std::string desc__second_ = {};
-	//変化するステータスの名前
-	std::string StatusName_second_;
-
+	
 
 
 	void run_Status_Event();

@@ -9,6 +9,9 @@
 #include <iostream>
 #include"Event.h"
 #include "CardEvent.h"
+#include"ForceStopDay.h"
+#include"ExtraEvent.h"
+
 
 extern GameManager* gManager;
 
@@ -22,16 +25,14 @@ EventManager::EventManager()
 
 	cardEventList.resize(3);
 
-
-
 	loadEvent();
 	loadCardEvent();
+	loadForcedStopDay();
+	exEvent = new ExtraEvent();
 }
 
 void EventManager::loadEvent()
 {
-	
-
 	event_all = t2k::loadCsv("Csv/event.csv");
 	for (int i = 1; i < event_all.size(); ++i) {
 
@@ -72,6 +73,9 @@ int EventManager::setEvent(int eventType)
 	}
 	else if (9 <= eventType && eventType <= 15) {
 		return 2;
+	}
+	else if (eventType >= 16) {
+		return 99;
 	}
 
 	
@@ -127,6 +131,7 @@ void EventManager::DoEvent(int eventID, int randomnum)
 {
 	//eventID:0,1,2 randomnum:eventnumber
 	//どのイベントを行うかexcelから決定する
+	if (eventID == 99)return;
 	eventList[eventID][randomnum]->run_Status_Event();
 	//eventList[0][1]->StatusName_;
 
@@ -146,4 +151,22 @@ int EventManager::Random(int rangeMax)
 
 
 	return hoge;
+}
+
+void EventManager::loadForcedStopDay()
+{
+	ForcedStopDay_All = t2k::loadCsv("Csv/ForcedStopDay.csv");
+	for (int i = 1; i < ForcedStopDay_All.size(); ++i) {
+		//id
+		int a = std::atoi(ForcedStopDay_All[i][0].c_str());
+		//month
+		int b = std::atoi(ForcedStopDay_All[i][1].c_str());
+		//day
+		int c = std::atoi(ForcedStopDay_All[i][2].c_str());
+
+		ForcedStopDay* stopday = new ForcedStopDay(a, b, c, ForcedStopDay_All[i][3]);
+
+		ForcedStopDayList.emplace_back(stopday);
+
+	}
 }

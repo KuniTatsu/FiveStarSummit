@@ -1,0 +1,5 @@
+id(int),month(int),day(int),desc(std::string)
+100,3,1,入学式
+101,6,25,試験
+102,0,1,年始
+103,2,9,卒業式

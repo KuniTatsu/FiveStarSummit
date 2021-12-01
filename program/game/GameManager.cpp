@@ -13,38 +13,21 @@
 
 GameManager::GameManager()
 {
-	//aManager = new AbilityManager();
-	////dManager = new DataManager();
-	////sManager = new SceneManager();
-	//deitatime_ = 0;
 
-	//SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 }
 
 GameManager::~GameManager()
 {
 }
 
-void GameManager::MakeCharacter()
+void GameManager::MakeCharacter(const std::string& name)
 {
-
-	InputName();
-
-	////string型に変換
-	//std::string name(String, sizeof(String) / sizeof(String[0]));
-	//isInput = false;
-
-	//////******debug*****
-	////std::string name = "test";
-
-
-	//chara_ = new Chara(name);
-	//chara.emplace_back(chara_);
-
-
+	chara_ = new Chara(name);
+	chara.emplace_back(chara_);
+	//InputName(name);
 }
 
-void GameManager::InputName()
+void GameManager::InputName(std::string name)
 {
 	isInput = true;
 	if (InputHandle != 0)return;
@@ -104,8 +87,8 @@ void GameManager::StatusSet(int setType, int value)
 
 			c->charadata->ATACK += value;
 			if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
-		}
 	}
+}
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
@@ -196,11 +179,15 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 			//*******なんか複数個同じアビリティが登録されてるバグある*******//
 			bool checkAlreadyhave = false;
 			int i = 0;
+			//ここのfor分がうまく回ってない
 			//すでに持っているアビリティだったら追加せずに飛ばす
 			for (auto abi : c->charadata->Ability) {
 
-				if (abi[i].ability_name == aManager->abilityList[abilityType][abilityId]->ability_name)checkAlreadyhave = true;
-				i++;
+				if (abi->ability_name == aManager->abilityList[abilityType][abilityId]->ability_name) {
+					checkAlreadyhave = true;
+					break;
+				}
+				//i++;
 			}
 			if (checkAlreadyhave) {
 				checkAlreadyhave = false;
@@ -242,14 +229,15 @@ void GameManager::Update()
 	else {
 
 
-		//入力モードの描画↓出ない
+		//入力モードの描画
 		DrawKeyInputModeString(640, 480);
 
 		//↓出る
 		//t2k::debugTrace("\n入力中\n");
 
-		//入力途中の文字列の描画↓出ない
-		DrawKeyInputString(0, 0, InputHandle);
+		//DrawBox(50, 50, 100, 100, -1, true);
+		//入力途中の文字列の描画
+		DrawKeyInputString(200, 200, InputHandle);
 	}
 
 }

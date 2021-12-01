@@ -15,6 +15,8 @@
 #include"Character.h"
 #include"MenuWindow.h"
 #include"Ability.h"
+#include"ExtraEvent.h"
+#include"ForceStopDay.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -25,7 +27,7 @@ TrainingScene::TrainingScene()
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
-
+	eventframe = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
 	SRand(time(0));
 
 	String_Color_Black = GetColor(0, 0, 0);
@@ -104,6 +106,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	//ループ日数決定後にループが開始し、0になるまでここが回る
 	if (loopdaycount != 0)
 	{
+
 		//一日経過する間隔
 		time_++;
 		if (time_ > 40) {
@@ -192,14 +195,51 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	//ここにDayCellを追加したり消したりする処理を入れる
 	//新しく1つDayCellを作る
 	int random = GetRand(15);
-	createDayCell(random);
+
+	
+	//入学式を仕込む
+	if (now_month == 3 && day == 1) {
+		createDayCell(16);
+	}
+	else {
+		createDayCell(random);
+	}
+std::list<DayCell*>::iterator it = cell_.begin();
+
+	++it;
+	++it;
+	++it;
+
 	//DayCell* p = new DayCell(0);
 	//リストの1番をリストから外してdeleteする生成
 	CellDelete();
 
 	//もし次が必ず止まる日ならloopdaycountを0にする
-	//
+	bool isForcedStopDay = false;
+
+
+	for (auto stopday : eManager->ForcedStopDayList) {
+
+		//今の日にちが必ず止まる日だったら
+		if ((*it)->myMonth == stopday->month && (*it)->myDay== stopday->day) {
+			loopdaycount = 0;
+
+			if (stopday->id == 100) {
+				isForcedStopDay = true;
+				doneEvent = true;
+				main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
+
+				break;
+			}
+			/*else if (stopday->id == 1)
+				main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);*/
+		}
+
+	}
+	if (isForcedStopDay)return true;
+
 	loopdaycount--;
+
 	main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	return true;
 }
@@ -215,11 +255,16 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	//イベントの内容を文章で表示
 	if (main_sequence_.isStart()) {
 		sequenceID = 2;
-		size = eManager->eventList[event].size();
-		//size_card = eManager->eventList[selectedCardEvent].size();
+		if (event == 99) {
+			rand_cellEvent = 99;
+		}
+		else {
+			size = eManager->eventList[event].size();
+			//size_card = eManager->eventList[selectedCardEvent].size();
 
-		rand_cellEvent = GetRand(size - 1);
-		//rand_cardEvent = GetRand(size_card - 1);
+			rand_cellEvent = GetRand(size - 1);
+			//rand_cardEvent = GetRand(size_card - 1);
+		}
 	}
 
 	//イベント処理シーンのウィンドウを出す
@@ -325,7 +370,7 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 
 	//イベント1の描画処理 
 	if (main_sequence_.isStart()) {
-		eventframe = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
+
 		eventframe->menu_live = true;
 	}
 
@@ -334,8 +379,27 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		remainEventNum--;
 		eventframe->menu_live = false;
-		delete eventframe;
+
 		main_sequence_.change(&TrainingScene::Seq_DoEvent);
+	}
+
+	return true;
+}
+
+bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
+{
+	if (main_sequence_.isStart()) {
+
+		eventframe->menu_live = true;
+		eManager->exEvent->NewMemberComing();
+		t2k::debugTrace("\n入学式イベント実行\n");
+	}
+	eventframe->Menu_Draw();
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+
+		eventframe->menu_live = false;
+		main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	}
 
 	return true;
@@ -347,15 +411,24 @@ DayCell* TrainingScene::createDayCell(int cellnum) {
 	DayCell* new_obj = new DayCell(cellnum);
 
 	//DayCell自体のeventIDを決定する
-
 	new_obj->eventID = eManager->setEvent(cellnum);
+	//DayCellに自分の日にちをもたせる
 	new_obj->myDayName = days[week];
 	new_obj->myDay = day;
 	new_obj->myMonthName = month[now_month];
+	new_obj->myMonth = now_month;
 
+	//もし日にちが特定の日にちだったら
+
+	//ForcedStopFlagをtrueにする
+
+
+
+	//日にちの更新処理
 	day++;
 	week = (week + 1) % 7;
 
+	//日が31以上になっていたら次の月にする
 	if (day > 30) {
 		day = 1;
 		now_month = (now_month + 1) % 12;
@@ -412,6 +485,7 @@ void TrainingScene::CardDelete()
 			}
 		}
 	}
+
 	card_.erase(it);
 }
 
@@ -433,7 +507,7 @@ void TrainingScene::Update()
 	//暫定的なキャラ作成
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
 
-		gManager->MakeCharacter();
+		gManager->MakeCharacter("");
 
 		//出力欄にメッセージ出したいんだけど出ないんだけど！
 		//std::cout << "キャラが作成されました" << std::endl;
@@ -633,7 +707,7 @@ void TrainingScene::DrawWindow()
 void TrainingScene::DrawAbility(Chara* c)
 {
 	if (c->charadata->Ability.empty() == false) {
-		
+
 		int i = 0;
 		for (auto abi : c->charadata->Ability) {
 
@@ -642,6 +716,16 @@ void TrainingScene::DrawAbility(Chara* c)
 			++i;
 		}
 	}
+
+
+}
+
+void TrainingScene::NewCharaWindow()
+{
+	eventframe->Menu_Draw();
+
+
+
 
 
 }

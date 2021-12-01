@@ -27,10 +27,10 @@ public:
 
 	bool isInput = false;
 	int InputHandle=0;
-	void MakeCharacter();
+	void MakeCharacter(const std::string& name);
 
 	//名前を入力する関数
-	void InputName();
+	void InputName(std::string name);
 
 	//ステータス変化関数
 	//setType→どのステータスを変化させるか

@@ -5,6 +5,8 @@
 
 class Event;
 class CardEvent;
+class ForcedStopDay;
+class ExtraEvent;
 
 //イベント内容を保存するクラス
 class EventManager {
@@ -13,7 +15,7 @@ public:
 
 	EventManager();
 
-
+	ExtraEvent* exEvent = nullptr;
 
 	std::vector< std::vector<std::string> > event_all;
 	//読み込んだイベントを格納するvector
@@ -43,17 +45,18 @@ public:
 	//2→特殊能力獲得
 	//3→アイテム獲得
 
-	void DoCardEvent(int eventType,int eventId);
+	void DoCardEvent(int eventType, int eventId);
+void loadForcedStopDay();
+	std::vector< std::vector<std::string> > ForcedStopDay_All;
 
+	std::vector < ForcedStopDay*> ForcedStopDayList;
 
 
 	int eventdebugID = 0;
 private:
 	int Random(int rangeMax);
 
-
-
-
+	
 
 
 };

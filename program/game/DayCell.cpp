@@ -32,6 +32,9 @@ DayCell::DayCell(int cell_gh)
 		//スキル獲得マス 確率でスキルを獲得できる　リストから選ぶ　成功率が表示される
 		gh = gManager->LoadGraphEx("graphics/gold.png");
 	}
+	else if (cell_gh == 16) {
+		gh = gManager->LoadGraphEx("graphics/extraDay_1.png");
+	}
 
 
 	//gh = cell_gh;

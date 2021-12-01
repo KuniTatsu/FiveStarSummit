@@ -72,18 +72,18 @@ public:
 
 	};
 
-	//月
+	//月						1		2			3		4		5		6			7		8		9		10			11			12		
 	std::string month[12] = { "火の月","水の月","地の月","風の月","雷の月","光の月","闇の月","銀の月","金の月","黄昏の月","虚無の月","明星の月" };
 
 	//今の月
-	int now_month = 0;
+	int now_month = 2;
 
 	std::string days[7] = { "月","火","水","木","金","土","日" };
 
 	//一週間のどこにいるか
 	int week = 0;//1~7
 	//今の日
-	int day = 1;//1~30
+	int day = 24;//1~30
 
 
 	//初期シークエンスを設定
@@ -103,9 +103,12 @@ public:
 	//日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
 	bool Seq_LoopDay(const float deltatime);
 	int loopdaycount = 0;
-
+	//イベント実行シークエンス
 	bool Seq_DoEvent(const float deltatime);
+
 	bool Seq_EventFrameDraw(const float deltatime);
+	//入学式イベントシークエンス
+	bool Seq_NewCharactorComing(const float deltatime);
 
 
 	void Update();
@@ -157,6 +160,8 @@ private:
 
 	//キャラクターのアビリティ描画関数
 	void DrawAbility(Chara* c);
+
+	void NewCharaWindow();
 
 
 

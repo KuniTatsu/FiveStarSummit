@@ -90,6 +90,8 @@
     <ClCompile Include="program\game\AbilityManager.cpp" />
     <ClCompile Include="program\game\Ability.cpp" />
     <ClCompile Include="program\game\CardEvent.cpp" />
+    <ClCompile Include="program\game\ForceStopDay.cpp" />
+    <ClCompile Include="program\game\ExtraEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="program\support\FrameRateController.h">
@@ -185,5 +187,7 @@
     <ClInclude Include="program\game\AbilityManager.h" />
     <ClInclude Include="program\game\Ability.h" />
     <ClInclude Include="program\game\CardEvent.h" />
+    <ClInclude Include="program\game\ForceStopDay.h" />
+    <ClInclude Include="program\game\ExtraEvent.h" />
   </ItemGroup>
 </Project>

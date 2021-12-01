@@ -24,6 +24,7 @@ public:
 
 	int myDay = 0;
 	std::string myMonthName = "";
+	int myMonth = 0;
 
 	void Update();
 
