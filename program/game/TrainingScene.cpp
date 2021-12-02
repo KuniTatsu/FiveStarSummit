@@ -27,7 +27,8 @@ TrainingScene::TrainingScene()
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
-	eventframe = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
+	eventFrame = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
+	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 	SRand(time(0));
 
 	String_Color_Black = GetColor(0, 0, 0);
@@ -97,7 +98,8 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 		//カードが持ち上がり、拡大して一定以上の大きさになると消えるシークエンスをはさみたい
 		//main_sequence_.change(&TrainingScene::Seq_CardDisappear);
-		main_sequence_.change(&TrainingScene::Seq_LoopDay);
+		ChangeSequence(sequence::loop);
+		//main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
 	}
 
@@ -111,7 +113,8 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		time_++;
 		if (time_ > 40) {
 			time_ = 0;
-			main_sequence_.change(&TrainingScene::Seq_LoopDay);
+			ChangeSequence(sequence::loop);
+			//main_sequence_.change(&TrainingScene::Seq_LoopDay);
 
 		}
 	}
@@ -134,7 +137,8 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			remainEventNum = 2;
 
 			//DoEventに移動
-			main_sequence_.change(&TrainingScene::Seq_DoEvent);
+			ChangeSequence(sequence::doEvent);
+			//main_sequence_.change(&TrainingScene::Seq_DoEvent);
 
 		}
 
@@ -178,8 +182,9 @@ bool TrainingScene::Seq_CardDisappear(const float deltatime)
 	//カードを消す
 	//新しくカードを生成する
 	//リストに入れる
+	ChangeSequence(sequence::loop);
 
-	main_sequence_.change(&TrainingScene::Seq_LoopDay);
+	//main_sequence_.change(&TrainingScene::Seq_LoopDay);
 	return true;
 }
 
@@ -227,7 +232,9 @@ std::list<DayCell*>::iterator it = cell_.begin();
 			if (stopday->id == 100) {
 				isForcedStopDay = true;
 				doneEvent = true;
-				main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
+				ChangeSequence(sequence::newChara);
+
+				//main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
 
 				break;
 			}
@@ -240,7 +247,9 @@ std::list<DayCell*>::iterator it = cell_.begin();
 
 	loopdaycount--;
 
-	main_sequence_.change(&TrainingScene::Seq_Training_Main);
+	ChangeSequence(sequence::main);
+
+	//main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	return true;
 }
 
@@ -279,7 +288,9 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 		eManager->DoEvent(event, rand_cellEvent);
 
 		sequenceID = 3;
-		main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
+		ChangeSequence(sequence::eventDraw);
+
+		//main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
 		return true;
 
 	}
@@ -293,7 +304,9 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 		sequenceID = 3;
 		t2k::debugTrace("\nイベント2つめの画面処理\n");
 
-		main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
+		ChangeSequence(sequence::eventDraw);
+
+		//main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
 		return true;
 
 	}
@@ -359,8 +372,9 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 		c->recentAddedAbility = c->recentAddedAbility.erase(0);
 
 	}
+	ChangeSequence(sequence::main);
 
-	main_sequence_.change(&TrainingScene::Seq_Training_Main);
+	//main_sequence_.change(&TrainingScene::Seq_Training_Main);
 
 	return true;
 }
@@ -371,16 +385,18 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 	//イベント1の描画処理 
 	if (main_sequence_.isStart()) {
 
-		eventframe->menu_live = true;
+		eventFrame->menu_live = true;
 	}
-
-	eventframe->Menu_Draw();
+	
+	eventFrame->Menu_Draw();
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		remainEventNum--;
-		eventframe->menu_live = false;
+		eventFrame->menu_live = false;
 
-		main_sequence_.change(&TrainingScene::Seq_DoEvent);
+		ChangeSequence(sequence::doEvent);
+
+		//main_sequence_.change(&TrainingScene::Seq_DoEvent);
 	}
 
 	return true;
@@ -390,16 +406,18 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 {
 	if (main_sequence_.isStart()) {
 
-		eventframe->menu_live = true;
+		newCharaFrame->menu_live = true;
 		eManager->exEvent->NewMemberComing();
 		t2k::debugTrace("\n入学式イベント実行\n");
 	}
-	eventframe->Menu_Draw();
+	//eventframe->Menu_Draw();
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 
-		eventframe->menu_live = false;
-		main_sequence_.change(&TrainingScene::Seq_Training_Main);
+		newCharaFrame->menu_live = false;
+		ChangeSequence(sequence::main);
+
+		//main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	}
 
 	return true;
@@ -584,7 +602,9 @@ void TrainingScene::Draw()
 	cMenuManager->DrawWindow();
 
 	//もし今のシークエンスが〇〇なら描画する
-
+	if (nowSeq == sequence::newChara) {
+		newCharaFrame->Menu_Draw();
+	}
 
 		//if (gManager->isInput== true) {
 		//	//入力モードの描画
@@ -722,11 +742,32 @@ void TrainingScene::DrawAbility(Chara* c)
 
 void TrainingScene::NewCharaWindow()
 {
-	eventframe->Menu_Draw();
+	eventFrame->Menu_Draw();
 
 
 
 
+
+}
+
+void TrainingScene::ChangeSequence(sequence seq)
+{
+	nowSeq = seq;
+	if (seq == sequence::main) {
+		main_sequence_.change(&TrainingScene::Seq_Training_Main);
+	}
+	else if (seq == sequence::loop) {
+		main_sequence_.change(&TrainingScene::Seq_LoopDay);
+	}
+	else if (seq == sequence::doEvent) {
+		main_sequence_.change(&TrainingScene::Seq_DoEvent);
+	}
+	else if (seq == sequence::eventDraw) {
+		main_sequence_.change(&TrainingScene::Seq_EventFrameDraw);
+	}
+	else if (seq == sequence::newChara) {
+		main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
+	}
 
 }
 

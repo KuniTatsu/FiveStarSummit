@@ -140,7 +140,8 @@ private:
 	int selectedCardEvent = 0;
 	int selectedCardEventId = 0;
 
-	Menu* eventframe = nullptr;
+	Menu* eventFrame = nullptr;
+	Menu* newCharaFrame = nullptr;
 
 	std::string Log[9] = {};
 	//ループ中か否か
@@ -149,6 +150,17 @@ private:
 	bool doneEvent = false;
 	//起動時に最初のイベントが走ってしまわないようにするためのフラグ
 	bool doneFirstEvent = false;
+
+
+	//シークエンスの列挙体
+	enum class sequence {
+		main,
+		loop,
+		doEvent,
+		eventDraw,
+		newChara,
+	};
+	sequence nowSeq = sequence::main;
 
 	void addLog(std::string log);
 	void LogDraw();
@@ -162,8 +174,8 @@ private:
 	void DrawAbility(Chara* c);
 
 	void NewCharaWindow();
-
-
+	//Sequenceを移動させる関数,enumも一緒に変更する
+	void ChangeSequence(sequence seq);
 
 
 };
