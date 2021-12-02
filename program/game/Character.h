@@ -57,6 +57,7 @@ public:
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
 
+	int myGh = 0;
 	std::string recentAddedAbility = {};
 
 private:

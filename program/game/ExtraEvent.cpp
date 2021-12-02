@@ -13,18 +13,40 @@ ExtraEvent::ExtraEvent()
 
 }
 
+//同じ名前のキャラが作成されないようにしたい
 void ExtraEvent::NewMemberComing()
 {
-	for (int i = 0; i < 10; ++i) {
+	//for (int i = 0; i < 10; ++i) {
+	int count = 0;
+	//10人作るまで続ける
+	while (count < 10) {
+		std::string choosenName = ChooseName();
 
-		int rand = GetRand(RandomNameList.size()-1);
+		bool checkAlreadyUseName = false;
 
-		std::string randomName = RandomNameList[rand];
+		//すでに使っているキャラ名じゃないか確認する
+		for (auto name : usedNameList) {
+			if (name == choosenName) {
+				//すでに使われていたらフラグをtrueにする
+				checkAlreadyUseName = true;
+				break;
+			}
+			else {
+				continue;
+			}
 
-		//名前を勝手に決定してキャラを生成する
-		gManager->MakeCharacter(randomName);
+		}
+		if (checkAlreadyUseName == false) {
+			//使った名前リストに登録する
+			usedNameList.emplace_back(choosenName);
+			count++;
+			//名前を勝手に決定してキャラを生成する
+			gManager->MakeCharacter(choosenName);
+		}
 	}
-
+	//}
+	//卒業式で使った名前リストをクリアする
+	//usedNameList.clear();
 }
 
 void ExtraEvent::ExitMember()
@@ -46,6 +68,16 @@ void ExtraEvent::loadCharaRandomName()
 		//eventtypeごとにリストに格納
 		RandomNameList.emplace_back(RandomName_All[i][1]);
 	}
+}
+
+std::string ExtraEvent::ChooseName()
+{
+	int rand = GetRand(RandomNameList.size() - 1);
+
+	std::string randomName = RandomNameList[rand];
+	//usedNameList.emplace_back(randomName);
+
+	return randomName;
 }
 
 

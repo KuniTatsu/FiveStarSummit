@@ -16,12 +16,12 @@ DayCell::DayCell(int cell_gh)
 
 	if (0 <= cell_gh && cell_gh <= 5) {
 		//0は青マス プラス効果のイベントが発生する
-		gh = gManager->LoadGraphEx("graphics/red.png");
+		gh = gManager->LoadGraphEx("graphics/blue.png");
 
 	}
 	else if (6 <= cell_gh && cell_gh <= 8) {
 		//1は赤マス マイナス効果のイベントが発生する
-		gh = gManager->LoadGraphEx("graphics/blue.png");
+		gh = gManager->LoadGraphEx("graphics/red.png");
 	}
 	else if (9 <= cell_gh && cell_gh <= 14) {
 		//2は白マス プラス効果とマイナス効果がランダムで選ばれる
