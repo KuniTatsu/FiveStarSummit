@@ -754,6 +754,16 @@ void TrainingScene::DrawWindow()
 		int SPEED = c->charadata->SPEED;
 		int MIND = c->charadata->MIND;
 		int VIT = c->charadata->VITALITY;
+
+		int ATK_exp = c->charadata->EXP_ATACK;
+		int DEF_exp = c->charadata->EXP_DEFENCE;
+		int MATK_exp = c->charadata->EXP_MAGIATACK;
+		int MDEF_exp = c->charadata->EXP_MAGIDEFENCE;
+		int SPEED_exp = c->charadata->EXP_SPEED;
+		int MIND_exp = c->charadata->EXP_MIND;
+		int VIT_exp = c->charadata->EXP_VITALITY;
+
+
 		std::string abi1 = {};
 		//アビリティがあれば取得
 		//将来的にはすべての持っているアビリティを表示させるように変更する
@@ -770,6 +780,12 @@ void TrainingScene::DrawWindow()
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "速度:%d", SPEED);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "賢さ:%d", MIND);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "持久力:%d", VIT);
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力経験値:%d", ATK_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力経験値:%d", DEF_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 90, String_Color_Black, "魔攻撃力経験値:%d", MATK_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 110, String_Color_Black, "魔防御力:%d", MDEF_exp);
+
 
 		//DrawGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 50, c->cWindow->windowPos.y + 10, c->gh[2], false);
 		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 170, c->cWindow->windowPos.y + 15, 1, 0, c->gh[1], true);

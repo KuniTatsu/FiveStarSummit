@@ -89,6 +89,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_ATACK <= 0)c->charadata->EXP_ATACK = 0;
 			if (c->charadata->EXP_ATACK >= needExp[GetDecNum(c->charadata->ATACK)]) {
 				c->charadata->ATACK += 1;
+				c->charadata->EXP_ATACK = 0;
 			}
 		}
 	}
@@ -100,6 +101,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_DEFENCE <= 0)c->charadata->EXP_DEFENCE = 0;
 			if (c->charadata->EXP_DEFENCE >= needExp[GetDecNum(c->charadata->DEFENCE)]) {
 				c->charadata->DEFENCE += 1;
+				c->charadata->EXP_DEFENCE = 0;
 			}
 		}
 	}
@@ -111,6 +113,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_MAGIATACK <= 0)c->charadata->EXP_MAGIATACK = 0;
 			if (c->charadata->EXP_MAGIATACK >= needExp[GetDecNum(c->charadata->MAGIATACK)]) {
 				c->charadata->MAGIATACK += 1;
+				c->charadata->EXP_MAGIATACK = 0;
 			}
 		}
 	}
@@ -122,6 +125,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_MAGIDEFENCE <= 0)c->charadata->EXP_MAGIDEFENCE = 0;
 			if (c->charadata->EXP_MAGIDEFENCE >= needExp[GetDecNum(c->charadata->MAGIDEFENCE)]) {
 				c->charadata->MAGIDEFENCE += 1;
+				c->charadata->EXP_MAGIDEFENCE = 0;
 			}
 		}
 	}
@@ -133,6 +137,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_SPEED <= 0)c->charadata->EXP_SPEED = 0;
 			if (c->charadata->EXP_SPEED >= needExp[GetDecNum(c->charadata->SPEED)]) {
 				c->charadata->SPEED += 1;
+				c->charadata->EXP_SPEED = 0;
 			}
 		}
 	}
@@ -144,6 +149,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_MIND <= 0)c->charadata->EXP_MIND = 0;
 			if (c->charadata->EXP_MIND >= needExp[GetDecNum(c->charadata->MIND)]) {
 				c->charadata->MIND += 1;
+				c->charadata->EXP_MIND = 0;
 			}
 		}
 	}
@@ -155,6 +161,7 @@ void GameManager::StatusSet(int setType, int value)
 			if (c->charadata->EXP_VITALITY <= 0)c->charadata->EXP_VITALITY = 0;
 			if (c->charadata->EXP_VITALITY >= needExp[GetDecNum(c->charadata->VITALITY)]) {
 				c->charadata->VITALITY += 1;
+				c->charadata->EXP_VITALITY = 0;
 			}
 
 		}
@@ -176,13 +183,51 @@ void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd,
 		c->charadata->EXP_MIND += mind;
 		c->charadata->EXP_VITALITY += vit;
 
-		if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
+
+		if (c->charadata->EXP_ATACK >= needExp[GetDecNum(c->charadata->ATACK)]) {
+			c->charadata->ATACK += 1;
+			c->charadata->EXP_ATACK = 0;
+		}
+
+		if (c->charadata->EXP_DEFENCE >= needExp[GetDecNum(c->charadata->DEFENCE)]) {
+			c->charadata->DEFENCE += 1;
+			c->charadata->EXP_DEFENCE = 0;
+		}
+
+		if (c->charadata->EXP_MAGIATACK >= needExp[GetDecNum(c->charadata->MAGIATACK)]) {
+			c->charadata->MAGIATACK += 1;
+			c->charadata->EXP_MAGIATACK = 0;
+		}
+
+		if (c->charadata->EXP_MAGIDEFENCE >= needExp[GetDecNum(c->charadata->MAGIDEFENCE)]) {
+			c->charadata->MAGIDEFENCE += 1;
+			c->charadata->EXP_MAGIDEFENCE = 0;
+		}
+
+		if (c->charadata->EXP_SPEED >= needExp[GetDecNum(c->charadata->SPEED)]) {
+			c->charadata->SPEED += 1;
+			c->charadata->EXP_SPEED = 0;
+		}
+
+		if (c->charadata->EXP_MIND >= needExp[GetDecNum(c->charadata->MIND)]) {
+			c->charadata->MIND += 1;
+			c->charadata->EXP_MIND = 0;
+		}
+
+		if (c->charadata->EXP_VITALITY >= needExp[GetDecNum(c->charadata->VITALITY)]) {
+			c->charadata->VITALITY += 1;
+			c->charadata->EXP_VITALITY = 0;
+		}
+
+
+
+		/*if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
 		if (c->charadata->DEFENCE <= 0)c->charadata->DEFENCE = 0;
 		if (c->charadata->MAGIATACK <= 0)c->charadata->MAGIATACK = 0;
 		if (c->charadata->MAGIDEFENCE <= 0)c->charadata->MAGIDEFENCE = 0;
 		if (c->charadata->SPEED <= 0)c->charadata->SPEED = 0;
 		if (c->charadata->MIND <= 0)c->charadata->MIND = 0;
-		if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;
+		if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;*/
 	}
 
 }
