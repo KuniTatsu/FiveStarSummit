@@ -71,7 +71,10 @@ private:
 	std::vector<std::vector<std::string>> loadGhCsv;
 	std::vector<std::vector<int>> charaGh;
 
+	int needExp[11] = { 20,40,80,160,320,480,600,720,840,960,1080 };
 
+	//今のステータスの値を入れると必要経験値テーブルの配列番号を取得する関数
+	int GetDecNum(int nowStatus);
 	
 
 };
