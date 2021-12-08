@@ -54,7 +54,7 @@ public:
 
 private:
 
-
+	int String_Color_Black = 0;;
 	int elements_num_;
 	bool m_IsStartOpened;		// ESCキーで開いた1フレーム目
 	MenuElement_t* MenuElement = nullptr;

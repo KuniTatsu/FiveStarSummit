@@ -13,6 +13,7 @@ Chara::Chara(std::string name)
 	//SRand(time(0));
 	charadata = new SaveData_t;
 
+	//生成時にランダムで値を決める
 	int rangetype = StatusRandom(2, 0);
 	int stance = StatusRandom(2, 0);
 
@@ -21,14 +22,14 @@ Chara::Chara(std::string name)
 		mainStatus[i] = StatusRandom(20, 1);
 	}
 	//int atk = StatusRandom(20,1);
-	//実際は生成時にランダムで値を決める
 	*charadata = { name,
 					rangetype,stance,
 					mainStatus[0],mainStatus[1],mainStatus[2],mainStatus[3],mainStatus[4],mainStatus[5],mainStatus[6],
 					0,0,0,0,0,0,0,
 					0,0,0,0,
 					{} ,
-					2 };
+					2 ,
+					0};
 
 	//ステータスウィンドウの作成
 	cWindow = new CharaWindow();

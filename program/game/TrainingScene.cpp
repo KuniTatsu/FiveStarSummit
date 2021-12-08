@@ -17,6 +17,7 @@
 #include"Ability.h"
 #include"ExtraEvent.h"
 #include"ForceStopDay.h"
+#include"MenuWindow.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -29,6 +30,17 @@ TrainingScene::TrainingScene()
 
 	eventFrame = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
+
+	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
+		{40,50,"候補生一覧",0},
+		{40,100,"テスト1",1},
+		{40,150,"テスト2",2},
+		{40,200,"テスト3",3},
+		{40,250,"テスト4",4}
+	};
+	// メニューウィンドウのインスタンス化
+	FrontMenu = new MenuWindow(16, 25, 120, 300, "graphics/WindowBase_02.png", menu_0, 5);
+
 	SRand(time(0));
 
 	String_Color_Black = GetColor(0, 0, 0);
@@ -68,6 +80,12 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		sequenceID = 0;
 	}
 	cardSelect();
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		FrontMenu->Open();
+		//メニューをいじるシークエンスに移動する
+		ChangeSequence(sequence::menu_1);
+		return true;
+	}
 	//ループ日数を決定する所
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_NUMPAD0) && isnowLoop == false) {
 		isnowLoop = true;
@@ -149,6 +167,9 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			now_month = (now_month + 1) % 12;
 		}*/
 
+		
+
+
 	}
 	return true;
 }
@@ -201,7 +222,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	//新しく1つDayCellを作る
 	int random = GetRand(15);
 
-	
+
 	//入学式を仕込む
 	if (now_month == 3 && day == 1) {
 		createDayCell(16);
@@ -209,7 +230,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	else {
 		createDayCell(random);
 	}
-std::list<DayCell*>::iterator it = cell_.begin();
+	std::list<DayCell*>::iterator it = cell_.begin();
 
 	++it;
 	++it;
@@ -226,7 +247,7 @@ std::list<DayCell*>::iterator it = cell_.begin();
 	for (auto stopday : eManager->ForcedStopDayList) {
 
 		//今の日にちが必ず止まる日だったら
-		if ((*it)->myMonth == stopday->month && (*it)->myDay== stopday->day) {
+		if ((*it)->myMonth == stopday->month && (*it)->myDay == stopday->day) {
 			loopdaycount = 0;
 
 			if (stopday->id == 100) {
@@ -250,6 +271,24 @@ std::list<DayCell*>::iterator it = cell_.begin();
 	ChangeSequence(sequence::main);
 
 	//main_sequence_.change(&TrainingScene::Seq_Training_Main);
+	return true;
+}
+
+bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
+{
+
+
+
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		FrontMenu->menu_live = false;
+		//メインシークエンスに移動する
+		ChangeSequence(sequence::main);
+		return true;
+	}
+
+
+
 	return true;
 }
 
@@ -387,7 +426,7 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 
 		eventFrame->menu_live = true;
 	}
-	
+
 	eventFrame->Menu_Draw();
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
@@ -582,14 +621,26 @@ void TrainingScene::Draw()
 	}
 	DrawStringEx(100, 300, -1, "%d", loopdaycount);
 
-	if (sequenceID == 0) {
+	
+
+
+	if (nowSeq==sequence::main) {
 		DrawStringEx(100, 350, -1, "SeqTrainingMain");
 	}
-	else if (sequenceID == 1) {
+	else if (nowSeq == sequence::loop) {
 		DrawStringEx(100, 350, -1, "SeqLoopDay");
 	}
-	else if (sequenceID == 2) {
+	else if (nowSeq == sequence::doEvent) {
 		DrawStringEx(100, 350, -1, "SeqDoEvent");
+	}
+	else if (nowSeq == sequence::eventDraw) {
+		DrawStringEx(100, 350, -1, "SeqDrawEventFrame");
+	}
+	else if (nowSeq == sequence::newChara) {
+		DrawStringEx(100, 350, -1, "SeqNewChara");
+	}
+	else if (nowSeq == sequence::menu_1) {
+		DrawStringEx(100, 350, -1, "SeqMenu1");
 	}
 
 	DrawStringEx(100, 400, -1, "イベントIDは%d", eManager->eventdebugID);
@@ -603,16 +654,20 @@ void TrainingScene::Draw()
 
 	//もし今のシークエンスが〇〇なら描画する
 	if (nowSeq == sequence::newChara) {
+		
 		newCharaFrame->Menu_Draw();
 	}
+	else if (nowSeq == sequence::menu_1) {
+		FrontMenu->All();
+	}
 
-		//if (gManager->isInput== true) {
-		//	//入力モードの描画
-		//	DrawKeyInputModeString(640, 480);
+	//if (gManager->isInput== true) {
+	//	//入力モードの描画
+	//	DrawKeyInputModeString(640, 480);
 
-		//	//入力途中の文字列の描画
-		//	DrawKeyInputString(0, 0, gManager->InputHandle);
-		//}
+	//	//入力途中の文字列の描画
+	//	DrawKeyInputString(0, 0, gManager->InputHandle);
+	//}
 }
 
 //7つまでログを生成する関数,古い方から消える
@@ -716,8 +771,8 @@ void TrainingScene::DrawWindow()
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "賢さ:%d", MIND);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "持久力:%d", VIT);
 
-
-
+		//DrawGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 50, c->cWindow->windowPos.y + 10, c->gh[2], false);
+		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 170, c->cWindow->windowPos.y + 15, 1, 0, c->gh[1], true);
 
 		DrawAbility(c);
 	}
@@ -768,6 +823,42 @@ void TrainingScene::ChangeSequence(sequence seq)
 	else if (seq == sequence::newChara) {
 		main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
 	}
+	else if (seq == sequence::menu_1) {
+		main_sequence_.change(&TrainingScene::Seq_MenuDraw_1);
+	}
 
+}
+
+void TrainingScene::menuInit()
+{
+	menu_1 = new Menu(10, 10, 1010, 700, "graphics/WindowBase_02.png");
+	chara_1 = new Menu(menu_1->menu_x + 10, menu_1->menu_y + 10, 990, 150, "graphics/WindowBase_01.png");
+
+	yearly = new Menu(chara_1->menu_x + 10, chara_1->menu_y + 85, 55, 60, "graphics/WindowBase_01.png");
+
+	name = new Menu(chara_1->menu_x + 10, chara_1->menu_y + 10, 165, 70, "graphics/WindowBase_01.png");
+
+	stance = new Menu(yearly->menu_x + 55, chara_1->menu_y + 85, 55, 60, "graphics/WindowBase_01.png");
+
+	range = new Menu(yearly->menu_x + 110, chara_1->menu_y + 85, 55, 60, "graphics/WindowBase_01.png");
+
+
+	//能力値の名前の枠
+	menu_3 = new Menu(range->menu_x + 60, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_4 = new Menu(menu_3->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_5 = new Menu(menu_4->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_6 = new Menu(menu_5->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_7 = new Menu(menu_6->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_8 = new Menu(menu_7->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+	menu_9 = new Menu(menu_8->menu_x + menu_3->menu_width + buff, chara_1->menu_y + 10, width, 50, "graphics/WindowBase_01.png");
+
+
+	menu_status_1 = new Menu(menu_3->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_2 = new Menu(menu_4->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_3 = new Menu(menu_5->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_4 = new Menu(menu_6->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_5 = new Menu(menu_7->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_6 = new Menu(menu_8->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+	menu_status_7 = new Menu(menu_9->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
 }
 

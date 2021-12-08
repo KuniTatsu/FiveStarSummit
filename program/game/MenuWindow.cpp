@@ -60,7 +60,7 @@ MenuWindow::MenuWindow(int menu_window_x, int menu_window_y, int menu_window_wid
 
 	MenuElement = elements;
 	elements_num_ = elements_num;
-
+	String_Color_Black = GetColor(0, 0, 0);
 
 }
 
@@ -138,7 +138,7 @@ void MenuWindow::Read() {
 	}
 
 	for (int i = 0; i < elements_num_; i++) {
-		DrawFormatString(MenuElement[i].x, MenuElement[i].y, GetColor(255, 255, 255), MenuElement[i].name.c_str());
+		DrawFormatString(MenuElement[i].x, MenuElement[i].y, GetColor(0, 0, 0), MenuElement[i].name.c_str());
 	}
 
 }

@@ -10,12 +10,15 @@ class CharaMenuManager;
 class CharaWindow;
 class Chara;
 class Menu;
-
+class MenuWindow;
 
 class TrainingScene : public BaseScene {
 public:
 	EventManager* eManager = nullptr;
 	CharaMenuManager* cMenuManager = nullptr;
+
+	MenuWindow* FrontMenu = nullptr;
+
 
 	bool changeSceneFlag = false;
 	int playergh[4] = {};
@@ -103,6 +106,10 @@ public:
 	//日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
 	bool Seq_LoopDay(const float deltatime);
 	int loopdaycount = 0;
+
+	//メニュー描画シークエンス
+	bool Seq_MenuDraw_1(const float deltatime);
+
 	//イベント実行シークエンス
 	bool Seq_DoEvent(const float deltatime);
 
@@ -140,6 +147,38 @@ private:
 	int selectedCardEvent = 0;
 	int selectedCardEventId = 0;
 
+	int buff = 5;
+	const int width = 110;
+
+	Menu* menu_1 = nullptr;
+	Menu* chara_1 = nullptr;
+
+	//年次
+	Menu* yearly = nullptr;
+	//キャラ名前
+	Menu* name = nullptr;
+	//スタンス
+	Menu* stance = nullptr;
+	//レンジ
+	Menu* range = nullptr;
+	//ステータスの名前
+	Menu* menu_3 = nullptr;
+	Menu* menu_4 = nullptr;
+	Menu* menu_5 = nullptr;
+	Menu* menu_6 = nullptr;
+	Menu* menu_7 = nullptr;
+	Menu* menu_8 = nullptr;
+	Menu* menu_9 = nullptr;
+
+	//ステータスのランクと値
+	Menu* menu_status_1 = nullptr;
+	Menu* menu_status_2 = nullptr;
+	Menu* menu_status_3 = nullptr;
+	Menu* menu_status_4 = nullptr;
+	Menu* menu_status_5 = nullptr;
+	Menu* menu_status_6 = nullptr;
+	Menu* menu_status_7 = nullptr;
+
 	Menu* eventFrame = nullptr;
 	Menu* newCharaFrame = nullptr;
 
@@ -159,6 +198,7 @@ private:
 		doEvent,
 		eventDraw,
 		newChara,
+		menu_1,
 	};
 	sequence nowSeq = sequence::main;
 
@@ -176,6 +216,10 @@ private:
 	void NewCharaWindow();
 	//Sequenceを移動させる関数,enumも一緒に変更する
 	void ChangeSequence(sequence seq);
+
+	void menuInit();
+
+	
 
 
 };

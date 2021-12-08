@@ -51,14 +51,15 @@ public:
 		//0...1...2...3...4
 		int tension = 2;//default
 //---------‹­‰»€–Ú---------------------1
-		//int training_ToDo = 0;
-
-
+		int training_ToDo = 0;
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
 
-	int myGh = 0;
+	//int myGh = 0;
+	std::vector<int>gh = {};
 	std::string recentAddedAbility = {};
+
+
 
 private:
 	int StatusRandom(int maxnum, int randomtype);

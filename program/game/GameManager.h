@@ -51,13 +51,27 @@ public:
 	void Update();
 	void Draw();
 	void initGameManager();
+	//‰æ‘œ‚ğ“Ç‚İ‚ñ‚Åmap‚É“ü‚ê‚éŠÖ”
+	//‚·‚Å‚É‚ ‚égh‚È‚ç‚»‚ê‚ğ•Ô‚·
 	int LoadGraphEx(std::string gh);
+
+	//gh‚ğ•Ô‚·ŠÖ”
+	std::vector<int> SetCharaGh(int num);
+
+	
+
+	
 
 	std::string GetAbility(int abilityType, int abilityId);
 
 private:
 	char String[256] = {};
+	void loadCharaCsv();
+
+	std::vector<std::vector<std::string>> loadGhCsv;
+	std::vector<std::vector<int>> charaGh;
 
 
+	
 
 };

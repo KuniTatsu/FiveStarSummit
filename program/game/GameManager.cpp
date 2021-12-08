@@ -23,6 +23,13 @@ GameManager::~GameManager()
 void GameManager::MakeCharacter(const std::string& name)
 {
 	chara_ = new Chara(name);
+
+	int random = GetRand(charaGh.size()-1);
+	//chara_->gh
+
+	
+	chara_->gh = SetCharaGh(random);
+
 	chara.emplace_back(chara_);
 	//InputName(name);
 }
@@ -74,21 +81,14 @@ void GameManager::InputName(std::string name)
 
 void GameManager::StatusSet(int setType, int value)
 {
-	//Ç‡ÇµATACKè„è∏Ç≥ÇπÇΩÇ¢Ç»ÇÁ
-	//0:ATACK,...
-
-	//int MAGIATACK;	//ñÇñ@çUåÇóÕ
-	//int MAGIDEFENCE;//ñÇñ@ñhå‰óÕ
-	//int SPEED;		//ëfëÅÇ≥
-	//int MIND;		//å´Ç≥
-	//int VITALITY;	//éùãvóÕ
+	
 	if (0 == setType) {
 		for (auto c : chara) {
 
 			c->charadata->ATACK += value;
 			if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
+		}
 	}
-}
 	//DEFENCE
 	else if (1 == setType) {
 		for (auto c : chara) {
@@ -227,8 +227,6 @@ void GameManager::Update()
 
 	}
 	else {
-
-
 		//ì¸óÕÉÇÅ[ÉhÇÃï`âÊ
 		DrawKeyInputModeString(640, 480);
 
@@ -266,7 +264,7 @@ void GameManager::initGameManager()
 	//dManager = new DataManager();
 	//sManager = new SceneManager();
 	deitatime_ = 0;
-
+	loadCharaCsv();
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 
 
@@ -289,9 +287,35 @@ int GameManager::LoadGraphEx(std::string gh)
 	return ghmap[gh];
 }
 
+std::vector<int> GameManager::SetCharaGh(int num)
+{
+	return charaGh[num];
+}
+
+
+
 std::string GameManager::GetAbility(int abilityType, int abilityId)
 {
 	std::string ability = aManager->abilityList[abilityType][abilityId]->ability_name;
 
 	return ability;
 }
+
+void GameManager::loadCharaCsv()
+{
+	loadGhCsv = t2k::loadCsv("Csv/CharaPass.csv");
+	for (int i = 1; i < loadGhCsv.size()-1; ++i) {
+
+		int hoge[3] = {};
+		std::string Pass = loadGhCsv[i][1];
+		LoadDivGraph(Pass.c_str(), 3, 3, 1, 32, 32, hoge, false);
+
+		//ê≥ñ ÇÃóßÇøäGÇÃÇ›Çíäèo
+		std::vector<int> gh;
+		charaGh.emplace_back( gh );
+		charaGh[i - 1].emplace_back(hoge[0]);
+		charaGh[i - 1].emplace_back(hoge[1]);
+		charaGh[i - 1].emplace_back(hoge[2]);
+	}
+}
+
