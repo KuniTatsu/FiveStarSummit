@@ -7,7 +7,7 @@ class Ability;
 class Chara {
 
 public:
-	Chara(std::string name);
+	Chara(std::string name,int year);
 	~Chara();
 
 	CharaWindow* cWindow;
@@ -52,13 +52,15 @@ public:
 		int tension = 2;//default
 //---------‹­‰»€–Ú---------------------1
 		int training_ToDo = 0;
+//---------‰½”NİĞ‚©-------------------1
+		int stayYear = 0;
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
 
 	//int myGh = 0;
 	std::vector<int>gh = {};
 	std::string recentAddedAbility = {};
-
+	
 
 
 private:

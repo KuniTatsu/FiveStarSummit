@@ -63,6 +63,10 @@ TrainingScene::TrainingScene()
 	/*createCharaWindow();
 	createCharaWindow();*/
 	//
+
+	//2年,3年の先輩を生成
+	eManager->exEvent->NewMemberComing(3);
+	eManager->exEvent->NewMemberComing(2);
 }
 
 TrainingScene::~TrainingScene()
@@ -446,7 +450,7 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 	if (main_sequence_.isStart()) {
 
 		newCharaFrame->menu_live = true;
-		eManager->exEvent->NewMemberComing();
+		eManager->exEvent->NewMemberComing(1);
 		t2k::debugTrace("\n入学式イベント実行\n");
 	}
 	//eventframe->Menu_Draw();
@@ -564,7 +568,7 @@ void TrainingScene::Update()
 	//暫定的なキャラ作成
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
 
-		gManager->MakeCharacter("");
+		gManager->MakeCharacter("",1);
 
 		//出力欄にメッセージ出したいんだけど出ないんだけど！
 		//std::cout << "キャラが作成されました" << std::endl;
@@ -747,6 +751,7 @@ void TrainingScene::DrawWindow()
 			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);
 
 		std::string name = c->charadata->name_;
+		int year = c->charadata->stayYear;
 		int ATK = c->charadata->ATACK;
 		int DEF = c->charadata->DEFENCE;
 		int MATK = c->charadata->MAGIATACK;
@@ -772,14 +777,17 @@ void TrainingScene::DrawWindow()
 
 
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 10, String_Color_Black, "名前:%s", name.c_str());
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力:%d", ATK);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力:%d", DEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "魔法攻撃力:%d", MATK);
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 110, String_Color_Black, "魔法防御力:%d", MDEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "速度:%d", SPEED);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "賢さ:%d", MIND);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "持久力:%d", VIT);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 30, String_Color_Black, "学年:%d年", year);
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "攻撃力:%d", ATK);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "防御力:%d", DEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 110, String_Color_Black, "魔法攻撃力:%d", MATK);
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "魔法防御力:%d", MDEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "速度:%d", SPEED);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "賢さ:%d", MIND);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 190, String_Color_Black, "持久力:%d", VIT);
 
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力経験値:%d", ATK_exp);
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力経験値:%d", DEF_exp);

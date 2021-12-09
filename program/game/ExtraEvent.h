@@ -13,7 +13,7 @@ public:
 
 
 	//入学式イベント
-	void NewMemberComing();
+	void NewMemberComing(int year);
 
 	//卒業式イベント
 	void ExitMember();

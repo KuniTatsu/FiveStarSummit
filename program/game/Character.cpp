@@ -8,7 +8,7 @@
 //playerdata = new SaveData_t;
 //*playerdata = { "プレイヤー",100.0f,100.0f , 10/*1000*/,10, 0,0, 1,1,0,0,0 };
 
-Chara::Chara(std::string name)
+Chara::Chara(std::string name, int year)
 {
 	//SRand(time(0));
 	charadata = new SaveData_t;
@@ -29,7 +29,9 @@ Chara::Chara(std::string name)
 					0,0,0,0,
 					{} ,
 					2 ,
-					0};
+					0,
+					year
+						};
 
 	//ステータスウィンドウの作成
 	cWindow = new CharaWindow();

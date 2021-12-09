@@ -27,7 +27,9 @@ public:
 
 	bool isInput = false;
 	int InputHandle=0;
-	void MakeCharacter(const std::string& name);
+
+	//ƒLƒƒƒ‰‚ğ¶¬‚·‚éŠÖ”
+	void MakeCharacter(const std::string& name,int year);
 
 	//–¼‘O‚ğ“ü—Í‚·‚éŠÖ”
 	void InputName(std::string name);

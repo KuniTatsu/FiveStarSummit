@@ -20,9 +20,9 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::MakeCharacter(const std::string& name)
+void GameManager::MakeCharacter(const std::string& name, int year)
 {
-	chara_ = new Chara(name);
+	chara_ = new Chara(name,year);
 
 	int random = GetRand(charaGh.size()-1);
 	//chara_->gh
@@ -287,7 +287,7 @@ void GameManager::Update()
 		//std::string name = "test";
 
 
-		chara_ = new Chara(name);
+		chara_ = new Chara(name,1);
 		chara.emplace_back(chara_);
 
 
@@ -376,7 +376,7 @@ void GameManager::loadCharaCsv()
 		std::string Pass = loadGhCsv[i][1];
 		LoadDivGraph(Pass.c_str(), 3, 3, 1, 32, 32, hoge, false);
 
-		//³–Ê‚Ì—§‚¿ŠG‚Ì‚İ‚ğ’Šo
+		
 		std::vector<int> gh;
 		charaGh.emplace_back( gh );
 		charaGh[i - 1].emplace_back(hoge[0]);

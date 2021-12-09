@@ -14,7 +14,7 @@ ExtraEvent::ExtraEvent()
 }
 
 //同じ名前のキャラが作成されないようにしたい
-void ExtraEvent::NewMemberComing()
+void ExtraEvent::NewMemberComing(int year)
 {
 	//for (int i = 0; i < 10; ++i) {
 	int count = 0;
@@ -41,7 +41,7 @@ void ExtraEvent::NewMemberComing()
 			usedNameList.emplace_back(choosenName);
 			count++;
 			//名前を勝手に決定してキャラを生成する
-			gManager->MakeCharacter(choosenName);
+			gManager->MakeCharacter(choosenName,year);
 		}
 	}
 	//}
