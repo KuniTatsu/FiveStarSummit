@@ -15,7 +15,7 @@ public:
 	std::list<CharaWindow*> charaWindow_;
 
 	//ステータス画面の座標(これを動かすと他のステータスの枠が全部動く)
-	t2k::Vector3 StatusMenuPos = { 512,50,0 };
+	t2k::Vector3 StatusMenuPos = { 512,75,0 };
 
 	////キャラ一人一人の枠の座標::ステータス画面の座標からの相対座標
 	t2k::Vector3 CharaWakuPos = {};
@@ -27,6 +27,7 @@ public:
 	~CharaMenuManager();
 
 	void DrawWindow();
+	void PosReset();
 
 	void AddList(CharaWindow* cWindow);
 private:

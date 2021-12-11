@@ -18,7 +18,7 @@ public:
 	CharaMenuManager* cMenuManager = nullptr;
 
 	MenuWindow* FrontMenu = nullptr;
-	MenuWindow* charaListMenu = nullptr;
+	Menu* charaListMenu = nullptr;
 	MenuWindow* charaTrainingMenu = nullptr;
 
 
@@ -124,6 +124,9 @@ public:
 	//卒業式イベントシークエンス
 	bool Seq_ExitDay(const float deltatime);
 
+	//月始まりの強化指定イベントシークエンス
+	bool Seq_SelectEnhance(const float deltatime);
+
 
 	void Update();
 
@@ -148,7 +151,8 @@ private:
 	//表示するカードの最大数
 	int cardNum = 5;
 
-	int String_Color_Black;
+	int String_Color_Black=0;
+	int String_Color_Red = 0;
 
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
@@ -190,6 +194,14 @@ private:
 	Menu* eventFrame = nullptr;
 	Menu* newCharaFrame = nullptr;
 
+	//Menu* charaListTitle = nullptr;
+	int charaListTitle_gh = 0;
+	int charaListName_gh = 0;
+
+	Menu* charaListWindow = nullptr;
+
+	MenuWindow* enhanceSelect = nullptr;
+
 	std::string Log[9] = {};
 	//ループ中か否か
 	bool isnowLoop = false;
@@ -209,7 +221,8 @@ private:
 		menu_1,
 		menu_2,
 		menu_3,
-		exit
+		exit,
+		selectEnhance
 	};
 	sequence nowSeq = sequence::main;
 

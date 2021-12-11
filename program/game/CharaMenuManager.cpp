@@ -25,6 +25,12 @@ void CharaMenuManager::DrawWindow()
 
 }
 
+void CharaMenuManager::PosReset()
+{
+	StatusMenuPos.y = 70;
+
+}
+
 void CharaMenuManager::AddList(CharaWindow* cWindow)
 {
 	charaWindow_.emplace_back(cWindow);

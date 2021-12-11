@@ -102,41 +102,41 @@ void MenuWindow::Read() {
 		menuInit = true;
 	}
 	if (m_IsStartOpened == true)return;
-	if (manageSelectFlag == false)return;
+	if (manageSelectFlag != false) {
 
 
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN)) {
-		SelectNum = (SelectNum + 1) % read_menu_element_num_;//ˆê‚Â‰º‚É‚¸‚ê‚é
-		//sound->System_Play(sound->system_move);
-	}
-	else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
-		SelectNum = (SelectNum + (read_menu_element_num_ - 1)) % read_menu_element_num_;//ˆê‚Âã‚É‚¸‚ê‚é
-		//sound->System_Play(sound->system_move);
-	}
-	/*if (menuExitFlag == true) {
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
-			menu_live = false;
-			SelectNum = 0;
-			menuInit = false;
-			player->m_ActionFlag_Menu = true;
-
-			secondMenuFlag = false;
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN)) {
+			SelectNum = (SelectNum + 1) % read_menu_element_num_;//ˆê‚Â‰º‚É‚¸‚ê‚é
+			//sound->System_Play(sound->system_move);
 		}
-	}*/
-
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN) || t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
-
-		for (int i = 0; i < elements_num_; i++) {
-			if (i == SelectNum) {
-				MenuElement[i].x = read_menu_x + 10;
-			}
-			else {
-				MenuElement[i].x = read_menu_x + 20;
-			}
+		else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
+			SelectNum = (SelectNum + (read_menu_element_num_ - 1)) % read_menu_element_num_;//ˆê‚Âã‚É‚¸‚ê‚é
+			//sound->System_Play(sound->system_move);
 		}
+		/*if (menuExitFlag == true) {
+			if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+				menu_live = false;
+				SelectNum = 0;
+				menuInit = false;
+				player->m_ActionFlag_Menu = true;
 
+				secondMenuFlag = false;
+			}
+		}*/
+
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN) || t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
+
+			for (int i = 0; i < elements_num_; i++) {
+				if (i == SelectNum) {
+					MenuElement[i].x = read_menu_x + 10;
+				}
+				else {
+					MenuElement[i].x = read_menu_x + 20;
+				}
+			}
+
+		}
 	}
-
 	for (int i = 0; i < elements_num_; i++) {
 		DrawFormatString(MenuElement[i].x, MenuElement[i].y, GetColor(0, 0, 0), MenuElement[i].name.c_str());
 	}

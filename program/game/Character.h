@@ -3,6 +3,7 @@
 #include<vector>
 class CharaWindow;
 class Ability;
+class Menu;
 
 class Chara {
 
@@ -60,7 +61,9 @@ public:
 	//int myGh = 0;
 	std::vector<int>gh = {};
 	std::string recentAddedAbility = {};
-	
+	Menu* charaListWindow = nullptr;
+
+	void changeWindowPos(int x,int y);
 
 
 private:

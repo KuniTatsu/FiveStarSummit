@@ -25,6 +25,7 @@
     <ClCompile Include="program\game\Event.cpp" />
     <ClCompile Include="program\game\EventManager.cpp" />
     <ClCompile Include="program\game\ExtraEvent.cpp" />
+    <ClCompile Include="program\game\FadeControl.cpp" />
     <ClCompile Include="program\game\ForceStopDay.cpp" />
     <ClCompile Include="program\game\GameManager.cpp" />
     <ClCompile Include="program\game\game_main.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="program\game\Event.h" />
     <ClInclude Include="program\game\EventManager.h" />
     <ClInclude Include="program\game\ExtraEvent.h" />
+    <ClInclude Include="program\game\FadeControl.h" />
     <ClInclude Include="program\game\ForceStopDay.h" />
     <ClInclude Include="program\game\GameManager.h" />
     <ClInclude Include="program\game\game_main.h" />

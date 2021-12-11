@@ -41,24 +41,24 @@ TrainingScene::TrainingScene()
 	// メニューウィンドウのインスタンス化
 	FrontMenu = new MenuWindow(16, 25, 120, 300, "graphics/WindowBase_02.png", menu_0, 5);
 
-	MenuWindow::MenuElement_t* menu_ = new MenuWindow::MenuElement_t[]{
-		{40,50,"候補生一覧",0},
-		{40,100,"テスト1",1},
-		{40,150,"テスト2",2},
-		{40,200,"テスト3",3},
-		{40,250,"テスト4",4}
+	
 
-	};
-//	charaListMenu=new MenuWindow()
 
+	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10, FrontMenu->menu_y, 650, 743, "graphics/WindowBase_02.png");
+	cMenuManager->StatusMenuPos.x = charaListMenu->menu_x + (charaListMenu->menu_width / 2);
 
 	SRand(time(0));
 
 	String_Color_Black = GetColor(0, 0, 0);
+	String_Color_Red = GetColor(255, 0, 0);
 
 
 	//プレイヤー画像のロード
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
+
+	charaListTitle_gh = gManager->LoadGraphEx("graphics/charatitle.png");
+	charaListName_gh = gManager->LoadGraphEx("graphics/charaListName.png");
+
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -284,6 +284,14 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 				ChangeSequence(sequence::exit);
 				break;
 			}
+			//月始まりの日だったら一旦強化項目を選ぶシークエンスに飛ばす
+			else if (stopday->id >= 900) {
+				isForcedStopDay = true;
+
+				ChangeSequence(sequence::selectEnhance);
+
+				break;
+			}
 			//main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
 		}
 
@@ -302,6 +310,9 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 {
 	if (FrontMenu->SelectNum == 0 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		//menuの上下を操作出来なくする
+		FrontMenu->manageSelectFlag = false;
+
 		//menu2シークエンスに移動する
 		ChangeSequence(sequence::menu_2);
 		return true;
@@ -325,11 +336,20 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 {
-
+	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
+		if (cMenuManager->StatusMenuPos.y < 75)
+			cMenuManager->StatusMenuPos.y += 10;
+	}
+	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
+		cMenuManager->StatusMenuPos.y -= 10;
+	}
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
-		FrontMenu->menu_live = false;
+
+
 		//menu1シークエンスに移動する
+		FrontMenu->manageSelectFlag = true;
+		cMenuManager->PosReset();
 		ChangeSequence(sequence::menu_1);
 		return true;
 	}
@@ -525,6 +545,15 @@ bool TrainingScene::Seq_ExitDay(const float deltatime)
 	return true;
 }
 
+bool TrainingScene::Seq_SelectEnhance(const float deltatime)
+{
+
+	//キャラごとの強化指定ステータスを選ぶ画面を出す
+
+
+	return true;
+}
+
 DayCell* TrainingScene::createDayCell(int cellnum) {
 
 	//cellnum:0→青,1→赤,2→白
@@ -625,22 +654,16 @@ void TrainingScene::Update()
 
 
 	//暫定的なキャラ作成
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
+	//if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
 
-		gManager->MakeCharacter("", 1);
+	//	gManager->MakeCharacter("", 1);
 
-		//出力欄にメッセージ出したいんだけど出ないんだけど！
-		//std::cout << "キャラが作成されました" << std::endl;
-		t2k::debugTrace("\nキャラが作成されました\n");
-	}
+	//	//出力欄にメッセージ出したいんだけど出ないんだけど！
+	//	//std::cout << "キャラが作成されました" << std::endl;
+	//	t2k::debugTrace("\nキャラが作成されました\n");
+	//}
 
-	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
-		if (cMenuManager->StatusMenuPos.y > 15)return;
-		cMenuManager->StatusMenuPos.y += 10;
-	}
-	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
-		cMenuManager->StatusMenuPos.y -= 10;
-	}
+
 
 	//--------------debug end------------------------//
 
@@ -670,7 +693,7 @@ void TrainingScene::Draw()
 
 	}
 	//cardSelect();
-	DrawWindow();
+	//DrawWindow();
 
 	DrawStringEx(900, 150, -1, "%s", month[now_month].c_str());
 
@@ -703,6 +726,9 @@ void TrainingScene::Draw()
 	else if (nowSeq == sequence::menu_1) {
 		DrawStringEx(100, 350, -1, "SeqMenu1");
 	}
+	else if (nowSeq == sequence::selectEnhance) {
+		DrawStringEx(100, 350, -1, "SeqSelectEnhance");
+	}
 
 	DrawStringEx(100, 400, -1, "イベントIDは%d", eManager->eventdebugID);
 
@@ -718,11 +744,24 @@ void TrainingScene::Draw()
 
 		newCharaFrame->Menu_Draw();
 	}
-	else if (nowSeq == sequence::menu_1||nowSeq==sequence::menu_2) {
+	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2) {
 		FrontMenu->All();
 	}
 
 	if (nowSeq == sequence::menu_2) {
+		//DrawBox(5, 5, 800, 600, -1, true);
+		charaListMenu->Menu_Draw();
+		DrawWindow();
+		DrawStringEx(300, 300, String_Color_Black, "ここはmenu2だよ");
+
+		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListTitle_gh, true);
+		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListName_gh, true);
+		//DrawStringEx(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, String_Color_Red, "冒険者候補生一覧");
+	}
+	else if (nowSeq == sequence::selectEnhance) {
+
+		DrawBox(5, 5, 800, 600, -1, true);
+
 
 	}
 
@@ -805,11 +844,16 @@ void TrainingScene::DrawWindow()
 
 		c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
 
-		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));;
+		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));
 
 		i++;
-		DrawBox(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y,
-			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);
+
+		//charaListWindow = new Menu(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, cMenuManager->CharaWindowWidth, cMenuManager->CharaWindowHeight, "graphics/WindowBase_02.png");
+		c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2),c->cWindow->windowPos.y);
+		c->charaListWindow->Menu_Draw();
+
+		/*DrawBox(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y,
+			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);*/
 
 		std::string name = c->charadata->name_;
 		int year = c->charadata->stayYear;
@@ -857,9 +901,11 @@ void TrainingScene::DrawWindow()
 
 
 		//DrawGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 50, c->cWindow->windowPos.y + 10, c->gh[2], false);
-		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 170, c->cWindow->windowPos.y + 15, 1, 0, c->gh[1], true);
+		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 170, c->cWindow->windowPos.y + 20, 1, 0, c->gh[1], true);
 
 		DrawAbility(c);
+
+
 	}
 
 }
@@ -916,6 +962,9 @@ void TrainingScene::ChangeSequence(sequence seq)
 	}
 	else if (seq == sequence::exit) {
 		main_sequence_.change(&TrainingScene::Seq_ExitDay);
+	}
+	else if (seq == sequence::selectEnhance) {
+		main_sequence_.change(&TrainingScene::Seq_SelectEnhance);
 	}
 
 }

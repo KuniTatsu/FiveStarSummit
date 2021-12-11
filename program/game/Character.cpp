@@ -3,6 +3,9 @@
 #include<time.h>
 #include"DxLib.h"
 #include"Ability.h"
+#include"MenuWindow.h"
+
+
 //
 //
 //playerdata = new SaveData_t;
@@ -35,12 +38,22 @@ Chara::Chara(std::string name, int year)
 
 	//ステータスウィンドウの作成
 	cWindow = new CharaWindow();
+	//charaListWindow = new Menu(cWindow->windowPos.x - (600 / 2), cWindow->windowPos.y, 600, 250, "graphics/WindowBase_02.png");
+	charaListWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
 
 }
 
 Chara::~Chara()
 {
 
+
+
+}
+
+void Chara::changeWindowPos(int x,int y)
+{
+	charaListWindow->menu_x = x;
+	charaListWindow->menu_y = y;
 
 
 }
