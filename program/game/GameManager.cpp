@@ -22,16 +22,31 @@ GameManager::~GameManager()
 
 void GameManager::MakeCharacter(const std::string& name, int year)
 {
-	chara_ = new Chara(name,year);
+	chara_ = new Chara(name, year);
 
-	int random = GetRand(charaGh.size()-1);
+	int random = GetRand(charaGh.size() - 1);
 	//chara_->gh
 
-	
+
 	chara_->gh = SetCharaGh(random);
 
 	chara.emplace_back(chara_);
 	//InputName(name);
+}
+
+void GameManager::ExitCharaVec()
+{
+	auto it = chara.begin();
+	while (it != chara.end()) {
+		if ((*it)->charadata->stayYear == 3) {
+			exitChara.emplace_back((*it));
+			it = chara.erase(it);
+			continue;
+		}
+		it++;
+	}
+
+
 }
 
 void GameManager::InputName(std::string name)
@@ -81,7 +96,7 @@ void GameManager::InputName(std::string name)
 
 void GameManager::StatusSet(int setType, int value)
 {
-	
+
 	if (0 == setType) {
 		for (auto c : chara) {
 
@@ -267,6 +282,10 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 
 	}
 }
+void GameManager::TrainingSet(Chara* setChara,int id)
+{
+	setChara->charadata->training_ToDo = id;
+}
 void GameManager::Update()
 {
 	SceneManager::Update();
@@ -287,7 +306,7 @@ void GameManager::Update()
 		//std::string name = "test";
 
 
-		chara_ = new Chara(name,1);
+		chara_ = new Chara(name, 1);
 		chara.emplace_back(chara_);
 
 
@@ -370,15 +389,15 @@ std::string GameManager::GetAbility(int abilityType, int abilityId)
 void GameManager::loadCharaCsv()
 {
 	loadGhCsv = t2k::loadCsv("Csv/CharaPass.csv");
-	for (int i = 1; i < loadGhCsv.size()-1; ++i) {
+	for (int i = 1; i < loadGhCsv.size() - 1; ++i) {
 
 		int hoge[3] = {};
 		std::string Pass = loadGhCsv[i][1];
 		LoadDivGraph(Pass.c_str(), 3, 3, 1, 32, 32, hoge, false);
 
-		
+
 		std::vector<int> gh;
-		charaGh.emplace_back( gh );
+		charaGh.emplace_back(gh);
 		charaGh[i - 1].emplace_back(hoge[0]);
 		charaGh[i - 1].emplace_back(hoge[1]);
 		charaGh[i - 1].emplace_back(hoge[2]);

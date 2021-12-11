@@ -4,6 +4,7 @@
 #include"../support/Support.h"
 #include"DxLib.h"
 #include<string>
+#include"Character.h"
 
 extern GameManager* gManager;
 
@@ -51,9 +52,9 @@ void ExtraEvent::NewMemberComing(int year)
 
 void ExtraEvent::ExitMember()
 {
-
-
-
+	gManager->ExitCharaVec();
+	
+	
 }
 
 void ExtraEvent::loadCharaRandomName()

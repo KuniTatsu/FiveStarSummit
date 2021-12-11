@@ -19,7 +19,11 @@ public:
 	AbilityManager* aManager = nullptr;
 	DataManager* dManager = nullptr;
 
-	std::vector<Chara*> chara = {};
+	//在籍するキャラクター
+	std::list<Chara*> chara = {};
+
+	//卒業したキャラクター
+	std::vector<Chara*> exitChara = {};
 
 	std::unordered_map<std::string, int> ghmap;
 
@@ -30,6 +34,9 @@ public:
 
 	//キャラを生成する関数
 	void MakeCharacter(const std::string& name,int year);
+
+	//キャラを在籍vectorから外す関数
+	void ExitCharaVec();
 
 	//名前を入力する関数
 	void InputName(std::string name);
@@ -42,6 +49,8 @@ public:
 	void StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit);
 
 	void AbilitySet(int abilityType, int abilityId);
+
+	void TrainingSet(Chara* setChara,int id);
 
 
 

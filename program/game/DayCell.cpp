@@ -35,6 +35,9 @@ DayCell::DayCell(int cell_gh)
 	else if (cell_gh == 16) {
 		gh = gManager->LoadGraphEx("graphics/extraDay_1.png");
 	}
+	else if (cell_gh == 17) {
+		gh = gManager->LoadGraphEx("graphics/extraDay_2.png");
+	}
 
 
 	//gh = cell_gh;

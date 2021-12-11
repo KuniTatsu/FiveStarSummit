@@ -18,6 +18,8 @@ public:
 	CharaMenuManager* cMenuManager = nullptr;
 
 	MenuWindow* FrontMenu = nullptr;
+	MenuWindow* charaListMenu = nullptr;
+	MenuWindow* charaTrainingMenu = nullptr;
 
 
 	bool changeSceneFlag = false;
@@ -86,7 +88,7 @@ public:
 	//一週間のどこにいるか
 	int week = 0;//1~7
 	//今の日
-	int day = 24;//1~30
+	int day = 1;//1~30
 
 
 	//初期シークエンスを設定
@@ -107,8 +109,11 @@ public:
 	bool Seq_LoopDay(const float deltatime);
 	int loopdaycount = 0;
 
-	//メニュー描画シークエンス
+	//メニュー1描画シークエンス
 	bool Seq_MenuDraw_1(const float deltatime);
+
+	//メニュー2描画シークエンス
+	bool Seq_MenuDraw_2(const float deltatime);
 
 	//イベント実行シークエンス
 	bool Seq_DoEvent(const float deltatime);
@@ -116,6 +121,8 @@ public:
 	bool Seq_EventFrameDraw(const float deltatime);
 	//入学式イベントシークエンス
 	bool Seq_NewCharactorComing(const float deltatime);
+	//卒業式イベントシークエンス
+	bool Seq_ExitDay(const float deltatime);
 
 
 	void Update();
@@ -151,6 +158,7 @@ private:
 	const int width = 110;
 
 	Menu* menu_1 = nullptr;
+
 	Menu* chara_1 = nullptr;
 
 	//年次
@@ -199,6 +207,9 @@ private:
 		eventDraw,
 		newChara,
 		menu_1,
+		menu_2,
+		menu_3,
+		exit
 	};
 	sequence nowSeq = sequence::main;
 

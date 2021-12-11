@@ -17,13 +17,16 @@ public:
 	int gh = 0;
 	bool is_alive_ = true;
 
-	//0,1,2から選ばれる
+	//イベント種別	master管理
 	int eventID = 0;
 
+	//日にちの名前
 	std::string myDayName = "";
-
+	//日にち
 	int myDay = 0;
+	//月の名前
 	std::string myMonthName = "";
+	//月
 	int myMonth = 0;
 
 	void Update();

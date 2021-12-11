@@ -41,6 +41,17 @@ TrainingScene::TrainingScene()
 	// メニューウィンドウのインスタンス化
 	FrontMenu = new MenuWindow(16, 25, 120, 300, "graphics/WindowBase_02.png", menu_0, 5);
 
+	MenuWindow::MenuElement_t* menu_ = new MenuWindow::MenuElement_t[]{
+		{40,50,"候補生一覧",0},
+		{40,100,"テスト1",1},
+		{40,150,"テスト2",2},
+		{40,200,"テスト3",3},
+		{40,250,"テスト4",4}
+
+	};
+//	charaListMenu=new MenuWindow()
+
+
 	SRand(time(0));
 
 	String_Color_Black = GetColor(0, 0, 0);
@@ -171,7 +182,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			now_month = (now_month + 1) % 12;
 		}*/
 
-		
+
 
 
 	}
@@ -231,6 +242,10 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 	if (now_month == 3 && day == 1) {
 		createDayCell(16);
 	}
+	//卒業式を仕込む
+	else if (now_month == 2 && day == 9) {
+		createDayCell(17);
+	}
 	else {
 		createDayCell(random);
 	}
@@ -253,7 +268,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 		//今の日にちが必ず止まる日だったら
 		if ((*it)->myMonth == stopday->month && (*it)->myDay == stopday->day) {
 			loopdaycount = 0;
-
+			//どの強制停止イベントか
 			if (stopday->id == 100) {
 				isForcedStopDay = true;
 				doneEvent = true;
@@ -263,11 +278,17 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 				break;
 			}
-			/*else if (stopday->id == 1)
-				main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);*/
+			else if (stopday->id == 103) {
+				isForcedStopDay = true;
+				doneEvent = true;
+				ChangeSequence(sequence::exit);
+				break;
+			}
+			//main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
 		}
 
 	}
+	//次のフレームに移動する
 	if (isForcedStopDay)return true;
 
 	loopdaycount--;
@@ -280,7 +301,13 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 {
+	if (FrontMenu->SelectNum == 0 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		//menu2シークエンスに移動する
+		ChangeSequence(sequence::menu_2);
+		return true;
 
+
+	}
 
 
 
@@ -288,6 +315,22 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 		FrontMenu->menu_live = false;
 		//メインシークエンスに移動する
 		ChangeSequence(sequence::main);
+		return true;
+	}
+
+
+
+	return true;
+}
+
+bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
+{
+
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		FrontMenu->menu_live = false;
+		//menu1シークエンスに移動する
+		ChangeSequence(sequence::menu_1);
 		return true;
 	}
 
@@ -466,6 +509,22 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 	return true;
 }
 
+bool TrainingScene::Seq_ExitDay(const float deltatime)
+{
+	if (main_sequence_.isStart()) {
+		eManager->exEvent->ExitMember();
+	}
+
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+
+
+		ChangeSequence(sequence::main);
+
+	}
+	return true;
+}
+
 DayCell* TrainingScene::createDayCell(int cellnum) {
 
 	//cellnum:0→青,1→赤,2→白
@@ -568,7 +627,7 @@ void TrainingScene::Update()
 	//暫定的なキャラ作成
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
 
-		gManager->MakeCharacter("",1);
+		gManager->MakeCharacter("", 1);
 
 		//出力欄にメッセージ出したいんだけど出ないんだけど！
 		//std::cout << "キャラが作成されました" << std::endl;
@@ -625,10 +684,8 @@ void TrainingScene::Draw()
 	}
 	DrawStringEx(100, 300, -1, "%d", loopdaycount);
 
-	
 
-
-	if (nowSeq==sequence::main) {
+	if (nowSeq == sequence::main) {
 		DrawStringEx(100, 350, -1, "SeqTrainingMain");
 	}
 	else if (nowSeq == sequence::loop) {
@@ -658,11 +715,15 @@ void TrainingScene::Draw()
 
 	//もし今のシークエンスが〇〇なら描画する
 	if (nowSeq == sequence::newChara) {
-		
+
 		newCharaFrame->Menu_Draw();
 	}
-	else if (nowSeq == sequence::menu_1) {
+	else if (nowSeq == sequence::menu_1||nowSeq==sequence::menu_2) {
 		FrontMenu->All();
+	}
+
+	if (nowSeq == sequence::menu_2) {
+
 	}
 
 	//if (gManager->isInput== true) {
@@ -849,6 +910,12 @@ void TrainingScene::ChangeSequence(sequence seq)
 	}
 	else if (seq == sequence::menu_1) {
 		main_sequence_.change(&TrainingScene::Seq_MenuDraw_1);
+	}
+	else if (seq == sequence::menu_2) {
+		main_sequence_.change(&TrainingScene::Seq_MenuDraw_2);
+	}
+	else if (seq == sequence::exit) {
+		main_sequence_.change(&TrainingScene::Seq_ExitDay);
 	}
 
 }
