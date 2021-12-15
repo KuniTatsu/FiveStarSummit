@@ -30,22 +30,37 @@ TrainingScene::TrainingScene()
 
 	eventFrame = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
+	exitCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
+
+
+	enhanceFrame = new Menu(146, 0, 650, 743, "graphics/WindowBase_02.png");
+	//enhanceButton = new Menu(0, 0, 200, 100, "graphics/WindowBase_02.png");
 
 	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
 		{40,50,"候補生一覧",0},
-		{40,100,"テスト1",1},
+		{40,100,"訓練内容一覧",1},
 		{40,150,"テスト2",2},
 		{40,200,"テスト3",3},
 		{40,250,"テスト4",4}
 	};
 	// メニューウィンドウのインスタンス化
-	FrontMenu = new MenuWindow(16, 25, 120, 300, "graphics/WindowBase_02.png", menu_0, 5);
-
-	
-
+	FrontMenu = new MenuWindow(16, 0, 130, 300, "graphics/WindowBase_02.png", menu_0, 5);
 
 	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10, FrontMenu->menu_y, 650, 743, "graphics/WindowBase_02.png");
 	cMenuManager->StatusMenuPos.x = charaListMenu->menu_x + (charaListMenu->menu_width / 2);
+
+	MenuWindow::MenuElement_t* enhance = new MenuWindow::MenuElement_t[]{
+		{40,50,"おまかせ強化",0},
+		{40,100,"攻撃強化",1},
+		{40,150,"防御強化2",2},
+		{40,200,"魔法攻撃強化3",3},
+		{40,250,"魔法防御強化",4},
+		{40,300,"素早さ強化",5},
+		{40,350,"賢さ強化",6},
+		{40,400,"持久力強化",7},
+	};
+	enhanceSelect = new MenuWindow(300, 100, 100, 300, "graphics/WindowBase_02.png", enhance, 8);
+
 
 	SRand(time(0));
 
@@ -56,8 +71,10 @@ TrainingScene::TrainingScene()
 	//プレイヤー画像のロード
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
 
-	charaListTitle_gh = gManager->LoadGraphEx("graphics/charatitle.png");
+	charaListTitle_gh = gManager->LoadGraphEx("graphics/enhanceWindow.png");
 	charaListName_gh = gManager->LoadGraphEx("graphics/charaListName.png");
+
+	enhanceListNameGh = gManager->LoadGraphEx("graphics/charaEnhanceName.png");
 
 
 	//最初に7個リストに入れる処理を書く
@@ -316,8 +333,15 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 		//menu2シークエンスに移動する
 		ChangeSequence(sequence::menu_2);
 		return true;
+	}
+	else if (FrontMenu->SelectNum == 1 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 
+		//menuの上下を操作出来なくする
+		FrontMenu->manageSelectFlag = false;
 
+		//selectEnhanceシークエンスに移動する
+		ChangeSequence(sequence::selectEnhance);
+		return true;
 	}
 
 
@@ -550,7 +574,84 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 
 	//キャラごとの強化指定ステータスを選ぶ画面を出す
 
+	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
+		if (cMenuManager->StatusMenuPos.y < 75)
+			cMenuManager->StatusMenuPos.y += 10;
+	}
+	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
+		cMenuManager->StatusMenuPos.y -= 10;
+	}
 
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+
+
+		//menu1シークエンスに移動する
+		FrontMenu->manageSelectFlag = true;
+		cMenuManager->PosReset();
+		ChangeSequence(sequence::menu_1);
+		return true;
+	}
+	//*****windowの位置変更処理*****//
+
+	int i = 0;
+	if (gManager->chara.empty() == false) {
+		for (auto c : gManager->chara) {
+
+			c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
+
+			c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));
+			i++;
+			c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, 1);
+			//ボタンの座標変更
+			c->enhanceButton->menu_x = cMenuManager->StatusMenuPos.x + 150;
+			c->enhanceButton->menu_y = c->cWindow->windowPos.y + 100;
+
+			if (t2k::Input::isMouseTrigger(t2k::Input::MOUSE_RELEASED_LEFT)) {
+				int x; int y;
+				GetMousePoint(&x, &y);
+				if (x >= c->enhanceButton->menu_x && x <= c->enhanceButton->menu_x + 140
+					&& y >= c->enhanceButton->menu_y && y <= c->enhanceButton->menu_y + 50) {
+
+					DrawStringEx(100, 100, -1, "hoge");
+					t2k::debugTrace("hogeee");
+					////クリックされたことを取得
+					//bool isClick = true;
+
+					//今のキャラクタを取得
+					nowChara = c;
+
+					enhanceSelect->menu_live = true;
+
+					//シークエンスを移動
+					ChangeSequence(sequence::Set);
+					break;
+
+				}
+			}
+		}
+	}
+
+
+
+
+
+	return true;
+}
+
+bool TrainingScene::Seq_SetEnhance(const float deltatime)
+{
+	//強化項目を選ぶ処理
+	// 
+	//選び終わったあと戻る処理
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+
+
+		//menu1シークエンスに移動する
+		enhanceSelect->menu_live = false;
+		ChangeSequence(sequence::selectEnhance);
+		return true;
+	}
 	return true;
 }
 
@@ -737,14 +838,18 @@ void TrainingScene::Draw()
 
 	LogDraw();
 
-	cMenuManager->DrawWindow();
+	//cMenuManager->DrawWindow();
 
 	//もし今のシークエンスが〇〇なら描画する
 	if (nowSeq == sequence::newChara) {
 
 		newCharaFrame->Menu_Draw();
 	}
-	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2) {
+	else if (nowSeq == sequence::exit) {
+		exitCharaFrame->Menu_Draw();
+
+	}
+	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2 || nowSeq == sequence::selectEnhance) {
 		FrontMenu->All();
 	}
 
@@ -754,15 +859,21 @@ void TrainingScene::Draw()
 		DrawWindow();
 		DrawStringEx(300, 300, String_Color_Black, "ここはmenu2だよ");
 
-		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListTitle_gh, true);
+		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListTitle_gh, false);
 		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListName_gh, true);
 		//DrawStringEx(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, String_Color_Red, "冒険者候補生一覧");
 	}
 	else if (nowSeq == sequence::selectEnhance) {
 
-		DrawBox(5, 5, 800, 600, -1, true);
+		enhanceFrame->Menu_Draw();
 
+		DrawEnhanceWindow();
 
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 35, 0.5, 0, charaListTitle_gh, false);
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 35, 0.5, 0, enhanceListNameGh, true);
+	}
+	else if (nowSeq == sequence::Set) {
+		enhanceSelect->All();
 	}
 
 	//if (gManager->isInput== true) {
@@ -848,12 +959,10 @@ void TrainingScene::DrawWindow()
 
 		i++;
 
-		//charaListWindow = new Menu(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, cMenuManager->CharaWindowWidth, cMenuManager->CharaWindowHeight, "graphics/WindowBase_02.png");
-		c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2),c->cWindow->windowPos.y);
+		c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, 0);
 		c->charaListWindow->Menu_Draw();
 
-		/*DrawBox(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y,
-			c->cWindow->windowPos.x + (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y + cMenuManager->CharaWindowHeight, -1, true);*/
+
 
 		std::string name = c->charadata->name_;
 		int year = c->charadata->stayYear;
@@ -910,6 +1019,38 @@ void TrainingScene::DrawWindow()
 
 }
 
+void TrainingScene::DrawEnhanceWindow()
+{
+	//int i = 0;
+	if (gManager->chara.empty())return;
+	for (auto c : gManager->chara) {
+
+		/*c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
+
+		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));
+
+		i++;
+		c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, 1);*/
+		//キャラクターごとのウィンドウ描画
+		c->charaEnhanceWindow->Menu_Draw();
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 20, String_Color_Black, "名前:%s", c->charadata->name_.c_str());
+
+		/*ボタンの座標変更
+		c->enhanceButton->menu_x = cMenuManager->StatusMenuPos.x + 150;
+		c->enhanceButton->menu_y = c->cWindow->windowPos.y+100;*/
+
+
+		//キャラクターウィンドウごとのボタン描画
+		c->enhanceButton->Menu_Draw();
+
+		//DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 40, String_Color_Black, "強化中:%s", c->charadata->myTraining.c_str());
+		DrawStringEx(c->enhanceButton->menu_x + 10, c->enhanceButton->menu_y + 20, String_Color_Black, "強化中:%s", c->charadata->myTraining.c_str());
+
+
+	}
+}
+
 void TrainingScene::DrawAbility(Chara* c)
 {
 	if (c->charadata->Ability.empty() == false) {
@@ -929,10 +1070,6 @@ void TrainingScene::DrawAbility(Chara* c)
 void TrainingScene::NewCharaWindow()
 {
 	eventFrame->Menu_Draw();
-
-
-
-
 
 }
 
@@ -965,6 +1102,9 @@ void TrainingScene::ChangeSequence(sequence seq)
 	}
 	else if (seq == sequence::selectEnhance) {
 		main_sequence_.change(&TrainingScene::Seq_SelectEnhance);
+	}
+	else if (seq == sequence::Set) {
+		main_sequence_.change(&TrainingScene::Seq_SetEnhance);
 	}
 
 }

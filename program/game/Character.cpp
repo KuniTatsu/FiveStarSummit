@@ -5,7 +5,16 @@
 #include"Ability.h"
 #include"MenuWindow.h"
 
-
+std::string Chara::trainingAll[Chara::MENU_MAX] = {
+		"Random",
+		"ATACK",
+		"DEFENCE",
+		"MAGIARACK",
+		"MAGIDEFENCE",
+		"SPEED",
+		"MIND",
+		"VITALITY",
+};
 //
 //
 //playerdata = new SaveData_t;
@@ -32,14 +41,18 @@ Chara::Chara(std::string name, int year)
 					0,0,0,0,
 					{} ,
 					2 ,
-					0,
+					Chara::trainingAll[Chara::Random],
 					year
-						};
+	};
 
+	
+	
 	//ステータスウィンドウの作成
 	cWindow = new CharaWindow();
 	//charaListWindow = new Menu(cWindow->windowPos.x - (600 / 2), cWindow->windowPos.y, 600, 250, "graphics/WindowBase_02.png");
 	charaListWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
+	charaEnhanceWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
+	enhanceButton = new Menu(0, 0, 140, 50, "graphics/WindowBase_02.png");
 
 }
 
@@ -50,12 +63,18 @@ Chara::~Chara()
 
 }
 
-void Chara::changeWindowPos(int x,int y)
+void Chara::changeWindowPos(int x, int y, int type)
 {
-	charaListWindow->menu_x = x;
-	charaListWindow->menu_y = y;
-
-
+	//charaListWindowを動かす
+	if (type == 0) {
+		charaListWindow->menu_x = x;
+		charaListWindow->menu_y = y;
+	}
+	//charaEnhanceWindowを動かす
+	else if (type == 1) {
+		charaEnhanceWindow->menu_x = x;
+		charaEnhanceWindow->menu_y = y;
+	}
 }
 
 //randomtype:0→基本ステータス以外のもの

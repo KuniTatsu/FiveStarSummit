@@ -8,10 +8,26 @@ class Menu;
 class Chara {
 
 public:
-	Chara(std::string name,int year);
+	Chara(std::string name, int year);
 	~Chara();
 
 	CharaWindow* cWindow;
+
+	enum {
+		Random,
+		ATACK,
+		DEFENCE,
+		MAGIARACK,
+		MAGIDEFENCE,
+		SPEED,
+		MIND,
+		VITALITY,
+		MENU_MAX
+	};
+	static std::string trainingAll[MENU_MAX];
+
+	//trainingMenu myMenu = trainingMenu::Random;
+
 
 	typedef struct {
 		std::string name_;	//名前
@@ -52,8 +68,9 @@ public:
 		//0...1...2...3...4
 		int tension = 2;//default
 //---------強化項目---------------------1
-		int training_ToDo = 0;
-//---------何年在籍か-------------------1
+		//int training_ToDo = 0;
+		std::string  myTraining = Chara::trainingAll[Chara::Random];
+		//---------何年在籍か-------------------1
 		int stayYear = 0;
 	}SaveData_t;
 	SaveData_t* charadata = nullptr;
@@ -63,7 +80,11 @@ public:
 	std::string recentAddedAbility = {};
 	Menu* charaListWindow = nullptr;
 
-	void changeWindowPos(int x,int y);
+	Menu* charaEnhanceWindow = nullptr;
+	Menu* enhanceButton = nullptr;
+	//typeが0ならListWindowの座標を変える
+	//typeが1ならEnhanceWindowの座標を変える
+	void changeWindowPos(int x, int y, int type);
 
 
 private:

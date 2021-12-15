@@ -284,7 +284,7 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 }
 void GameManager::TrainingSet(Chara* setChara,int id)
 {
-	setChara->charadata->training_ToDo = id;
+	setChara->charadata->myTraining = Chara::trainingAll[id];
 }
 void GameManager::Update()
 {

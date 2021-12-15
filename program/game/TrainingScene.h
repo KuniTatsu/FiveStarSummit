@@ -127,6 +127,10 @@ public:
 	//月始まりの強化指定イベントシークエンス
 	bool Seq_SelectEnhance(const float deltatime);
 
+	//キャラクタの強化項目を変更するシークエンス
+	bool Seq_SetEnhance(const float deltatime);
+	
+
 
 	void Update();
 
@@ -161,6 +165,10 @@ private:
 	int buff = 5;
 	const int width = 110;
 
+	int enhanceListNameGh = 0;
+
+	Chara* nowChara = nullptr;
+
 	Menu* menu_1 = nullptr;
 
 	Menu* chara_1 = nullptr;
@@ -193,6 +201,9 @@ private:
 
 	Menu* eventFrame = nullptr;
 	Menu* newCharaFrame = nullptr;
+	Menu* exitCharaFrame = nullptr;
+
+	Menu* enhanceFrame = nullptr;
 
 	//Menu* charaListTitle = nullptr;
 	int charaListTitle_gh = 0;
@@ -202,6 +213,9 @@ private:
 
 	MenuWindow* enhanceSelect = nullptr;
 
+	
+	/*Menu* enhanceButton = nullptr;*/
+	
 	std::string Log[9] = {};
 	//ループ中か否か
 	bool isnowLoop = false;
@@ -209,6 +223,9 @@ private:
 	bool doneEvent = false;
 	//起動時に最初のイベントが走ってしまわないようにするためのフラグ
 	bool doneFirstEvent = false;
+
+	//ボタンが押されたかどうか
+	bool isClick = false;
 
 
 	//シークエンスの列挙体
@@ -222,7 +239,8 @@ private:
 		menu_2,
 		menu_3,
 		exit,
-		selectEnhance
+		selectEnhance,
+		Set
 	};
 	sequence nowSeq = sequence::main;
 
@@ -233,6 +251,9 @@ private:
 
 	//キャラクターのステータス画面を描画する関数
 	void DrawWindow();
+
+	//キャラクターの強化選択画面を描画する関数
+	void DrawEnhanceWindow();
 
 	//キャラクターのアビリティ描画関数
 	void DrawAbility(Chara* c);

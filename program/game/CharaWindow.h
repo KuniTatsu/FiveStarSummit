@@ -2,6 +2,7 @@
 #include"../library/t2klib.h"
 
 class CharaMenuManager;
+class Menu;
 
 class CharaWindow {
 
@@ -11,5 +12,6 @@ public:
 	~CharaWindow();
 
 	t2k::Vector3 windowPos = {};
-
+private:
+	Menu* enhanceButton = nullptr;
 };

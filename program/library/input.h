@@ -2,10 +2,24 @@
 
 namespace t2k {
 
-    class Input final {
-	public :
-		Input(){}
-		~Input(){}
+	class Input final {
+	public:
+		Input() {}
+		~Input() {}
+
+#define MOUSE_OUTPUT_LEFT	(0x08)
+#define MOUSE_OUTPUT_RIGHT	(0x10)
+#define MOUSE_OUTPUT_MIDDLE	(0x20)
+
+		// マウス対応キー 一覧
+		enum eMouse {
+			MOUSE_PRESSED_LEFT = MOUSE_OUTPUT_LEFT,
+			MOUSE_PRESSED_RIGHT = MOUSE_OUTPUT_RIGHT,
+			MOUSE_PRESSED_MIDDLE = MOUSE_OUTPUT_MIDDLE,
+			MOUSE_RELEASED_LEFT = MOUSE_OUTPUT_LEFT,
+			MOUSE_RELEASED_RIGHT = MOUSE_OUTPUT_RIGHT,
+			MOUSE_RELEASED_MIDDLE = MOUSE_OUTPUT_MIDDLE
+		};
 
 		// キーボード対応キー 一覧
 		enum eKeys {
@@ -117,20 +131,24 @@ namespace t2k {
 		};
 
 
-  	    // 初期化
-	    static void initialize();
+		// 初期化
+		static void initialize();
 
-	    // 更新
+		// 更新
 		static void update();
 
-	    // 押下
+		// 押下
 		static bool isKeyDown(eKeys key);
 
-	    // 押下( トリガー )
+		// 押下( トリガー )
 		static bool isKeyDownTrigger(eKeys key);
 
-	    // リリーストリガー
+		// リリーストリガー
 		static bool isKeyReleaseTrigger(eKeys key);
+
+		// マウス押下
+		static bool isMouseTrigger(eMouse _mouse);
+
 	};
 
 }
