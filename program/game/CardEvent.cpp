@@ -47,10 +47,10 @@ CardEvent::~CardEvent()
 
 }
 
-void CardEvent::run_Card_Event()
+void CardEvent::run_Card_Event(int passedDay)
 {
 	if (AbilityType == -1) {
-		gManager->StatusSet(Atk_Num, Def_Num, MAtk_Num, MDef_Num, Spd_Num, Mind_Num, Vit_Num);
+		gManager->StatusSet(Atk_Num, Def_Num, MAtk_Num, MDef_Num, Spd_Num, Mind_Num, Vit_Num,passedDay);
 	}
 	else {
 		gManager->AbilitySet(AbilityType, AbilityId);

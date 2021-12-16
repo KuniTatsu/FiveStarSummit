@@ -6,6 +6,7 @@ class SceneManager;
 class Chara;
 class AbilityManager;
 class DataManager;
+class Item;
 
 class GameManager {
 
@@ -46,18 +47,13 @@ public:
 	//value→変化量
 	void StatusSet(int setType, int value);
 
-	void StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit);
+	void StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, int passedDay);
 
 	void AbilitySet(int abilityType, int abilityId);
 
 	void TrainingSet(Chara* setChara,int id);
 
-
-
-
-
-	//debug用に一旦ここで作る
-	//void CharactorStatusDraw();
+	
 
 	void Update();
 	void Draw();
@@ -69,23 +65,29 @@ public:
 	//ghを返す関数
 	std::vector<int> SetCharaGh(int num);
 
-	
-
-	
-
 	std::string GetAbility(int abilityType, int abilityId);
 
 private:
 	char String[256] = {};
+	//キャラクター画像をexcelから読み取る関数
 	void loadCharaCsv();
+	//アイテム情報をexcelから読み取る関数
+	void loadItem();
 
 	std::vector<std::vector<std::string>> loadGhCsv;
 	std::vector<std::vector<int>> charaGh;
 
+	std::vector<std::vector<std::string>> loadItemCsv;
+	std::vector<std::vector<Item*>> itemList;
+
+	//ステータスが1上がるために必要な経験値テーブル
 	int needExp[11] = { 20,40,80,160,320,480,600,720,840,960,1080 };
 
 	//今のステータスの値を入れると必要経験値テーブルの配列番号を取得する関数
 	int GetDecNum(int nowStatus);
 	
+	//経験値を与える関数
+	//c→与えるキャラ,num→ステータス番号
+	void GiveExperience(Chara* c,int num,int PassedDay);
 
 };

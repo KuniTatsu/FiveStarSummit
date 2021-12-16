@@ -93,6 +93,7 @@
     <ClCompile Include="program\game\ForceStopDay.cpp" />
     <ClCompile Include="program\game\ExtraEvent.cpp" />
     <ClCompile Include="program\game\FadeControl.cpp" />
+    <ClCompile Include="program\game\Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="program\support\FrameRateController.h">
@@ -191,5 +192,6 @@
     <ClInclude Include="program\game\ForceStopDay.h" />
     <ClInclude Include="program\game\ExtraEvent.h" />
     <ClInclude Include="program\game\FadeControl.h" />
+    <ClInclude Include="program\game\Item.h" />
   </ItemGroup>
 </Project>

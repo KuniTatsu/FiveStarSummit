@@ -93,7 +93,7 @@ void GameManager::InputName(std::string name)
 }
 
 //スキル付与イベントは負の値だった場合無視するコードを冒頭に入れる
-
+//DayCellによって与えられるステータス経験値
 void GameManager::StatusSet(int setType, int value)
 {
 
@@ -185,20 +185,37 @@ void GameManager::StatusSet(int setType, int value)
 
 }
 
-void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit)
+//カードによって与えられるステータス経験値
+void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, int passedDay)
 {
 
 	for (auto c : chara) {
+		//カードのイベントの持つ経験値×経過日数の付与部分
+		c->charadata->EXP_ATACK += atk * passedDay;
+		c->charadata->EXP_DEFENCE += def * passedDay;
+		c->charadata->EXP_MAGIATACK += magiatk * passedDay;
+		c->charadata->EXP_MAGIDEFENCE += magidef * passedDay;
+		c->charadata->EXP_SPEED += spd * passedDay;
+		c->charadata->EXP_MIND += mind * passedDay;
+		c->charadata->EXP_VITALITY += vit * passedDay;
 
-		c->charadata->EXP_ATACK += atk;
-		c->charadata->EXP_DEFENCE += def;
-		c->charadata->EXP_MAGIATACK += magiatk;
-		c->charadata->EXP_MAGIDEFENCE += magidef;
-		c->charadata->EXP_SPEED += spd;
-		c->charadata->EXP_MIND += mind;
-		c->charadata->EXP_VITALITY += vit;
+		//キャラクター個人の強化項目の経験値付与
+		for (int i = 0; i < 7; ++i) {
+			//もしキャラクターの強化指定がおまかせだったら
+			if (c->charadata->myTraining == Chara::trainingAll[0]) {
+				int random = GetRand(7);
 
-
+				//将来的にはキャラクターの全部のステータスが同じ値になるようにお任せを作りたい
+				GiveExperience(c, random, passedDay);
+				break;
+			}
+			//もしキャラクターの強化指定が〇〇だったら
+			if (c->charadata->myTraining == Chara::trainingAll[i]) {
+				GiveExperience(c, i, passedDay);
+				break;
+			}
+		}
+		//******閾値を突破していたときのステータス上昇処理******//
 		if (c->charadata->EXP_ATACK >= needExp[GetDecNum(c->charadata->ATACK)]) {
 			c->charadata->ATACK += 1;
 			c->charadata->EXP_ATACK = 0;
@@ -233,16 +250,10 @@ void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd,
 			c->charadata->VITALITY += 1;
 			c->charadata->EXP_VITALITY = 0;
 		}
+		//******************//
 
 
 
-		/*if (c->charadata->ATACK <= 0)c->charadata->ATACK = 0;
-		if (c->charadata->DEFENCE <= 0)c->charadata->DEFENCE = 0;
-		if (c->charadata->MAGIATACK <= 0)c->charadata->MAGIATACK = 0;
-		if (c->charadata->MAGIDEFENCE <= 0)c->charadata->MAGIDEFENCE = 0;
-		if (c->charadata->SPEED <= 0)c->charadata->SPEED = 0;
-		if (c->charadata->MIND <= 0)c->charadata->MIND = 0;
-		if (c->charadata->VITALITY <= 0)c->charadata->VITALITY = 0;*/
 	}
 
 }
@@ -253,8 +264,12 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 	int count = 0;
 	for (auto c : chara) {
 		//1/10の確率でアビリティを付与する
-		//int random = GetRand(10);
-		int random = 9;
+		int random = GetRand(10);
+
+		//***debug***//
+		//int random = 9;
+		//***********//
+
 		if (random > 8) {
 
 			//*******なんか複数個同じアビリティが登録されてるバグある*******//
@@ -282,7 +297,7 @@ void GameManager::AbilitySet(int abilityType, int abilityId)
 
 	}
 }
-void GameManager::TrainingSet(Chara* setChara,int id)
+void GameManager::TrainingSet(Chara* setChara, int id)
 {
 	setChara->charadata->myTraining = Chara::trainingAll[id];
 }
@@ -403,6 +418,20 @@ void GameManager::loadCharaCsv()
 		charaGh[i - 1].emplace_back(hoge[2]);
 	}
 }
+//id	itemType	setDay	addStatus	addStatusNum	setAbility	setAbilityType	Desc
+void GameManager::loadItem()
+{
+	loadItemCsv = t2k::loadCsv("Csv/Item.csv");
+	for (int i = 1; i < loadItemCsv.size(); ++i) {
+
+
+
+
+
+	}
+
+
+}
 
 int GameManager::GetDecNum(int nowStatus)
 {
@@ -416,5 +445,32 @@ int GameManager::GetDecNum(int nowStatus)
 	int DecNum = nowStatus / 10;
 
 	return DecNum;
+}
+
+void GameManager::GiveExperience(Chara* c, int num, int PassedDay)
+{
+	if (num == 0) {
+		c->charadata->EXP_ATACK += 10 * PassedDay;
+	}
+	else if (num == 1) {
+		c->charadata->EXP_DEFENCE += 10 * PassedDay;
+	}
+	else if (num == 2) {
+		c->charadata->EXP_MAGIATACK += 10 * PassedDay;
+	}
+	else if (num == 3) {
+		c->charadata->EXP_MAGIDEFENCE += 10 * PassedDay;
+	}
+	else if (num == 4) {
+		c->charadata->EXP_SPEED += 10 * PassedDay;
+	}
+	else if (num == 5) {
+		c->charadata->EXP_MIND += 10 * PassedDay;
+	}
+	else if (num == 6) {
+		c->charadata->EXP_VITALITY += 10 * PassedDay;
+	}
+
+
 }
 

@@ -15,7 +15,7 @@ void FadeControl::imageFadeIn(int x, int y, double rate, int gh)
 		//SetDrawBright(imageFade, imageFade, imageFade);        //段々あかるく(c= 0->255)
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, imageFade);		//だんだん画像を鮮明に
 
-		DrawRotaGraph(x, y, rate, 1, gh, true);
+		DrawRotaGraph(x, y, rate, 0, gh, true);
 
 		imageFade += FADESPEED;//imageFadeをカウントアップ
 

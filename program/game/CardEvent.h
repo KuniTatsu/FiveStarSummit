@@ -66,7 +66,7 @@ public:
 	//変化するステータスの量
 	std::vector<int> changeStatusValue = {};
 
-	void run_Card_Event();
+	void run_Card_Event(int passedDay);
 
 	void AddNameToVector();
 

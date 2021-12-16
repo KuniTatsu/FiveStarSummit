@@ -74,15 +74,19 @@ int EventManager::setEvent(int eventType)
 	else if (9 <= eventType && eventType <= 15) {
 		return 2;
 	}
-	else if (eventType >= 16) {
+	//else if (eventType == 15) {
+	//	//400	3	0	0	スキルを獲得する	スキル
+	//	return 3;
+	//}
+	else if (eventType >= 100) {
 		return 99;
 	}
 
-	
+
 }
 void EventManager::loadCardEvent()
 {
-	cardEvent_all=t2k::loadCsv("Csv/cardEvent.csv");
+	cardEvent_all = t2k::loadCsv("Csv/cardEvent.csv");
 	for (int i = 1; i < cardEvent_all.size(); ++i) {
 
 		//excelから読み取った列を一つずつ変数に格納→イベントクラスを生成するときの引数にぶち込む
@@ -114,7 +118,7 @@ void EventManager::loadCardEvent()
 		int n = std::atoi(cardEvent_all[i][13].c_str());
 
 		//id(int)	eventType(int)	atk	def	matk	mdef	spd	mind	vit	desc(std::string)	Abilitytype(int)	Abilityid(int)	tension(int)	itemid(int)
-		CardEvent* event = new CardEvent(a, b, c, d, e,f,g,h,j,cardEvent_all[i][9], k,l,m,n);
+		CardEvent* event = new CardEvent(a, b, c, d, e, f, g, h, j, cardEvent_all[i][9], k, l, m, n);
 
 		//eventtypeごとにリストに格納
 		cardEventList[b].emplace_back(event);
@@ -137,10 +141,10 @@ void EventManager::DoEvent(int eventID, int randomnum)
 
 }
 
-void EventManager::DoCardEvent(int eventType, int eventId)
+void EventManager::DoCardEvent(int eventType, int eventId, int PassedDay)
 {
 
-	cardEventList[eventType][eventId]->run_Card_Event();
+	cardEventList[eventType][eventId]->run_Card_Event(PassedDay);
 
 }
 

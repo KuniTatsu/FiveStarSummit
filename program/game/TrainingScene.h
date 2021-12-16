@@ -155,12 +155,20 @@ private:
 	//表示するカードの最大数
 	int cardNum = 5;
 
+	//文字の色
 	int String_Color_Black=0;
 	int String_Color_Red = 0;
 
+	//画面でアニメーションさせるキャラクターのリスト
+	std::list<Chara*> animChara = {};
+	int drawCharaNum[3] = {};
+
+	//選ばれたカードの情報
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
 	int selectedCardEventId = 0;
+
+	int passedDay = 0;
 
 	int buff = 5;
 	const int width = 110;
@@ -208,6 +216,8 @@ private:
 	//Menu* charaListTitle = nullptr;
 	int charaListTitle_gh = 0;
 	int charaListName_gh = 0;
+
+	int graduation_gh = 0;
 
 	Menu* charaListWindow = nullptr;
 
@@ -261,10 +271,11 @@ private:
 	void NewCharaWindow();
 	//Sequenceを移動させる関数,enumも一緒に変更する
 	void ChangeSequence(sequence seq);
-
+	//windowの初期化をまとめた関数
 	void menuInit();
 
-	
+	//画面奥で所属キャラがわちゃわちゃする関数
+	void CharaSpeak();
 
 
 };

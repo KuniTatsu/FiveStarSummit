@@ -51,7 +51,7 @@ Chara::Chara(std::string name, int year)
 	cWindow = new CharaWindow();
 	//charaListWindow = new Menu(cWindow->windowPos.x - (600 / 2), cWindow->windowPos.y, 600, 250, "graphics/WindowBase_02.png");
 	charaListWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
-	charaEnhanceWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
+	charaEnhanceWindow = new Menu(0, 0, 620, 100, "graphics/WindowBase_02.png");
 	enhanceButton = new Menu(0, 0, 140, 50, "graphics/WindowBase_02.png");
 
 }

@@ -30,6 +30,7 @@
     <ClCompile Include="program\game\GameManager.cpp" />
     <ClCompile Include="program\game\game_main.cpp" />
     <ClCompile Include="program\game\GuildMainScene.cpp" />
+    <ClCompile Include="program\game\Item.cpp" />
     <ClCompile Include="program\game\MenuWindow.cpp" />
     <ClCompile Include="program\game\SceneManager.cpp" />
     <ClCompile Include="program\game\SoundManager.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="program\game\GameManager.h" />
     <ClInclude Include="program\game\game_main.h" />
     <ClInclude Include="program\game\GuildMainScene.h" />
+    <ClInclude Include="program\game\Item.h" />
     <ClInclude Include="program\game\MenuWindow.h" />
     <ClInclude Include="program\game\Scene.h" />
     <ClInclude Include="program\game\SceneManager.h" />

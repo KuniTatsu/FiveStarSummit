@@ -33,15 +33,15 @@ TrainingScene::TrainingScene()
 	exitCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 
 
-	enhanceFrame = new Menu(146, 0, 650, 743, "graphics/WindowBase_02.png");
+	enhanceFrame = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
 	//enhanceButton = new Menu(0, 0, 200, 100, "graphics/WindowBase_02.png");
 
 	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
 		{40,50,"候補生一覧",0},
 		{40,100,"訓練内容一覧",1},
-		{40,150,"テスト2",2},
-		{40,200,"テスト3",3},
-		{40,250,"テスト4",4}
+		{40,150,"アイテム",2},
+		{40,200,"セーブ",3},
+		{40,250,"タイトルに戻る",4}
 	};
 	// メニューウィンドウのインスタンス化
 	FrontMenu = new MenuWindow(16, 0, 130, 300, "graphics/WindowBase_02.png", menu_0, 5);
@@ -50,16 +50,16 @@ TrainingScene::TrainingScene()
 	cMenuManager->StatusMenuPos.x = charaListMenu->menu_x + (charaListMenu->menu_width / 2);
 
 	MenuWindow::MenuElement_t* enhance = new MenuWindow::MenuElement_t[]{
-		{40,50,"おまかせ強化",0},
-		{40,100,"攻撃強化",1},
-		{40,150,"防御強化2",2},
-		{40,200,"魔法攻撃強化3",3},
-		{40,250,"魔法防御強化",4},
-		{40,300,"素早さ強化",5},
-		{40,350,"賢さ強化",6},
-		{40,400,"持久力強化",7},
+		{735,110,"おまかせ強化",0},
+		{735,160,"攻撃強化",1},
+		{735,210,"防御強化",2},
+		{735,260,"魔法攻撃強化",3},
+		{735,310,"魔法防御強化",4},
+		{735,360,"素早さ強化",5},
+		{735,410,"賢さ強化",6},
+		{735,460,"持久力強化",7},
 	};
-	enhanceSelect = new MenuWindow(300, 100, 100, 300, "graphics/WindowBase_02.png", enhance, 8);
+	enhanceSelect = new MenuWindow(900, 100, 150, 440, "graphics/WindowBase_02.png", enhance, 8);
 
 
 	SRand(time(0));
@@ -76,6 +76,7 @@ TrainingScene::TrainingScene()
 
 	enhanceListNameGh = gManager->LoadGraphEx("graphics/charaEnhanceName.png");
 
+	graduation_gh = gManager->LoadGraphEx("graphics/Graduation ceremony.png");
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -131,6 +132,8 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 			if (c == selectNum)
 			{
 				loopdaycount = card->passedDayNum;
+				passedDay = loopdaycount;
+
 				card->isSelected = true;
 				selectedCardPos = selectNum;
 				selectedCardEvent = card->cardEventTypeId;
@@ -257,11 +260,11 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 	//入学式を仕込む
 	if (now_month == 3 && day == 1) {
-		createDayCell(16);
+		createDayCell(100);
 	}
 	//卒業式を仕込む
 	else if (now_month == 2 && day == 9) {
-		createDayCell(17);
+		createDayCell(101);
 	}
 	else {
 		createDayCell(random);
@@ -428,7 +431,7 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 		//イベントの2実行処理
 		t2k::debugTrace("\nカードのイベントは:%d,%d\n", selectedCardEvent, selectedCardEventId);
 
-		eManager->DoCardEvent(selectedCardEvent, selectedCardEventId);
+		eManager->DoCardEvent(selectedCardEvent, selectedCardEventId, passedDay);
 
 		//eManager->DoEvent(selectedCardEvent, selectedCardEventId);
 		sequenceID = 3;
@@ -556,6 +559,7 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 bool TrainingScene::Seq_ExitDay(const float deltatime)
 {
 	if (main_sequence_.isStart()) {
+		//3年生を卒業させる関数
 		eManager->exEvent->ExitMember();
 	}
 
@@ -568,12 +572,12 @@ bool TrainingScene::Seq_ExitDay(const float deltatime)
 	}
 	return true;
 }
-
+//キャラごとの強化指定ステータスを選ぶ画面を出すシシークエンス
 bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 {
 
-	//キャラごとの強化指定ステータスを選ぶ画面を出す
 
+	//キャラの枠を上下に移動させる処理
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
 		if (cMenuManager->StatusMenuPos.y < 75)
 			cMenuManager->StatusMenuPos.y += 10;
@@ -582,7 +586,7 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 		cMenuManager->StatusMenuPos.y -= 10;
 	}
 
-
+	//escキーでmenu1へ戻る
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 
 
@@ -598,15 +602,16 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 	if (gManager->chara.empty() == false) {
 		for (auto c : gManager->chara) {
 
-			c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
+			c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x - 20;
 
-			c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));
+			c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((100) * (i));
 			i++;
 			c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, 1);
 			//ボタンの座標変更
-			c->enhanceButton->menu_x = cMenuManager->StatusMenuPos.x + 150;
-			c->enhanceButton->menu_y = c->cWindow->windowPos.y + 100;
+			c->enhanceButton->menu_x = cMenuManager->StatusMenuPos.x + 130;
+			c->enhanceButton->menu_y = c->cWindow->windowPos.y + 20;
 
+			//マウスクリック検知
 			if (t2k::Input::isMouseTrigger(t2k::Input::MOUSE_RELEASED_LEFT)) {
 				int x; int y;
 				GetMousePoint(&x, &y);
@@ -638,11 +643,42 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 
 	return true;
 }
-
+//強化項目を選ぶシークエンス
 bool TrainingScene::Seq_SetEnhance(const float deltatime)
 {
-	//強化項目を選ぶ処理
-	// 
+	//enterキーを押したときのSeletNumによってキャラクタの強化項目を変更する
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		if (enhanceSelect->SelectNum == 0) {
+			nowChara->charadata->myTraining = Chara::trainingAll[0];
+		}
+		else if (enhanceSelect->SelectNum == 1) {
+			nowChara->charadata->myTraining = Chara::trainingAll[1];
+		}
+		else if (enhanceSelect->SelectNum == 2) {
+			nowChara->charadata->myTraining = Chara::trainingAll[2];
+		}
+		else if (enhanceSelect->SelectNum == 3) {
+			nowChara->charadata->myTraining = Chara::trainingAll[3];
+		}
+		else if (enhanceSelect->SelectNum == 4) {
+			nowChara->charadata->myTraining = Chara::trainingAll[4];
+		}
+		else if (enhanceSelect->SelectNum == 5) {
+			nowChara->charadata->myTraining = Chara::trainingAll[5];
+		}
+		else if (enhanceSelect->SelectNum == 6) {
+			nowChara->charadata->myTraining = Chara::trainingAll[6];
+		}
+		else if (enhanceSelect->SelectNum == 7) {
+			nowChara->charadata->myTraining = Chara::trainingAll[7];
+		}
+		//menu1シークエンスに移動する
+		enhanceSelect->menu_live = false;
+		ChangeSequence(sequence::selectEnhance);
+		return true;
+	}
+
+
 	//選び終わったあと戻る処理
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 
@@ -847,9 +883,11 @@ void TrainingScene::Draw()
 	}
 	else if (nowSeq == sequence::exit) {
 		exitCharaFrame->Menu_Draw();
+		DrawRotaGraph(512, 362, 1, 0, graduation_gh, true);
+		DrawStringEx(300, 500, String_Color_Black, "3年生が卒業しました");
 
 	}
-	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2 || nowSeq == sequence::selectEnhance) {
+	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2 || nowSeq == sequence::selectEnhance || nowSeq == sequence::Set) {
 		FrontMenu->All();
 	}
 
@@ -863,26 +901,29 @@ void TrainingScene::Draw()
 		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListName_gh, true);
 		//DrawStringEx(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, String_Color_Red, "冒険者候補生一覧");
 	}
-	else if (nowSeq == sequence::selectEnhance) {
+	else if (nowSeq == sequence::selectEnhance || nowSeq == sequence::Set) {
 
 		enhanceFrame->Menu_Draw();
 
 		DrawEnhanceWindow();
 
-		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 35, 0.5, 0, charaListTitle_gh, false);
-		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 35, 0.5, 0, enhanceListNameGh, true);
-	}
-	else if (nowSeq == sequence::Set) {
-		enhanceSelect->All();
-	}
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 32, 0.43, 0, charaListTitle_gh, false);
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 32, 0.43, 0, enhanceListNameGh, true);
 
-	//if (gManager->isInput== true) {
-	//	//入力モードの描画
-	//	DrawKeyInputModeString(640, 480);
+		if (nowSeq == sequence::Set) {
+			enhanceSelect->All();
 
-	//	//入力途中の文字列の描画
-	//	DrawKeyInputString(0, 0, gManager->InputHandle);
+
+		}
+	}
+	////強化項目を描画,移動する処理
+	//else if (nowSeq == sequence::Set) {
+	//	enhanceSelect->All();
+
+
 	//}
+	
+
 }
 
 //7つまでログを生成する関数,古い方から消える
@@ -1025,26 +1066,30 @@ void TrainingScene::DrawEnhanceWindow()
 	if (gManager->chara.empty())return;
 	for (auto c : gManager->chara) {
 
-		/*c->cWindow->windowPos.x = cMenuManager->StatusMenuPos.x;
 
-		c->cWindow->windowPos.y = cMenuManager->StatusMenuPos.y + (20 * (i + 1)) + ((cMenuManager->CharaWindowHeight) * (i));
-
-		i++;
-		c->changeWindowPos(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2), c->cWindow->windowPos.y, 1);*/
 		//キャラクターごとのウィンドウ描画
 		c->charaEnhanceWindow->Menu_Draw();
 
+		//DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 20, String_Color_Black, "名前:%s", c->charadata->name_.c_str());
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 20, String_Color_Black, "名前:%s", c->charadata->name_.c_str());
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 40, String_Color_Black, "攻撃");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 60, c->cWindow->windowPos.y + 40, String_Color_Black, "防御");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 110, c->cWindow->windowPos.y + 40, String_Color_Black, "魔法攻撃");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 180, c->cWindow->windowPos.y + 40, String_Color_Black, "魔法防御");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 240, c->cWindow->windowPos.y + 40, String_Color_Black, "素早さ");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 300, c->cWindow->windowPos.y + 40, String_Color_Black, "精神力");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 360, c->cWindow->windowPos.y + 40, String_Color_Black, "持久力");
 
-		/*ボタンの座標変更
-		c->enhanceButton->menu_x = cMenuManager->StatusMenuPos.x + 150;
-		c->enhanceButton->menu_y = c->cWindow->windowPos.y+100;*/
+		//キャラクターのステータスと評価を表示する
+		
+
+
 
 
 		//キャラクターウィンドウごとのボタン描画
 		c->enhanceButton->Menu_Draw();
 
-		//DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 40, String_Color_Black, "強化中:%s", c->charadata->myTraining.c_str());
+		//強化中の項目を表示
 		DrawStringEx(c->enhanceButton->menu_x + 10, c->enhanceButton->menu_y + 20, String_Color_Black, "強化中:%s", c->charadata->myTraining.c_str());
 
 
@@ -1140,5 +1185,20 @@ void TrainingScene::menuInit()
 	menu_status_5 = new Menu(menu_7->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
 	menu_status_6 = new Menu(menu_8->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
 	menu_status_7 = new Menu(menu_9->menu_x, chara_1->menu_y + 65, width, 80, "graphics/WindowBase_02.png");
+}
+
+void TrainingScene::CharaSpeak()
+{
+	//ランダムに3人を今の在籍Memberから選ぶ
+	//選んだキャラクタをlistにいれる
+	//リストの中にいるキャラクターをアニメーションさせる(喋らせる？)
+
+	//毎フレーム回して条件にハマれば吹き出しを出してメッセージを表示する
+	//メッセージ表示は秒数で管理する
+	//n秒たったら吹き出しを消す
+
+	//吹き出しと中のメッセージは一つのクラスで作るべき？
+
+
 }
 
