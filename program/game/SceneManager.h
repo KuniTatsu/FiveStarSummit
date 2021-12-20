@@ -21,4 +21,7 @@ public:
 
 	static BaseScene* m_pScene;               //Œ»İ‚ÌƒV[ƒ“
 
+	static void Save();
+	static void Load();
+
 };

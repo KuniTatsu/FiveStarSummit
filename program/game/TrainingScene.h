@@ -129,12 +129,22 @@ public:
 
 	//キャラクタの強化項目を変更するシークエンス
 	bool Seq_SetEnhance(const float deltatime);
-	
+
+	//所持アイテムを描画するシークエンス
+	bool Seq_SelectItem(const float deltatime);
+
+	//アイテムを使用するシークエンス
+	bool Seq_UseItem(const float deltatime);
+
 
 
 	void Update();
 
 	void Draw();    //メニュー画面、背景画像、タイトル文字の描画
+
+	void Save();
+	void Load();
+
 
 private:
 	int time_ = 0;
@@ -156,7 +166,7 @@ private:
 	int cardNum = 5;
 
 	//文字の色
-	int String_Color_Black=0;
+	int String_Color_Black = 0;
 	int String_Color_Red = 0;
 
 	//画面でアニメーションさせるキャラクターのリスト
@@ -220,12 +230,13 @@ private:
 	int graduation_gh = 0;
 
 	Menu* charaListWindow = nullptr;
-
 	MenuWindow* enhanceSelect = nullptr;
 
-	
+	Menu* selectItemWindow = nullptr;
+
+
 	/*Menu* enhanceButton = nullptr;*/
-	
+
 	std::string Log[9] = {};
 	//ループ中か否か
 	bool isnowLoop = false;
@@ -250,9 +261,13 @@ private:
 		menu_3,
 		exit,
 		selectEnhance,
-		Set
+		Set,
+		selectItem,
+		useItem
 	};
 	sequence nowSeq = sequence::main;
+
+	std::vector<std::vector<int>>saveCard = {};
 
 	void addLog(std::string log);
 	void LogDraw();
@@ -277,5 +292,10 @@ private:
 	//画面奥で所属キャラがわちゃわちゃする関数
 	void CharaSpeak();
 
+
+	//ロード時のカード生成用関数
+	void LoadCreateCard(int EventType, int EventNum, int PassedDay);
+	//ロード時のセル生成用関数
+	void LoadCreateCell(int EventType);
 
 };

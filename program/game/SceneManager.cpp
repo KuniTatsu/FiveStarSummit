@@ -42,3 +42,15 @@ void SceneManager::Update() {
 void SceneManager::Render() {
     m_pScene->Draw();           //Œ»Ý‚ÌƒV[ƒ“‚Ì•`‰æŠÖ”
 }
+
+void SceneManager::Save()
+{
+    m_pScene->Save();
+
+
+}
+
+void SceneManager::Load()
+{
+    m_pScene->Load();
+}

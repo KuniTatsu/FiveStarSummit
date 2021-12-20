@@ -18,6 +18,7 @@
 #include"ExtraEvent.h"
 #include"ForceStopDay.h"
 #include"MenuWindow.h"
+#include"Item.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -25,6 +26,7 @@ extern GameManager* gManager;
 
 TrainingScene::TrainingScene()
 {
+	saveCard.resize(5);
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
@@ -35,6 +37,8 @@ TrainingScene::TrainingScene()
 
 	enhanceFrame = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
 	//enhanceButton = new Menu(0, 0, 200, 100, "graphics/WindowBase_02.png");
+
+	selectItemWindow = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
 
 	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
 		{40,50,"候補生一覧",0},
@@ -346,6 +350,15 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 		ChangeSequence(sequence::selectEnhance);
 		return true;
 	}
+	else if (FrontMenu->SelectNum == 2 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+
+		//menuの上下を操作出来なくする
+		FrontMenu->manageSelectFlag = false;
+
+		//selectEnhanceシークエンスに移動する
+		ChangeSequence(sequence::selectItem);
+		return true;
+	}
 
 
 
@@ -538,6 +551,7 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 {
 	if (main_sequence_.isStart()) {
+		gManager->stayYearUp();
 
 		newCharaFrame->menu_live = true;
 		eManager->exEvent->NewMemberComing(1);
@@ -636,11 +650,6 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 			}
 		}
 	}
-
-
-
-
-
 	return true;
 }
 //強化項目を選ぶシークエンス
@@ -691,6 +700,35 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 	return true;
 }
 
+bool TrainingScene::Seq_SelectItem(const float deltatime)
+{
+
+
+
+
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		//menu1シークエンスに移動する
+		FrontMenu->manageSelectFlag = true;
+		ChangeSequence(sequence::menu_1);
+		return true;
+	}
+
+	return true;
+}
+
+bool TrainingScene::Seq_UseItem(const float deltatime)
+{
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		//menu1シークエンスに移動する
+		enhanceSelect->menu_live = false;
+		ChangeSequence(sequence::selectItem);
+		return true;
+	}
+
+	return true;
+}
+
 DayCell* TrainingScene::createDayCell(int cellnum) {
 
 	//cellnum:0→青,1→赤,2→白
@@ -709,11 +747,9 @@ DayCell* TrainingScene::createDayCell(int cellnum) {
 	//ForcedStopFlagをtrueにする
 
 
-
+	week = (week + 1) % 7;
 	//日にちの更新処理
 	day++;
-	week = (week + 1) % 7;
-
 	//日が31以上になっていたら次の月にする
 	if (day > 30) {
 		day = 1;
@@ -887,7 +923,7 @@ void TrainingScene::Draw()
 		DrawStringEx(300, 500, String_Color_Black, "3年生が卒業しました");
 
 	}
-	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2 || nowSeq == sequence::selectEnhance || nowSeq == sequence::Set) {
+	else if (nowSeq == sequence::menu_1 || nowSeq == sequence::menu_2 || nowSeq == sequence::selectEnhance || nowSeq == sequence::Set || nowSeq == sequence::selectItem) {
 		FrontMenu->All();
 	}
 
@@ -912,8 +948,30 @@ void TrainingScene::Draw()
 
 		if (nowSeq == sequence::Set) {
 			enhanceSelect->All();
-
-
+		}
+	}
+	else if (nowSeq == sequence::selectItem) {
+		selectItemWindow->Menu_Draw();
+		int hoge = 0;
+		for (int i = 0; i < gManager->haveItem.size(); ++i) {
+			//通し番号i番を1個以上持っていたら
+			if (gManager->haveItem[i][0] > 0) {
+				if (i < 2) {
+					//描画する
+					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[0][i]->gh, true);
+					hoge += 1;
+				}
+				else if (2 <= i && i < 16) {
+					//描画する
+					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[1][i - 2]->gh, true);
+					hoge += 1;
+				}
+				else if (17 <= i && i < 38) {
+					//描画する
+					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[2][i - 17]->gh, true);
+					hoge += 1;
+				}
+			}
 		}
 	}
 	////強化項目を描画,移動する処理
@@ -922,9 +980,11 @@ void TrainingScene::Draw()
 
 
 	//}
-	
+
 
 }
+
+
 
 //7つまでログを生成する関数,古い方から消える
 void TrainingScene::addLog(std::string log)
@@ -1081,7 +1141,7 @@ void TrainingScene::DrawEnhanceWindow()
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 360, c->cWindow->windowPos.y + 40, String_Color_Black, "持久力");
 
 		//キャラクターのステータスと評価を表示する
-		
+
 
 
 
@@ -1151,6 +1211,12 @@ void TrainingScene::ChangeSequence(sequence seq)
 	else if (seq == sequence::Set) {
 		main_sequence_.change(&TrainingScene::Seq_SetEnhance);
 	}
+	else if (seq == sequence::selectItem) {
+		main_sequence_.change(&TrainingScene::Seq_SelectItem);
+	}
+	else if (seq == sequence::useItem) {
+		main_sequence_.change(&TrainingScene::Seq_UseItem);
+	}
 
 }
 
@@ -1202,3 +1268,85 @@ void TrainingScene::CharaSpeak()
 
 }
 
+void TrainingScene::LoadCreateCard(int EventType, int EventNum, int PassedDay)
+{
+	//カードの持つイベントを指定して生成
+	DayCard* new_card = new DayCard(EventType, EventNum);
+	//経過日数を設定
+	new_card->passedDayNum = PassedDay;
+
+	card_.emplace_back(new_card);
+}
+//EventType:0→15,100,101
+void TrainingScene::LoadCreateCell(int EventType)
+{
+	//cellnum:0→青,1→赤,2→白
+	DayCell* new_obj = new DayCell(EventType);
+	//DayCell自体のeventIDを決定する
+	new_obj->eventID = eManager->setEvent(EventType);
+
+	//DayCellに自分の日にちをもたせる
+	new_obj->myDayName = days[week];
+	new_obj->myDay = day;
+	new_obj->myMonthName = month[now_month];
+	new_obj->myMonth = now_month;
+
+	//日にちの更新処理
+	day++;
+	//日が31以上になっていたら次の月にする
+	if (day > 30) {
+		day = 1;
+		now_month = (now_month + 1) % 12;
+	}
+
+	cell_.emplace_back(new_obj);
+}
+
+void TrainingScene::Save()
+{
+	//card
+	//int EventType, int EventNum, int PassedDay
+	//すべてのカードの上の3つを取得する
+	int i = 0;
+	for (auto haveCard : card_) {
+		int type = haveCard->cardEventTypeId;
+		int id = haveCard->cardEventId;
+		int day = haveCard->passedDayNum;
+
+		saveCard[i].emplace_back(type);
+		saveCard[i].emplace_back(id);
+		saveCard[i].emplace_back(day);
+		++i;
+	}
+
+
+	//cell
+	//EventType
+	//day,week,now_month
+
+
+
+	FILE* fp = nullptr;
+	fopen_s(&fp, "saveData/test.bin", "wb");
+
+	fwrite(saveCard[0].data(), saveCard[0].size(), 1, fp);
+	fwrite("\n", 1, 1, fp);
+	fwrite(saveCard[1].data(), saveCard[0].size(), 1, fp);
+	fwrite("\n", 1, 1, fp);
+	fwrite(saveCard[2].data(), saveCard[0].size(), 1, fp);
+	fwrite("\n", 1, 1, fp);
+
+
+
+	int buff[5] = { 10,20,30,40,50 };
+	//sprintf_s(buff, "あいうえお\n\0");
+	fwrite(buff, sizeof(buff), 1, fp);
+	fclose(fp);
+
+}
+
+void TrainingScene::Load()
+{
+
+
+}

@@ -8,6 +8,7 @@
 #include"AbilityManager.h"
 #include"Ability.h"
 #include"DataManager.h"
+#include"Item.h"
 
 
 
@@ -45,8 +46,6 @@ void GameManager::ExitCharaVec()
 		}
 		it++;
 	}
-
-
 }
 
 void GameManager::InputName(std::string name)
@@ -367,7 +366,12 @@ void GameManager::initGameManager()
 	loadCharaCsv();
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 
+	itemList.resize(3);
+	loadItem();
 
+	haveItem.resize(38);
+
+	haveItemInit();
 }
 
 int GameManager::LoadGraphEx(std::string gh)
@@ -387,18 +391,35 @@ int GameManager::LoadGraphEx(std::string gh)
 	return ghmap[gh];
 }
 
+void GameManager::GetSceneData()
+{
+
+
+}
+
 std::vector<int> GameManager::SetCharaGh(int num)
 {
 	return charaGh[num];
 }
-
-
 
 std::string GameManager::GetAbility(int abilityType, int abilityId)
 {
 	std::string ability = aManager->abilityList[abilityType][abilityId]->ability_name;
 
 	return ability;
+}
+
+void GameManager::haveItemInit()
+{
+	for (int i = 0; i < haveItem.size(); ++i) {
+		//ƒAƒCƒeƒ€i”Ô‚ðZZŒÂ‚Å‰Šú‰»‚·‚é
+		haveItem[i].emplace_back(1);
+	}
+}
+
+void GameManager::setitem(int ItemId, int addNum)
+{
+	haveItem[ItemId][0] += addNum;
 }
 
 void GameManager::loadCharaCsv()
@@ -424,13 +445,29 @@ void GameManager::loadItem()
 	loadItemCsv = t2k::loadCsv("Csv/Item.csv");
 	for (int i = 1; i < loadItemCsv.size(); ++i) {
 
+		//id
+		int a = std::atoi(loadItemCsv[i][0].c_str());
+		//ItemType
+		int b = std::atoi(loadItemCsv[i][1].c_str());
+		//setDay
+		int c = std::atoi(loadItemCsv[i][2].c_str());
+		//addStatus
+		int d = std::atoi(loadItemCsv[i][3].c_str());
+		//addStatusNum
+		int e = std::atoi(loadItemCsv[i][4].c_str());
+		//setAbility
+		int f = std::atoi(loadItemCsv[i][5].c_str());
+		//setAbilityType
+		int g = std::atoi(loadItemCsv[i][6].c_str());
+		//num
+		int h = std::atoi(loadItemCsv[i][10].c_str());
 
 
+		Item* abi = new Item(a, b, c, d, e, f, g, loadItemCsv[i][7], loadItemCsv[i][8], loadItemCsv[i][9],h);
 
-
+		//abilitytype‚²‚Æ‚ÉƒŠƒXƒg‚ÉŠi”[
+		itemList[b].emplace_back(abi);
 	}
-
-
 }
 
 int GameManager::GetDecNum(int nowStatus)
@@ -445,6 +482,16 @@ int GameManager::GetDecNum(int nowStatus)
 	int DecNum = nowStatus / 10;
 
 	return DecNum;
+}
+
+void GameManager::stayYearUp()
+{
+
+	auto it = chara.begin();
+	while (it != chara.end()) {
+		(*it)->charadata->stayYear++;
+		it++;
+	}
 }
 
 void GameManager::GiveExperience(Chara* c, int num, int PassedDay)

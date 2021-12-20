@@ -10,6 +10,18 @@ DayCard::DayCard(int randomNum)
 	Color = GetColor(255, 0, 0);
 }
 
+DayCard::DayCard(int EventType, int EventId)
+{
+	cardEventTypeId = EventType;
+	cardEventId = EventId;
+
+	//‚Ç‚ÌƒCƒxƒ“ƒg‚ğ‚Á‚Ä‚¢‚é‚©‚Å‰æ‘œ‚ğ•Ï‚¦‚é
+	gh = LoadGraph("graphics/dayCard.png");
+	Color = GetColor(255, 0, 0);
+
+
+}
+
 DayCard::~DayCard()
 {
 }

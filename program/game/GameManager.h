@@ -25,8 +25,15 @@ public:
 
 	//卒業したキャラクター
 	std::vector<Chara*> exitChara = {};
-
+	//一度読み込んだghを保存するmap
 	std::unordered_map<std::string, int> ghmap;
+
+	//[itemid][haveItemNum]アイテムを持っている数とidの二次元配列
+	std::vector<std::vector<int>> haveItem;
+	//itemすべての配列
+	std::vector<std::vector<Item*>> itemList;
+
+	/*int[] haveItem = {};*/
 
 	float deitatime_;
 
@@ -62,10 +69,18 @@ public:
 	//すでにあるghならそれを返す
 	int LoadGraphEx(std::string gh);
 
+	void GetSceneData();
+
 	//ghを返す関数
 	std::vector<int> SetCharaGh(int num);
 
 	std::string GetAbility(int abilityType, int abilityId);
+	void haveItemInit();
+
+	void setitem(int ItemId,int addNum);
+
+	//学年を一つ上げる関数
+	void stayYearUp();
 
 private:
 	char String[256] = {};
@@ -78,16 +93,21 @@ private:
 	std::vector<std::vector<int>> charaGh;
 
 	std::vector<std::vector<std::string>> loadItemCsv;
-	std::vector<std::vector<Item*>> itemList;
+	
 
 	//ステータスが1上がるために必要な経験値テーブル
 	int needExp[11] = { 20,40,80,160,320,480,600,720,840,960,1080 };
 
 	//今のステータスの値を入れると必要経験値テーブルの配列番号を取得する関数
 	int GetDecNum(int nowStatus);
+
+	
 	
 	//経験値を与える関数
 	//c→与えるキャラ,num→ステータス番号
 	void GiveExperience(Chara* c,int num,int PassedDay);
+
+
+
 
 };

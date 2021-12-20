@@ -7,6 +7,7 @@ class DayCard {
 public:
 
 	DayCard(int randomNum);
+	DayCard(int EventType,int EventId);
 	~DayCard();
 
 	//カードの画面内の位置
