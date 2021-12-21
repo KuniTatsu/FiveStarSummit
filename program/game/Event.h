@@ -4,11 +4,10 @@
 class Event {
 
 public:
-	Event(int ID, int Eventtype, int Statustype, int num, std::string desc,std::string StatusName);
+	Event(int ID, int Eventtype, int Statustype, int num, std::string desc,std::string StatusName,std::string EventName,std::string EventMessage);
 	~Event();
 
-	Event(int ID, int Eventtype, int Statustype, int num, std::string desc, std::string StatusName,
-		int ID2, int Eventtype2, int Statustype2, int num2, std::string desc2, std::string StatusName2);
+	
 
 	//eventID
 	int id_ = 0;
@@ -21,8 +20,11 @@ public:
 	//説明
 	std::string desc_ = {};
 	//変化するステータスの名前
-	std::string StatusName_ ;
-
+	std::string statusName="" ;
+	//イベント名
+	std::string eventName = "";;
+	//イベントメッセージ
+	std::string eventMessage = "";
 	
 
 

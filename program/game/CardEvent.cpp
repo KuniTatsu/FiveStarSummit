@@ -15,7 +15,8 @@ extern GameManager* gManager;
 //
 //}
 
-CardEvent::CardEvent(int id, int eventType, int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, std::string desc, int abiType, int abiId, int tension, int itemid)
+CardEvent::CardEvent(int id, int eventType, int atk, int def, int magiatk, int magidef, int spd, int mind, int vit,
+		std::string desc, int abiType, int abiId, int tension, int itemid, std::string EventMessage)
 {
 	Id = id;
 	Event_type = eventType;
@@ -37,6 +38,8 @@ CardEvent::CardEvent(int id, int eventType, int atk, int def, int magiatk, int m
 	Tension = tension;
 
 	Item_id = itemid;
+
+	eventMessage = EventMessage;
 
 	AddNameToVector();
 }

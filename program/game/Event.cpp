@@ -4,14 +4,16 @@
 extern GameManager* gManager;
 
 
-Event::Event(int ID, int Eventtype, int Statustype, int num, std::string desc,std::string StatusName)
+Event::Event(int ID, int Eventtype, int Statustype, int num, std::string desc,std::string StatusName, std::string EventName, std::string EventMessage)
 {
 	id_ = ID;
 	event_type_ = Eventtype;
 	status_type_ = Statustype;
 	num_ = num;
 	desc_ = desc;
-	StatusName_ = StatusName;
+	statusName = StatusName;
+	eventName = EventName;
+	eventMessage = EventMessage;
 
 }
 

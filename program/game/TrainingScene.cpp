@@ -30,7 +30,7 @@ TrainingScene::TrainingScene()
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
-	eventFrame = new Menu(200, 100, 500, 300, "graphics/WindowBase_02.png");
+	eventFrame = new Menu(312, 210, 400, 340, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 	exitCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 
@@ -81,6 +81,8 @@ TrainingScene::TrainingScene()
 	enhanceListNameGh = gManager->LoadGraphEx("graphics/charaEnhanceName.png");
 
 	graduation_gh = gManager->LoadGraphEx("graphics/Graduation ceremony.png");
+
+	enhanceChara_gh = gManager->LoadGraphEx("graphics/enhance_1.png");
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -402,7 +404,7 @@ bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 bool TrainingScene::Seq_DoEvent(const float deltatime)
 {
 	int size = 0;
-	int rand_cellEvent = 0;
+	rand_cellEvent = 0;
 	//int rand_cardEvent = 0;
 
 	//イベントを処理するシークエンス
@@ -461,11 +463,11 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	//*************cellEventのログ表示**************
 	addLog("セルのイベントidは" + std::to_string(event) + ',' + std::to_string(rand_cellEvent));
 	if (eManager->eventList[event][rand_cellEvent]->num_ > 0) {
-		addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
+		addLog(eManager->eventList[event][rand_cellEvent]->statusName + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
 	}
 	else {
 		int hoge = eManager->eventList[event][rand_cellEvent]->num_ * (-1);
-		addLog(eManager->eventList[event][rand_cellEvent]->StatusName_ + "が" + std::to_string(hoge) + "減少した");
+		addLog(eManager->eventList[event][rand_cellEvent]->statusName + "が" + std::to_string(hoge) + "減少した");
 	}
 	//*************cardEventのログ表示**************
 	addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(selectedCardEventId));
@@ -535,7 +537,16 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 	}
 
 	eventFrame->Menu_Draw();
-
+	//セルイベントの画面表示
+	if (remainEventNum == 2) {
+		DrawRotaGraph(512, 370, 1, 0, enhanceChara_gh, true);
+		DrawStringEx(320, 520, String_Color_Black, "%s", eManager->eventList[event][rand_cellEvent]->eventMessage.c_str());
+	}
+	//カードイベントの画面表示
+	else {
+		DrawRotaGraph(512, 370, 1, 0, enhanceChara_gh, true);
+		DrawStringEx(320, 520, String_Color_Black, "%s", eManager->cardEventList[selectedCardEvent][selectedCardEventId]->eventMessage.c_str());
+	}
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		remainEventNum--;
 		eventFrame->menu_live = false;
@@ -916,6 +927,9 @@ void TrainingScene::Draw()
 	if (nowSeq == sequence::newChara) {
 
 		newCharaFrame->Menu_Draw();
+	}
+	else if (nowSeq == sequence::eventDraw) {
+		//DrawRotaGraph(512, 384, 2, 0, enhanceChara_gh, true);
 	}
 	else if (nowSeq == sequence::exit) {
 		exitCharaFrame->Menu_Draw();

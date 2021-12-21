@@ -47,7 +47,7 @@ void EventManager::loadEvent()
 		int d = std::atoi(event_all[i][3].c_str());
 
 		//id,eventType,extraStatus_type,extraStatus_num,desc
-		Event* event = new Event(a, b, c, d, event_all[i][4], event_all[i][5]);
+		Event* event = new Event(a, b, c, d, event_all[i][4], event_all[i][5], event_all[i][6], event_all[i][7]);
 
 		//eventtype‚²‚Æ‚ÉƒŠƒXƒg‚ÉŠi”[
 		eventList[b].emplace_back(event);
@@ -118,7 +118,7 @@ void EventManager::loadCardEvent()
 		int n = std::atoi(cardEvent_all[i][13].c_str());
 
 		//id(int)	eventType(int)	atk	def	matk	mdef	spd	mind	vit	desc(std::string)	Abilitytype(int)	Abilityid(int)	tension(int)	itemid(int)
-		CardEvent* event = new CardEvent(a, b, c, d, e, f, g, h, j, cardEvent_all[i][9], k, l, m, n);
+		CardEvent* event = new CardEvent(a, b, c, d, e, f, g, h, j, cardEvent_all[i][9], k, l, m, n, cardEvent_all[i][14]);
 
 		//eventtype‚²‚Æ‚ÉƒŠƒXƒg‚ÉŠi”[
 		cardEventList[b].emplace_back(event);

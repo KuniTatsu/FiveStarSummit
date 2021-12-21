@@ -173,6 +173,8 @@ private:
 	std::list<Chara*> animChara = {};
 	int drawCharaNum[3] = {};
 
+	int rand_cellEvent = 0;
+
 	//選ばれたカードの情報
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
@@ -228,6 +230,8 @@ private:
 	int charaListName_gh = 0;
 
 	int graduation_gh = 0;
+
+	int enhanceChara_gh = 0;
 
 	Menu* charaListWindow = nullptr;
 	MenuWindow* enhanceSelect = nullptr;

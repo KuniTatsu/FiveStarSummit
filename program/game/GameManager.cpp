@@ -91,7 +91,6 @@ void GameManager::InputName(std::string name)
 
 }
 
-//スキル付与イベントは負の値だった場合無視するコードを冒頭に入れる
 //DayCellによって与えられるステータス経験値
 void GameManager::StatusSet(int setType, int value)
 {
