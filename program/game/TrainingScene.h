@@ -11,6 +11,7 @@ class CharaWindow;
 class Chara;
 class Menu;
 class MenuWindow;
+class Item;
 
 class TrainingScene : public BaseScene {
 public:
@@ -188,6 +189,7 @@ private:
 	int enhanceListNameGh = 0;
 
 	Chara* nowChara = nullptr;
+	Item* nowItem = nullptr;
 
 	Menu* menu_1 = nullptr;
 
@@ -232,6 +234,11 @@ private:
 	int graduation_gh = 0;
 
 	int enhanceChara_gh = 0;
+
+	int selectCursor_gh = 0;
+
+	//アイテム画面の座標(これを動かすと他のアイテムの枠が全部動く)
+	t2k::Vector3 ItemMenuPos = { 146,0,0 };
 
 	Menu* charaListWindow = nullptr;
 	MenuWindow* enhanceSelect = nullptr;
@@ -301,5 +308,10 @@ private:
 	void LoadCreateCard(int EventType, int EventNum, int PassedDay);
 	//ロード時のセル生成用関数
 	void LoadCreateCell(int EventType);
+
+	//アイテム選択画面のカーソルを動かす関数
+	void selectItem(int HaveItemNum);
+	//選択中のアイテムを指す位置
+	int nowSelectNum = 0;
 
 };

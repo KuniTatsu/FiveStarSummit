@@ -2,7 +2,7 @@
 #include<string>
 
 class Ability;
-class CharaWindow;
+class Menu;
 
 class Item {
 
@@ -12,7 +12,9 @@ public:
 			std::string Gh, std::string Desc, std::string Name,int Num);
 	~Item();
 
-	CharaWindow* itemWindow;
+	
+	Menu* frame = nullptr;
+	Menu* button = nullptr;
 	//itemId
 	int id = 0;
 	//ItemType

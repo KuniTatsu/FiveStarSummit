@@ -83,6 +83,7 @@ TrainingScene::TrainingScene()
 	graduation_gh = gManager->LoadGraphEx("graphics/Graduation ceremony.png");
 
 	enhanceChara_gh = gManager->LoadGraphEx("graphics/enhance_1.png");
+	selectCursor_gh = gManager->LoadGraphEx("graphics/left_image_clear.png");
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -643,8 +644,8 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 				if (x >= c->enhanceButton->menu_x && x <= c->enhanceButton->menu_x + 140
 					&& y >= c->enhanceButton->menu_y && y <= c->enhanceButton->menu_y + 50) {
 
-					DrawStringEx(100, 100, -1, "hoge");
-					t2k::debugTrace("hogeee");
+					//DrawStringEx(100, 100, -1, "hoge");
+					//t2k::debugTrace("hogeee");
 					////クリックされたことを取得
 					//bool isClick = true;
 
@@ -713,23 +714,73 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 
 bool TrainingScene::Seq_SelectItem(const float deltatime)
 {
-
-
-
-
-
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
-		//menu1シークエンスに移動する
-		FrontMenu->manageSelectFlag = true;
-		ChangeSequence(sequence::menu_1);
-		return true;
+	if (main_sequence_.isStart()) {
+		ItemMenuPos = { 146,0,0 };
 	}
 
+
+	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_DOWN)) {
+		ItemMenuPos.y -= 10;
+	}
+	else if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
+		if (ItemMenuPos.y < 1)
+			ItemMenuPos.y += 10;
+	}
+	//マウスクリック検知
+	if (t2k::Input::isMouseTrigger(t2k::Input::MOUSE_RELEASED_LEFT)) {
+		int x; int y;
+		GetMousePoint(&x, &y);
+
+		for (int i = 0; i < gManager->haveItem.size(); ++i) {
+			//通し番号i番を1個以上持っていたら
+			if (gManager->haveItem[i][0] > 0) {
+				if (i < 2) {
+					if (x >= gManager->itemList[0][i]->button->menu_x && x <= gManager->itemList[0][i]->button->menu_x + 70
+						&& y >= gManager->itemList[0][i]->button->menu_y && y <= gManager->itemList[0][i]->button->menu_y + 45) {
+						nowItem = gManager->itemList[0][i];
+						ChangeSequence(sequence::useItem);
+						return true;
+					}
+				}
+				else if (2 <= i && i < 16) {
+
+					if (x >= gManager->itemList[1][i - 2]->button->menu_x && x <= gManager->itemList[1][i - 2]->button->menu_x + 70
+						&& y >= gManager->itemList[1][i - 2]->button->menu_y && y <= gManager->itemList[1][i - 2]->button->menu_y + 45) {
+						nowItem = gManager->itemList[1][i - 2];
+						ChangeSequence(sequence::useItem);
+						return true;
+					}
+
+				}
+				else if (17 <= i && i < 38) {
+					if (x >= gManager->itemList[2][i - 17]->button->menu_x && x <= gManager->itemList[2][i - 17]->button->menu_x + 70
+						&& y >= gManager->itemList[2][i - 17]->button->menu_y && y <= gManager->itemList[2][i - 17]->button->menu_y + 45) {
+						nowItem = gManager->itemList[2][i - 17];
+						ChangeSequence(sequence::useItem);
+						return true;
+					}
+				}
+			}
+		}
+}
+
+
+
+if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+	//menu1シークエンスに移動する
+	FrontMenu->manageSelectFlag = true;
+	ChangeSequence(sequence::menu_1);
 	return true;
+}
+
+return true;
 }
 
 bool TrainingScene::Seq_UseItem(const float deltatime)
 {
+
+
+
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 		//menu1シークエンスに移動する
 		enhanceSelect->menu_live = false;
@@ -972,17 +1023,41 @@ void TrainingScene::Draw()
 			if (gManager->haveItem[i][0] > 0) {
 				if (i < 2) {
 					//描画する
-					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[0][i]->gh, true);
+					//アイテムごとのwindowの位置を取得
+					gManager->itemList[0][i]->frame->menu_x = ItemMenuPos.x + 5;
+
+					gManager->itemList[0][i]->frame->menu_y = ItemMenuPos.y + 5 + 55 * hoge;
+					gManager->itemList[0][i]->frame->Menu_Draw();
+					//アイテムごとのbuttonの位置を取得
+					gManager->itemList[0][i]->button->menu_x = ItemMenuPos.x + 500;
+					gManager->itemList[0][i]->button->menu_y = ItemMenuPos.y + 5 + 55 * hoge;
+					gManager->itemList[0][i]->button->Menu_Draw();
+
+					DrawRotaGraph(ItemMenuPos.x + 25, ItemMenuPos.y + 30 + 55 * hoge, 1.7, 0, gManager->itemList[0][i]->gh, true);
+					DrawStringEx(ItemMenuPos.x + 50, ItemMenuPos.y + 30 + 55 * hoge, String_Color_Black, (char*)gManager->itemList[0][i]->name.c_str());
 					hoge += 1;
 				}
 				else if (2 <= i && i < 16) {
 					//描画する
-					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[1][i - 2]->gh, true);
+					gManager->itemList[1][i - 2]->frame->menu_x = ItemMenuPos.x + 5;
+					gManager->itemList[1][i - 2]->frame->menu_y = ItemMenuPos.y + 5 + 55 * hoge;
+					gManager->itemList[1][i - 2]->frame->Menu_Draw();
+
+					//アイテムごとのbuttonの位置を取得
+					gManager->itemList[1][i - 2]->button->menu_x = ItemMenuPos.x + 500;
+					gManager->itemList[1][i - 2]->button->menu_y = ItemMenuPos.y + 5 + 55 * hoge;
+					gManager->itemList[1][i - 2]->button->Menu_Draw();
+
+					DrawRotaGraph(ItemMenuPos.x + 25, ItemMenuPos.y + 30 + 55 * hoge, 1.7, 0, gManager->itemList[1][i - 2]->gh, true);
+					DrawStringEx(ItemMenuPos.x + 50, ItemMenuPos.y + 30 + 55 * hoge, String_Color_Black, (char*)gManager->itemList[1][i - 2]->name.c_str());
+
 					hoge += 1;
 				}
 				else if (17 <= i && i < 38) {
 					//描画する
-					DrawRotaGraph(selectItemWindow->menu_x + 10, selectItemWindow->menu_y + 10 + 50 * hoge, 2, 0, gManager->itemList[2][i - 17]->gh, true);
+					DrawRotaGraph(selectItemWindow->menu_x + 25, selectItemWindow->menu_y + 30 + 55 * hoge, 1.7, 0, gManager->itemList[2][i - 17]->gh, true);
+					DrawStringEx(selectItemWindow->menu_x + 50, selectItemWindow->menu_y + 30 + 55 * hoge, String_Color_Black, (char*)gManager->itemList[2][i - 17]->name.c_str());
+
 					hoge += 1;
 				}
 			}
@@ -1316,6 +1391,22 @@ void TrainingScene::LoadCreateCell(int EventType)
 	cell_.emplace_back(new_obj);
 }
 
+void TrainingScene::selectItem(int HaveItemNum)
+{
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN)) {
+		nowSelectNum = (nowSelectNum + 1) % HaveItemNum;//一つ下にずれる
+		//sound->System_Play(sound->system_move);
+	}
+	else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
+		nowSelectNum = (nowSelectNum + (HaveItemNum - 1)) % HaveItemNum;//一つ上にずれる
+		//sound->System_Play(sound->system_move);
+	}
+
+
+
+
+}
+
 void TrainingScene::Save()
 {
 	//card
@@ -1361,6 +1452,9 @@ void TrainingScene::Save()
 
 void TrainingScene::Load()
 {
+
+
+
 
 
 }
