@@ -148,6 +148,8 @@ public:
 
 
 private:
+
+	float deltatime_scene = 0;
 	int time_ = 0;
 	//今のシークエンスのID
 	int sequenceID = 0;
@@ -191,6 +193,7 @@ private:
 	Chara* nowChara = nullptr;
 	Item* nowItem = nullptr;
 
+	Menu* cardWindow = nullptr;
 	Menu* menu_1 = nullptr;
 
 	Menu* chara_1 = nullptr;
@@ -236,6 +239,9 @@ private:
 	int enhanceChara_gh = 0;
 
 	int selectCursor_gh = 0;
+
+	int leftArrow_gh[3] = {};
+	int rightArrow_gh[3] = {};
 
 	//アイテム画面の座標(これを動かすと他のアイテムの枠が全部動く)
 	t2k::Vector3 ItemMenuPos = { 146,0,0 };
@@ -314,4 +320,14 @@ private:
 	//選択中のアイテムを指す位置
 	int nowSelectNum = 0;
 
+	void arrowAnim();
+
+	//矢印のアニメーションに使う変数
+	int ACT_SPEED = 60;
+	int act_wait = ACT_SPEED;
+	int MAX_MOTION_INDEX = 3;
+
+	int act_index=0;
+	int motion_index_left = 0;
+	int motion_index_right = 0;
 };

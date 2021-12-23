@@ -303,38 +303,38 @@ void GameManager::Update()
 {
 	SceneManager::Update();
 
-	//文字入力が終了しているならwhileループを抜ける
-	if (InputHandle != 0 && CheckKeyInput(InputHandle) != 0) {
+	////文字入力が終了しているならwhileループを抜ける
+	//if (InputHandle != 0 && CheckKeyInput(InputHandle) != 0) {
 
-		//入力された文字列の取得
-		GetKeyInputString(String, InputHandle);
+	//	//入力された文字列の取得
+	//	GetKeyInputString(String, InputHandle);
 
-		DeleteKeyInput(InputHandle);
-		InputHandle = 0;
-		//string型に変換
-		std::string name(String, sizeof(String) / sizeof(String[0]));
-		isInput = false;
+	//	DeleteKeyInput(InputHandle);
+	//	InputHandle = 0;
+	//	//string型に変換
+	//	std::string name(String, sizeof(String) / sizeof(String[0]));
+	//	isInput = false;
 
-		////******debug*****
-		//std::string name = "test";
-
-
-		chara_ = new Chara(name, 1);
-		chara.emplace_back(chara_);
+	//	////******debug*****
+	//	//std::string name = "test";
 
 
-	}
-	else {
-		//入力モードの描画
-		DrawKeyInputModeString(640, 480);
+	//	chara_ = new Chara(name, 1);
+	//	chara.emplace_back(chara_);
 
-		//↓出る
-		//t2k::debugTrace("\n入力中\n");
 
-		//DrawBox(50, 50, 100, 100, -1, true);
-		//入力途中の文字列の描画
-		DrawKeyInputString(200, 200, InputHandle);
-	}
+	//}
+	//else {
+	//	//入力モードの描画
+	//	DrawKeyInputModeString(640, 480);
+
+	//	//↓出る
+	//	//t2k::debugTrace("\n入力中\n");
+
+	//	//DrawBox(50, 50, 100, 100, -1, true);
+	//	//入力途中の文字列の描画
+	//	DrawKeyInputString(200, 200, InputHandle);
+	//}
 
 }
 
@@ -363,7 +363,7 @@ void GameManager::initGameManager()
 	//sManager = new SceneManager();
 	deitatime_ = 0;
 	loadCharaCsv();
-	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
+	SceneManager::ChangeScene(SceneManager::SCENE::TITLE);
 
 	itemList.resize(3);
 	loadItem();

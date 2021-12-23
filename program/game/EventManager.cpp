@@ -81,8 +81,21 @@ int EventManager::setEvent(int eventType)
 	else if (eventType >= 100) {
 		return 99;
 	}
+	return -1;
 
-
+}
+int EventManager::setCardEvent(int eventType)
+{
+	if (0 <= eventType && eventType <= 5) {
+		return 0;
+	}
+	else if (6 <= eventType && eventType <= 13) {
+		return 1;
+	}
+	else if (14 <= eventType && eventType <= 15) {
+		return 2;
+	}
+	return -1;
 }
 void EventManager::loadCardEvent()
 {

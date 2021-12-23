@@ -30,6 +30,7 @@ TrainingScene::TrainingScene()
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
+	cardWindow = new Menu(20, 500, 984, 268, "graphics/WindowBase_03.png");
 	eventFrame = new Menu(312, 210, 400, 340, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 	exitCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
@@ -75,6 +76,9 @@ TrainingScene::TrainingScene()
 	//プレイヤー画像のロード
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
 
+	LoadDivGraph("graphics/left.png", 3, 3, 1, 32, 32, leftArrow_gh);
+	LoadDivGraph("graphics/right.png", 3, 3, 1, 32, 32, rightArrow_gh);
+
 	charaListTitle_gh = gManager->LoadGraphEx("graphics/enhanceWindow.png");
 	charaListName_gh = gManager->LoadGraphEx("graphics/charaListName.png");
 
@@ -113,6 +117,8 @@ TrainingScene::~TrainingScene()
 //日程カードが選ばれるまでのシークエンス(日数移動済み)
 bool TrainingScene::Seq_Training_Main(const float deltatime)
 {
+
+	cardWindow->Menu_Draw();
 	//loopdaycountが0でなければシークエンスをLoopDayにする
 	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	
 
@@ -255,7 +261,7 @@ bool TrainingScene::Seq_CardDisappear(const float deltatime)
 //日程カードが選ばれたあとのシークエンス(日数移動)
 bool TrainingScene::Seq_LoopDay(const float deltatime)
 {
-
+	cardWindow->Menu_Draw();
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
 
@@ -336,6 +342,7 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	if (FrontMenu->SelectNum == 0 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		//menuの上下を操作出来なくする
 		FrontMenu->manageSelectFlag = false;
@@ -379,6 +386,7 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
 		if (cMenuManager->StatusMenuPos.y < 75)
 			cMenuManager->StatusMenuPos.y += 10;
@@ -404,6 +412,7 @@ bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 
 bool TrainingScene::Seq_DoEvent(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	int size = 0;
 	rand_cellEvent = 0;
 	//int rand_cardEvent = 0;
@@ -530,7 +539,7 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 
 bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 {
-
+	cardWindow->Menu_Draw();
 	//イベント1の描画処理 
 	if (main_sequence_.isStart()) {
 
@@ -562,6 +571,7 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 
 bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	if (main_sequence_.isStart()) {
 		gManager->stayYearUp();
 
@@ -584,6 +594,7 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 
 bool TrainingScene::Seq_ExitDay(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	if (main_sequence_.isStart()) {
 		//3年生を卒業させる関数
 		eManager->exEvent->ExitMember();
@@ -601,8 +612,7 @@ bool TrainingScene::Seq_ExitDay(const float deltatime)
 //キャラごとの強化指定ステータスを選ぶ画面を出すシシークエンス
 bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 {
-
-
+	cardWindow->Menu_Draw();
 	//キャラの枠を上下に移動させる処理
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
 		if (cMenuManager->StatusMenuPos.y < 75)
@@ -667,6 +677,7 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 //強化項目を選ぶシークエンス
 bool TrainingScene::Seq_SetEnhance(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	//enterキーを押したときのSeletNumによってキャラクタの強化項目を変更する
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		if (enhanceSelect->SelectNum == 0) {
@@ -714,6 +725,7 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 
 bool TrainingScene::Seq_SelectItem(const float deltatime)
 {
+	cardWindow->Menu_Draw();
 	if (main_sequence_.isStart()) {
 		ItemMenuPos = { 146,0,0 };
 	}
@@ -762,24 +774,24 @@ bool TrainingScene::Seq_SelectItem(const float deltatime)
 				}
 			}
 		}
-}
+	}
 
 
 
-if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
-	//menu1シークエンスに移動する
-	FrontMenu->manageSelectFlag = true;
-	ChangeSequence(sequence::menu_1);
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		//menu1シークエンスに移動する
+		FrontMenu->manageSelectFlag = true;
+		ChangeSequence(sequence::menu_1);
+		return true;
+	}
+
 	return true;
-}
-
-return true;
 }
 
 bool TrainingScene::Seq_UseItem(const float deltatime)
 {
 
-
+	cardWindow->Menu_Draw();
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 		//menu1シークエンスに移動する
@@ -834,6 +846,7 @@ void TrainingScene::CellDelete()
 
 DayCard* TrainingScene::createDayCard(int cardEventNum)
 {
+	//0~15
 	DayCard* new_card = new DayCard(cardEventNum);
 	//経過日数をランダムで決定
 	int daynum = GetRand(4) + 1;
@@ -843,11 +856,13 @@ DayCard* TrainingScene::createDayCard(int cardEventNum)
 	new_card->pos_.y = 620;
 
 	//イベントタイプ0,1,2を決定
-	new_card->cardEventTypeId = eManager->setEvent(cardEventNum);
+	new_card->cardEventTypeId = eManager->setCardEvent(cardEventNum);
 
 	size_card = eManager->eventList[new_card->cardEventTypeId].size();
 	//イベントタイプの中から一つをランダムで決定
 	new_card->cardEventId = GetRand(size_card - 1);
+
+	new_card->setGh(new_card->cardEventTypeId, new_card->cardEventId);
 
 	card_.emplace_back(new_card);
 
@@ -916,6 +931,7 @@ void TrainingScene::Update()
 
 void TrainingScene::Draw()
 {
+
 	int i = 0;
 	for (auto cell : cell_) {
 		cell->pos_ = tbl[i++];
@@ -1070,7 +1086,7 @@ void TrainingScene::Draw()
 
 	//}
 
-
+	arrowAnim();
 }
 
 
@@ -1405,6 +1421,20 @@ void TrainingScene::selectItem(int HaveItemNum)
 
 
 
+}
+
+void TrainingScene::arrowAnim()
+{
+	if (--act_wait <= 0) {
+		act_index++;
+		act_wait = ACT_SPEED;
+		act_index %= MAX_MOTION_INDEX;
+	}
+	motion_index_left = leftArrow_gh[act_index];
+	motion_index_right = rightArrow_gh[act_index];
+
+	DrawRotaGraph(500, 500, 1, 0, motion_index_left, true);
+	DrawRotaGraph(1000, 500, 1, 0, motion_index_right, true);
 }
 
 void TrainingScene::Save()

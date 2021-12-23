@@ -10,7 +10,7 @@ public:
     TitleScene();
     ~TitleScene();
 
-
+    int title_gh = 0;
 
     void Update();  
 

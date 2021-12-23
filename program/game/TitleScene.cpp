@@ -1,7 +1,17 @@
 #include "TitleScene.h"
+#include"GameManager.h"
+#include"DxLib.h"
+#include "../library/t2klib.h"
+#include "../support/Support.h"
+#include"SceneManager.h"
+
+
+extern GameManager* gManager;
 
 TitleScene::TitleScene()
 {
+	title_gh = gManager->LoadGraphEx("graphics/sougenna.jpg");
+	
 }
 
 TitleScene::~TitleScene()
@@ -10,6 +20,11 @@ TitleScene::~TitleScene()
 
 void TitleScene::Update()
 {
+
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
+		return;
+	}
 	//ゲームの開始処理
 	//TrainingSceneへ飛ばす
 
@@ -25,7 +40,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-
+	DrawRotaGraph(512, 384, 1.28, 0, title_gh, true);
 	//タイトル画像の描画
 	//タイトルメニューの描画
 }

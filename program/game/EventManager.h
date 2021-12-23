@@ -26,6 +26,8 @@ public:
 	//DayCellが作られるたびに呼ぶイベントセット関数
 	int setEvent(int eventType);
 
+	int setCardEvent(int eventType);
+
 
 	std::vector< std::vector<std::string> > cardEvent_all;
 

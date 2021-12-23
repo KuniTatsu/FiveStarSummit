@@ -39,6 +39,8 @@ public:
 	//‘I‚Î‚ê‚½ƒtƒ‰ƒO
 	bool isSelected = false;
 
+	void setGh(int eventType,int eventId);
+
 	void Update();
 	void Draw();
 

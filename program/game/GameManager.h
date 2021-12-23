@@ -83,7 +83,9 @@ public:
 	void stayYearUp();
 
 private:
-	char String[256] = {};
+	//char String[256] = {};
+	
+
 	//キャラクター画像をexcelから読み取る関数
 	void loadCharaCsv();
 	//アイテム情報をexcelから読み取る関数
