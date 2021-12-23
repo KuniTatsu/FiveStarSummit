@@ -35,13 +35,26 @@ public:
 
 	/*int[] haveItem = {};*/
 
+	int statusAlfa_SS_gh = 0;
+	int statusAlfa_S_gh = 0;
+	int statusAlfa_A_gh = 0;
+	int statusAlfa_B_gh = 0;
+	int statusAlfa_C_gh = 0;
+	int statusAlfa_D_gh = 0;
+	int statusAlfa_E_gh = 0;
+	int statusAlfa_F_gh = 0;
+	int statusAlfa_G_gh = 0;
+
+	//ステータス画像のロード
+	void LoadStatusImage();
+
 	float deitatime_;
 
 	bool isInput = false;
-	int InputHandle=0;
+	int InputHandle = 0;
 
 	//キャラを生成する関数
-	void MakeCharacter(const std::string& name,int year);
+	void MakeCharacter(const std::string& name, int year);
 
 	//キャラを在籍vectorから外す関数
 	void ExitCharaVec();
@@ -53,38 +66,40 @@ public:
 	//setType→どのステータスを変化させるか
 	//value→変化量
 	void StatusSet(int setType, int value);
-
+	//カード用のステータス変化関数
 	void StatusSet(int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, int passedDay);
-
+	//アビリティの付与関数
 	void AbilitySet(int abilityType, int abilityId);
+	//トレーニングを選択する関数
+	void TrainingSet(Chara* setChara, int id);
 
-	void TrainingSet(Chara* setChara,int id);
 
-	
 
 	void Update();
 	void Draw();
+	//GameManagerの初期化
 	void initGameManager();
 	//画像を読み込んでmapに入れる関数
 	//すでにあるghならそれを返す
 	int LoadGraphEx(std::string gh);
-
+	//セーブに必要なシーン内のデータを取得する関数
 	void GetSceneData();
 
 	//ghを返す関数
 	std::vector<int> SetCharaGh(int num);
 
 	std::string GetAbility(int abilityType, int abilityId);
+	//アイテムの初期所持数を決める関数
 	void haveItemInit();
 
-	void setitem(int ItemId,int addNum);
+	void setitem(int ItemId, int addNum);
 
 	//学年を一つ上げる関数
 	void stayYearUp();
 
 private:
 	//char String[256] = {};
-	
+
 
 	//キャラクター画像をexcelから読み取る関数
 	void loadCharaCsv();
@@ -95,7 +110,7 @@ private:
 	std::vector<std::vector<int>> charaGh;
 
 	std::vector<std::vector<std::string>> loadItemCsv;
-	
+
 
 	//ステータスが1上がるために必要な経験値テーブル
 	int needExp[11] = { 20,40,80,160,320,480,600,720,840,960,1080 };
@@ -103,11 +118,11 @@ private:
 	//今のステータスの値を入れると必要経験値テーブルの配列番号を取得する関数
 	int GetDecNum(int nowStatus);
 
-	
-	
+
+
 	//経験値を与える関数
 	//c→与えるキャラ,num→ステータス番号
-	void GiveExperience(Chara* c,int num,int PassedDay);
+	void GiveExperience(Chara* c, int num, int PassedDay);
 
 
 

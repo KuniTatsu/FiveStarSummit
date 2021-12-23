@@ -6,14 +6,14 @@
 #include"MenuWindow.h"
 
 std::string Chara::trainingAll[Chara::MENU_MAX] = {
-		"Random",
-		"ATACK",
-		"DEFENCE",
-		"MAGIARACK",
-		"MAGIDEFENCE",
-		"SPEED",
-		"MIND",
-		"VITALITY",
+		"‚¨‚Ü‚©‚¹",
+		"UŒ‚—Í",
+		"–hŒä—Í",
+		"–‚–@UŒ‚—Í",
+		"–‚–@–hŒä—Í",
+		"‘f‘‚³",
+		"Œ«‚³",
+		"Ž‹v—Í",
 };
 //
 //
@@ -41,7 +41,7 @@ Chara::Chara(std::string name, int year)
 					0,0,0,0,
 					{} ,
 					2 ,
-					Chara::trainingAll[Chara::Random],
+					Chara::trainingAll[Chara::‚¨‚Ü‚©‚¹],
 					year
 	};
 
@@ -52,7 +52,7 @@ Chara::Chara(std::string name, int year)
 	//charaListWindow = new Menu(cWindow->windowPos.x - (600 / 2), cWindow->windowPos.y, 600, 250, "graphics/WindowBase_02.png");
 	charaListWindow = new Menu(0, 0, 600, 250, "graphics/WindowBase_02.png");
 	charaEnhanceWindow = new Menu(0, 0, 620, 100, "graphics/WindowBase_02.png");
-	enhanceButton = new Menu(0, 0, 140, 50, "graphics/WindowBase_02.png");
+	enhanceButton = new Menu(0, 0, 165, 50, "graphics/WindowBase_02.png");
 
 }
 

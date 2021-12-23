@@ -6,7 +6,7 @@ extern GameManager* gManager;
 
 
 CardEvent::CardEvent(int id, int eventType, int atk, int def, int magiatk, int magidef, int spd, int mind, int vit,
-		std::string desc, int abiType, int abiId, int tension, int itemid, std::string EventMessage)
+		std::string desc, int abiType, int abiId, int tension, int itemid, std::string EventMessage, std::string TeachRef)
 {
 	Id = id;
 	Event_type = eventType;
@@ -30,6 +30,7 @@ CardEvent::CardEvent(int id, int eventType, int atk, int def, int magiatk, int m
 	Item_id = itemid;
 
 	eventMessage = EventMessage;
+	teachRef = TeachRef;
 
 	AddNameToVector();
 }

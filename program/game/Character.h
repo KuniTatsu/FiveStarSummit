@@ -14,14 +14,14 @@ public:
 	CharaWindow* cWindow;
 
 	enum {
-		Random,
-		ATACK,
-		DEFENCE,
-		MAGIARACK,
-		MAGIDEFENCE,
-		SPEED,
-		MIND,
-		VITALITY,
+		おまかせ,
+		攻撃力,
+		防御力,
+		魔法攻撃力,
+		魔法防御力,
+		素早さ,
+		賢さ,
+		持久力,
 		MENU_MAX
 	};
 	static std::string trainingAll[MENU_MAX];
@@ -35,8 +35,7 @@ public:
 		int RANGETYPE;	//レンジ適正 0:短,1:中,2:長
 		int STANCE;		//戦闘スタンス 0:速攻,1:堅実,2:反撃,3:普通
 //---------基礎ステ-------------------7
-		/*class status{
-		public:*/
+		//
 		int ATACK;      //物理攻撃力 
 		int DEFENCE;	//物理防御力
 		int MAGIATACK;	//魔法攻撃力
@@ -69,7 +68,7 @@ public:
 		int tension = 2;//default
 //---------強化項目---------------------1
 		//int training_ToDo = 0;
-		std::string  myTraining = Chara::trainingAll[Chara::Random];
+		std::string  myTraining = Chara::trainingAll[Chara::おまかせ];
 		//---------何年在籍か-------------------1
 		int stayYear = 0;
 	}SaveData_t;
@@ -77,11 +76,14 @@ public:
 
 	//int myGh = 0;
 	std::vector<int>gh = {};
+	//直近で追加されたアビリティ
 	std::string recentAddedAbility = {};
+
 	Menu* charaListWindow = nullptr;
 
 	Menu* charaEnhanceWindow = nullptr;
 	Menu* enhanceButton = nullptr;
+
 	//typeが0ならListWindowの座標を変える
 	//typeが1ならEnhanceWindowの座標を変える
 	void changeWindowPos(int x, int y, int type);

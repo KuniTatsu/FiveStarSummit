@@ -21,6 +21,19 @@ GameManager::~GameManager()
 {
 }
 
+void GameManager::LoadStatusImage()
+{
+	statusAlfa_SS_gh = LoadGraphEx("graphics/Status_alfa_SS.png");
+	statusAlfa_S_gh = LoadGraphEx("graphics/Status_alfa_S.png");
+	statusAlfa_A_gh = LoadGraphEx("graphics/Status_alfa_A.png");
+	statusAlfa_B_gh = LoadGraphEx("graphics/Status_alfa_B.png");
+	statusAlfa_C_gh = LoadGraphEx("graphics/Status_alfa_C.png");
+	statusAlfa_D_gh = LoadGraphEx("graphics/Status_alfa_D.png");
+	statusAlfa_E_gh = LoadGraphEx("graphics/Status_alfa_E.png");
+	statusAlfa_F_gh = LoadGraphEx("graphics/Status_alfa_F.png");
+	statusAlfa_G_gh = LoadGraphEx("graphics/Status_alfa_G.png");
+}
+
 void GameManager::MakeCharacter(const std::string& name, int year)
 {
 	chara_ = new Chara(name, year);
@@ -340,27 +353,22 @@ void GameManager::Update()
 
 void GameManager::Draw()
 {
-	if (isInput == false) {
+	/*if (isInput == false) {
 		DrawStringEx(800, 500, -1, "false");
 	}
 	else {
 		DrawStringEx(800, 500, -1, "true");
-	}
+	}*/
 	SceneManager::Render();
 	/*if (chara.empty())return;
 	CharactorStatusDraw();*/
-
-	//debug
-	/*std::string hoge = aManager->abilityList[0][0]->ability_name;
-	DrawStringEx(800, 700, -1, "%s", hoge);*/
-
 }
 
 void GameManager::initGameManager()
 {
 	aManager = new AbilityManager();
 	//dManager = new DataManager();
-	//sManager = new SceneManager();
+	
 	deitatime_ = 0;
 	loadCharaCsv();
 	SceneManager::ChangeScene(SceneManager::SCENE::TITLE);
@@ -371,6 +379,7 @@ void GameManager::initGameManager()
 	haveItem.resize(38);
 
 	haveItemInit();
+	LoadStatusImage();
 }
 
 int GameManager::LoadGraphEx(std::string gh)

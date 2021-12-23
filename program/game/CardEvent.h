@@ -6,7 +6,7 @@ class CardEvent {
 
 public:
 	
-	CardEvent(int id,int eventType,int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, std::string desc, int abiType,int abiId,int tension,int itemid,std::string EventMessage);
+	CardEvent(int id,int eventType,int atk, int def, int magiatk, int magidef, int spd, int mind, int vit, std::string desc, int abiType,int abiId,int tension,int itemid,std::string EventMessage,std::string TeachRef);
 	~CardEvent();
 
 
@@ -47,6 +47,9 @@ public:
 
 	//イベントメッセージ
 	std::string eventMessage="";
+
+	//説明文
+	std::string teachRef = "";
 
 	void run_Card_Event(int passedDay);
 

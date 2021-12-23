@@ -18,9 +18,7 @@ public:
 	EventManager* eManager = nullptr;
 	CharaMenuManager* cMenuManager = nullptr;
 
-	MenuWindow* FrontMenu = nullptr;
-	Menu* charaListMenu = nullptr;
-	MenuWindow* charaTrainingMenu = nullptr;
+	
 
 
 	bool changeSceneFlag = false;
@@ -49,19 +47,19 @@ public:
 	//std::list<Chara*> chara_;
 
 	//一番左のマスの画像のx座標
-	const float mass_x = 50;
+	const float mass_x = 150;
 	//画像間の距離(画像の大きさは50x50)
-	const float mass_width = 70;
+	const float mass_width = 130;
 
 	//マス画像を表示するための中心座標
 	t2k::Vector3 tbl[7] = {
-		{mass_x, 70, 0},
-		{mass_x + mass_width * 1, 70, 0},
-		{mass_x + mass_width * 2, 70, 0},
-		{mass_x + mass_width * 3, 70, 0},
-		{mass_x + mass_width * 4, 70, 0},
-		{mass_x + mass_width * 5, 70, 0},
-		{mass_x + mass_width * 6, 70, 0},
+		{mass_x, 105, 0},
+		{mass_x + mass_width * 1, 105, 0},
+		{mass_x + mass_width * 2, 105, 0},
+		{mass_x + mass_width * 3, 105, 0},
+		{mass_x + mass_width * 4, 105, 0},
+		{mass_x + mass_width * 5, 105, 0},
+		{mass_x + mass_width * 6, 105, 0},
 	};
 	//カードの一番左の画像のx座標
 	const float card_x = 400;
@@ -230,6 +228,15 @@ private:
 
 	Menu* enhanceFrame = nullptr;
 
+	MenuWindow* FrontMenu = nullptr;
+	Menu* charaListMenu = nullptr;
+	MenuWindow* charaTrainingMenu = nullptr;
+
+	Menu* dayCellFrame = nullptr;
+	Menu* teachFrame = nullptr;
+
+	Menu* menuOpenFrame = nullptr;
+
 	//Menu* charaListTitle = nullptr;
 	int charaListTitle_gh = 0;
 	int charaListName_gh = 0;
@@ -239,6 +246,11 @@ private:
 	int enhanceChara_gh = 0;
 
 	int selectCursor_gh = 0;
+
+	int backGround_gh = 0;
+	int enter_gh = 0;
+	int escape_gh = 0;
+
 
 	int leftArrow_gh[3] = {};
 	int rightArrow_gh[3] = {};
@@ -288,14 +300,28 @@ private:
 
 	void addLog(std::string log);
 	void LogDraw();
-
+	//選択中のカードを移動する関数
 	void cardSelect();
+
+	//選択中のカードの詳細内容を教えてくれる関数
+	void teachCardRef();
+	t2k::Vector3 teach = {630,450,0};
+
+	//各シークエンスの最後列に描画する関数
+	void DrawBackGround();
 
 	//キャラクターのステータス画面を描画する関数
 	void DrawWindow();
 
 	//キャラクターの強化選択画面を描画する関数
 	void DrawEnhanceWindow();
+
+	//キャラクターの能力値をSABCDで表す関数
+	void DrawStatusAlfa(Chara* c);
+	
+
+	//能力値をSABCDに変換する関数
+	int GetStatusAlfa(int Status);
 
 	//キャラクターのアビリティ描画関数
 	void DrawAbility(Chara* c);
@@ -319,8 +345,13 @@ private:
 	void selectItem(int HaveItemNum);
 	//選択中のアイテムを指す位置
 	int nowSelectNum = 0;
+	//キャラクターのレンジとスタンスを描画する関数
+	void drawRangeAndStance(Chara* c);
 
+	//左右矢印をアニメーションさせる関数
 	void arrowAnim();
+	//int leftArrowPos_x = 0;
+	t2k::Vector3 leftArrowPos = {330,600,0};
 
 	//矢印のアニメーションに使う変数
 	int ACT_SPEED = 60;
@@ -330,4 +361,7 @@ private:
 	int act_index=0;
 	int motion_index_left = 0;
 	int motion_index_right = 0;
+
+	//操作ボタン画像を描画する関数
+	void DrawKeyImage();
 };

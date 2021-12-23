@@ -39,7 +39,12 @@ TrainingScene::TrainingScene()
 	enhanceFrame = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
 	//enhanceButton = new Menu(0, 0, 200, 100, "graphics/WindowBase_02.png");
 
+	dayCellFrame = new Menu(20, 20, 984, 150, "graphics/WindowBase_03.png");
+	teachFrame = new Menu(620, 430, 270, 50, "graphics/WindowBase_03.png");
+
 	selectItemWindow = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
+
+	menuOpenFrame = new Menu(20, 190, 100, 40, "graphics/WindowBase_03.png");
 
 	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
 		{40,50,"候補生一覧",0},
@@ -79,7 +84,7 @@ TrainingScene::TrainingScene()
 	LoadDivGraph("graphics/left.png", 3, 3, 1, 32, 32, leftArrow_gh);
 	LoadDivGraph("graphics/right.png", 3, 3, 1, 32, 32, rightArrow_gh);
 
-	charaListTitle_gh = gManager->LoadGraphEx("graphics/enhanceWindow.png");
+	charaListTitle_gh = gManager->LoadGraphEx("graphics/charatitle_back.png");
 	charaListName_gh = gManager->LoadGraphEx("graphics/charaListName.png");
 
 	enhanceListNameGh = gManager->LoadGraphEx("graphics/charaEnhanceName.png");
@@ -88,6 +93,11 @@ TrainingScene::TrainingScene()
 
 	enhanceChara_gh = gManager->LoadGraphEx("graphics/enhance_1.png");
 	selectCursor_gh = gManager->LoadGraphEx("graphics/left_image_clear.png");
+
+	backGround_gh = gManager->LoadGraphEx("graphics/background_2.PNG");
+
+	enter_gh = gManager->LoadGraphEx("graphics/button_Enter.png");
+	escape_gh = gManager->LoadGraphEx("graphics/button_Escape.png");
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -117,8 +127,9 @@ TrainingScene::~TrainingScene()
 //日程カードが選ばれるまでのシークエンス(日数移動済み)
 bool TrainingScene::Seq_Training_Main(const float deltatime)
 {
+	DrawBackGround();
 
-	cardWindow->Menu_Draw();
+
 	//loopdaycountが0でなければシークエンスをLoopDayにする
 	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	
 
@@ -133,7 +144,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		return true;
 	}
 	//ループ日数を決定する所
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_NUMPAD0) && isnowLoop == false) {
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
 		isnowLoop = true;
 		doneFirstEvent = true;
 		doneEvent = false;
@@ -164,6 +175,13 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 
 		//カードが持ち上がり、拡大して一定以上の大きさになると消えるシークエンスをはさみたい
 		//main_sequence_.change(&TrainingScene::Seq_CardDisappear);
+
+		/*while (time_ < 40) {
+			time_++;
+			if (time_ > 40) {
+				time_ = 0;
+			}
+		}*/
 		ChangeSequence(sequence::loop);
 		//main_sequence_.change(&TrainingScene::Seq_LoopDay);
 		return true;
@@ -225,6 +243,8 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 //**********************Seq_CardDisapper*****************************//
 bool TrainingScene::Seq_CardDisappear(const float deltatime)
 {
+	DrawBackGround();
+
 	//カードを大きくする
 	int c = 0;
 	for (auto card : card_) {
@@ -261,7 +281,8 @@ bool TrainingScene::Seq_CardDisappear(const float deltatime)
 //日程カードが選ばれたあとのシークエンス(日数移動)
 bool TrainingScene::Seq_LoopDay(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (main_sequence_.isStart()) {
 		sequenceID = 1;
 
@@ -342,7 +363,8 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (FrontMenu->SelectNum == 0 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		//menuの上下を操作出来なくする
 		FrontMenu->manageSelectFlag = false;
@@ -386,7 +408,8 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
 		if (cMenuManager->StatusMenuPos.y < 75)
 			cMenuManager->StatusMenuPos.y += 10;
@@ -412,7 +435,8 @@ bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 
 bool TrainingScene::Seq_DoEvent(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	int size = 0;
 	rand_cellEvent = 0;
 	//int rand_cardEvent = 0;
@@ -539,7 +563,8 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 
 bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	//イベント1の描画処理 
 	if (main_sequence_.isStart()) {
 
@@ -571,7 +596,8 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 
 bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (main_sequence_.isStart()) {
 		gManager->stayYearUp();
 
@@ -594,7 +620,8 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 
 bool TrainingScene::Seq_ExitDay(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (main_sequence_.isStart()) {
 		//3年生を卒業させる関数
 		eManager->exEvent->ExitMember();
@@ -612,7 +639,8 @@ bool TrainingScene::Seq_ExitDay(const float deltatime)
 //キャラごとの強化指定ステータスを選ぶ画面を出すシシークエンス
 bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	//キャラの枠を上下に移動させる処理
 	if (t2k::Input::isKeyDown(t2k::Input::KEYBORD_UP)) {
 		if (cMenuManager->StatusMenuPos.y < 75)
@@ -677,7 +705,8 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 //強化項目を選ぶシークエンス
 bool TrainingScene::Seq_SetEnhance(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	//enterキーを押したときのSeletNumによってキャラクタの強化項目を変更する
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		if (enhanceSelect->SelectNum == 0) {
@@ -725,7 +754,8 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 
 bool TrainingScene::Seq_SelectItem(const float deltatime)
 {
-	cardWindow->Menu_Draw();
+	DrawBackGround();
+
 	if (main_sequence_.isStart()) {
 		ItemMenuPos = { 146,0,0 };
 	}
@@ -790,9 +820,7 @@ bool TrainingScene::Seq_SelectItem(const float deltatime)
 
 bool TrainingScene::Seq_UseItem(const float deltatime)
 {
-
-	cardWindow->Menu_Draw();
-
+	DrawBackGround();
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 		//menu1シークエンスに移動する
 		enhanceSelect->menu_live = false;
@@ -983,10 +1011,12 @@ void TrainingScene::Draw()
 
 	DrawStringEx(100, 400, -1, "イベントIDは%d", eManager->eventdebugID);
 
-	DrawRotaGraph(190, 70, 1, 0, playergh[2], true);
-	//--------------------
 
+	//--------------------
+	DrawRotaGraph(410, 105, 1.5, 0, playergh[2], true);
 	LogDraw();
+	arrowAnim();
+	DrawKeyImage();
 
 	//cMenuManager->DrawWindow();
 
@@ -1014,8 +1044,8 @@ void TrainingScene::Draw()
 		DrawWindow();
 		DrawStringEx(300, 300, String_Color_Black, "ここはmenu2だよ");
 
-		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListTitle_gh, false);
-		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, 0.5, 0, charaListName_gh, true);
+		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 32, 0.5, 0, charaListTitle_gh, false);
+		DrawRotaGraph(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 32, 0.5, 0, charaListName_gh, true);
 		//DrawStringEx(charaListMenu->menu_x + (charaListMenu->menu_width / 2), charaListMenu->menu_y + 35, String_Color_Red, "冒険者候補生一覧");
 	}
 	else if (nowSeq == sequence::selectEnhance || nowSeq == sequence::Set) {
@@ -1024,8 +1054,8 @@ void TrainingScene::Draw()
 
 		DrawEnhanceWindow();
 
-		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 32, 0.43, 0, charaListTitle_gh, false);
-		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 32, 0.43, 0, enhanceListNameGh, true);
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 28, 0.43, 0, charaListTitle_gh, false);
+		DrawRotaGraph(enhanceFrame->menu_x + (enhanceFrame->menu_width / 2), enhanceFrame->menu_y + 28, 0.43, 0, enhanceListNameGh, true);
 
 		if (nowSeq == sequence::Set) {
 			enhanceSelect->All();
@@ -1086,7 +1116,7 @@ void TrainingScene::Draw()
 
 	//}
 
-	arrowAnim();
+
 }
 
 
@@ -1137,16 +1167,42 @@ void TrainingScene::cardSelect()
 
 	int c = 0;
 	for (auto card : card_) {
+		//もし選択中のカードだったら
 		if (c == selectNum) {
 			card->pos_.y = 600;
 		}
 		else {
-			card->pos_.y = 620;
+			card->pos_.y = 630;
 		}
 		c++;
 	}
 
 
+}
+
+void TrainingScene::teachCardRef()
+{
+	int c = 0;
+	for (auto card : card_) {
+		//もし選択中のカードだったら
+		if (c == selectNum) {
+			DrawStringEx(teach.x, teach.y, -1, (char*)eManager->cardEventList[card->cardEventTypeId][card->cardEventId]->teachRef.c_str());
+		}
+		//else {
+		//	card->pos_.y = 630;
+		//}
+		c++;
+	}
+
+}
+
+void TrainingScene::DrawBackGround()
+{
+	DrawRotaGraph(512, 382, 2, 0, backGround_gh, false);
+	teachFrame->Menu_Draw();
+	teachCardRef();
+	dayCellFrame->Menu_Draw();
+	cardWindow->Menu_Draw();
 }
 
 
@@ -1193,30 +1249,39 @@ void TrainingScene::DrawWindow()
 		//アビリティがあれば取得
 		//将来的にはすべての持っているアビリティを表示させるように変更する
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "アビリティ:");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 300, c->cWindow->windowPos.y + 70, String_Color_Black, "アビリティ:");
+
+		drawRangeAndStance(c);
+
+
+		//DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 190, c->cWindow->windowPos.y + 30, String_Color_Black, "強化内容:%s",c->charadata->myTraining.c_str());
 
 
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 10, String_Color_Black, "名前:%s", name.c_str());
 
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 30, String_Color_Black, "学年:%d年", year);
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "攻撃力:%d", ATK);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "防御力:%d", DEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 110, String_Color_Black, "魔法攻撃力:%d", MATK);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 70, String_Color_Black, "|攻撃力:%d", ATK);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 90, String_Color_Black, "|防御力:%d", DEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 110, String_Color_Black, "|魔法攻撃力:%d", MATK);
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "魔法防御力:%d", MDEF);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "速度:%d", SPEED);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "賢さ:%d", MIND);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 190, String_Color_Black, "持久力:%d", VIT);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 130, String_Color_Black, "|魔法防御力:%d", MDEF);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 150, String_Color_Black, "|速度:%d", SPEED);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 170, String_Color_Black, "|賢さ:%d", MIND);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 190, String_Color_Black, "|持久力:%d", VIT);
 
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 50, String_Color_Black, "攻撃力経験値:%d", ATK_exp);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 70, String_Color_Black, "防御力経験値:%d", DEF_exp);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 90, String_Color_Black, "魔攻撃力経験値:%d", MATK_exp);
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 110, String_Color_Black, "魔防御力:%d", MDEF_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 70, String_Color_Black, "|攻撃力経験値:%d", ATK_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 90, String_Color_Black, "|防御力経験値:%d", DEF_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 110, String_Color_Black, "|魔攻撃力経験値:%d", MATK_exp);
+
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 130, String_Color_Black, "|魔防御力経験値:%d", MDEF_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 150, String_Color_Black, "|素早さ経験値:%d", SPEED_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 170, String_Color_Black, "|賢さ経験値:%d", MIND_exp);
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 160, c->cWindow->windowPos.y + 190, String_Color_Black, "|耐久力経験値:%d", VIT_exp);
 
 
 		//DrawGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 50, c->cWindow->windowPos.y + 10, c->gh[2], false);
-		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 170, c->cWindow->windowPos.y + 20, 1, 0, c->gh[1], true);
+		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 140, c->cWindow->windowPos.y + 20, 1, 0, c->gh[1], true);
 
 		DrawAbility(c);
 
@@ -1241,15 +1306,12 @@ void TrainingScene::DrawEnhanceWindow()
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 60, c->cWindow->windowPos.y + 40, String_Color_Black, "防御");
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 110, c->cWindow->windowPos.y + 40, String_Color_Black, "魔法攻撃");
 		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 180, c->cWindow->windowPos.y + 40, String_Color_Black, "魔法防御");
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 240, c->cWindow->windowPos.y + 40, String_Color_Black, "素早さ");
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 300, c->cWindow->windowPos.y + 40, String_Color_Black, "精神力");
-		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 360, c->cWindow->windowPos.y + 40, String_Color_Black, "持久力");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 260, c->cWindow->windowPos.y + 40, String_Color_Black, "素早さ");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 320, c->cWindow->windowPos.y + 40, String_Color_Black, "精神力");
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 380, c->cWindow->windowPos.y + 40, String_Color_Black, "持久力");
 
 		//キャラクターのステータスと評価を表示する
-
-
-
-
+		DrawStatusAlfa(c);
 
 		//キャラクターウィンドウごとのボタン描画
 		c->enhanceButton->Menu_Draw();
@@ -1261,6 +1323,38 @@ void TrainingScene::DrawEnhanceWindow()
 	}
 }
 
+void TrainingScene::DrawStatusAlfa(Chara* c)
+{
+	//DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 60, String_Color_Black, GetStatusAlfa(c->charadata->ATACK);
+
+	DrawLine(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 10, c->cWindow->windowPos.y + 60, c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 430, c->cWindow->windowPos.y + 60, String_Color_Black);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 30, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->ATACK), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 80, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->DEFENCE), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 140, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->MAGIATACK), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 210, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->MAGIDEFENCE), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 280, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->SPEED), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 340, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->MIND), true);
+	DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 400, c->cWindow->windowPos.y + 75, 1, 0, GetStatusAlfa(c->charadata->VITALITY), true);
+
+
+
+}
+
+int TrainingScene::GetStatusAlfa(int Status)
+{
+	if (Status <= 20)return gManager->statusAlfa_G_gh;
+	else if (Status > 20 && Status <= 30)return gManager->statusAlfa_F_gh;
+	else if (Status > 30 && Status <= 40)return gManager->statusAlfa_E_gh;
+	else if (Status > 40 && Status <= 50)return gManager->statusAlfa_D_gh;
+	else if (Status > 50 && Status <= 60)return gManager->statusAlfa_C_gh;
+	else if (Status > 60 && Status <= 70)return gManager->statusAlfa_B_gh;
+	else if (Status > 70 && Status <= 80)return gManager->statusAlfa_A_gh;
+	else if (Status > 80 && Status <= 90)return gManager->statusAlfa_S_gh;
+	else if (Status > 90 && Status <= 100)return gManager->statusAlfa_SS_gh;
+
+	return -1;
+}
+
 void TrainingScene::DrawAbility(Chara* c)
 {
 	if (c->charadata->Ability.empty() == false) {
@@ -1268,7 +1362,7 @@ void TrainingScene::DrawAbility(Chara* c)
 		int i = 0;
 		for (auto abi : c->charadata->Ability) {
 
-			DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 300, c->cWindow->windowPos.y + 10 + (20 * i),
+			DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 320, c->cWindow->windowPos.y + 10 + (20 * i),
 				String_Color_Black, "%s", abi->ability_name.c_str());
 			++i;
 		}
@@ -1417,7 +1511,32 @@ void TrainingScene::selectItem(int HaveItemNum)
 		nowSelectNum = (nowSelectNum + (HaveItemNum - 1)) % HaveItemNum;//一つ上にずれる
 		//sound->System_Play(sound->system_move);
 	}
+}
 
+void TrainingScene::drawRangeAndStance(Chara* c)
+{
+	if (c->charadata->RANGETYPE == 0) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "レンジ適正:短");
+	}
+	else if (c->charadata->RANGETYPE == 1) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "レンジ適正:中");
+	}
+	else if (c->charadata->RANGETYPE == 2) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 10, String_Color_Black, "レンジ適正:長");
+	}
+
+	if (c->charadata->STANCE == 0) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 30, String_Color_Black, "スタンス:速攻");
+	}
+	else if (c->charadata->STANCE == 1) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 30, String_Color_Black, "スタンス:堅実");
+	}
+	else if (c->charadata->STANCE == 2) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 30, String_Color_Black, "スタンス:反撃");
+	}
+	else if (c->charadata->STANCE == 2) {
+		DrawStringEx(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 200, c->cWindow->windowPos.y + 30, String_Color_Black, "スタンス:普通");
+	}
 
 
 
@@ -1433,8 +1552,20 @@ void TrainingScene::arrowAnim()
 	motion_index_left = leftArrow_gh[act_index];
 	motion_index_right = rightArrow_gh[act_index];
 
-	DrawRotaGraph(500, 500, 1, 0, motion_index_left, true);
-	DrawRotaGraph(1000, 500, 1, 0, motion_index_right, true);
+	DrawRotaGraph(leftArrowPos.x, leftArrowPos.y, 1, 0, motion_index_left, true);
+	DrawRotaGraph(leftArrowPos.x + 620, leftArrowPos.y, 1, 0, motion_index_right, true);
+}
+
+void TrainingScene::DrawKeyImage()
+{
+	DrawRotaGraph(600, 720, 1, 0, enter_gh, true);
+	DrawStringEx(650, 710, -1, "でカードを選択");
+
+	//個々のフレーム画像を治す
+	menuOpenFrame->Menu_Draw();
+	DrawRotaGraph(50, 200, 1, 0, escape_gh, true);
+	DrawStringEx(20, 230, -1, "メニューを開く");
+
 }
 
 void TrainingScene::Save()
