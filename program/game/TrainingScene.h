@@ -92,49 +92,10 @@ public:
 
 	//初期シークエンスを設定
 	t2k::Sequence<TrainingScene*> main_sequence_ =
-		t2k::Sequence<TrainingScene*>(this, &TrainingScene::Seq_Training_Main);
+		t2k::Sequence<TrainingScene*>(this, &TrainingScene::Seq_InitSequence);
 
 	TrainingScene();
 	~TrainingScene();
-
-	//メインシークエンス 各処理へ移行する
-	bool Seq_Training_Main(const float deltatime);
-
-	//選択したカードが消えるまでのシークエンス
-	bool Seq_CardDisappear(const float deltatime);
-
-
-	//日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
-	bool Seq_LoopDay(const float deltatime);
-	int loopdaycount = 0;
-
-	//メニュー1描画シークエンス
-	bool Seq_MenuDraw_1(const float deltatime);
-
-	//メニュー2描画シークエンス
-	bool Seq_MenuDraw_2(const float deltatime);
-
-	//イベント実行シークエンス
-	bool Seq_DoEvent(const float deltatime);
-
-	bool Seq_EventFrameDraw(const float deltatime);
-	//入学式イベントシークエンス
-	bool Seq_NewCharactorComing(const float deltatime);
-	//卒業式イベントシークエンス
-	bool Seq_ExitDay(const float deltatime);
-
-	//月始まりの強化指定イベントシークエンス
-	bool Seq_SelectEnhance(const float deltatime);
-
-	//キャラクタの強化項目を変更するシークエンス
-	bool Seq_SetEnhance(const float deltatime);
-
-	//所持アイテムを描画するシークエンス
-	bool Seq_SelectItem(const float deltatime);
-
-	//アイテムを使用するシークエンス
-	bool Seq_UseItem(const float deltatime);
-
 
 
 	void Update();
@@ -180,7 +141,7 @@ private:
 	int selectedCardPos = 0;
 	int selectedCardEvent = 0;
 	int selectedCardEventId = 0;
-
+	//経過日数
 	int passedDay = 0;
 
 	int buff = 5;
@@ -237,6 +198,11 @@ private:
 
 	Menu* menuOpenFrame = nullptr;
 
+	Menu* initMessageFrame_1 = nullptr;
+	Menu* initMessageFrame_2 = nullptr;
+
+	Menu* initEnterFrame = nullptr;
+
 	//Menu* charaListTitle = nullptr;
 	int charaListTitle_gh = 0;
 	int charaListName_gh = 0;
@@ -252,7 +218,18 @@ private:
 	int escape_gh = 0;
 
 	int NewComeDay_gh = 0;
+	//ゲーム開始直後の画像_1
+	int init_gh_1 = 0;
+	//ゲーム開始直後の画像_2
+	int init_gh_2 = 0;
 
+	//init_1で使うメッセージ画像
+	int init_Message_gh_1 = 0;
+	int init_Message_gh_2 = 0;
+	int init_Message_gh_3 = 0;
+	int init_Message_gh_4 = 0;
+
+	
 
 	int leftArrow_gh[3] = {};
 	int rightArrow_gh[3] = {};
@@ -279,6 +256,53 @@ private:
 	//ボタンが押されたかどうか
 	bool isClick = false;
 
+	//ゲーム開始直後の一回だけ行う処理フラグ
+	bool doneInit = false;
+	//最初の説明windowの描画対象の変数
+	int drawDescWindow = 0;//0->2
+
+	//ゲーム開始直後一回だけトレーニングシーンで行う処理
+	void InitImageDraw();
+
+	//初期シークエンス(ゲーム開始直後一回きりの処理を行う
+	bool Seq_InitSequence(const float deltatime);
+
+	//メインシークエンス 各処理へ移行する
+	bool Seq_Training_Main(const float deltatime);
+
+	//選択したカードが消えるまでのシークエンス
+	bool Seq_CardDisappear(const float deltatime);
+
+	//日数経過中のシークエンス ループカウントが0になるまで繰り返す ループカウント:経過日数
+	bool Seq_LoopDay(const float deltatime);
+	int loopdaycount = 0;
+
+	//メニュー1描画シークエンス
+	bool Seq_MenuDraw_1(const float deltatime);
+
+	//メニュー2描画シークエンス
+	bool Seq_MenuDraw_2(const float deltatime);
+
+	//イベント実行シークエンス
+	bool Seq_DoEvent(const float deltatime);
+
+	bool Seq_EventFrameDraw(const float deltatime);
+	//入学式イベントシークエンス
+	bool Seq_NewCharactorComing(const float deltatime);
+	//卒業式イベントシークエンス
+	bool Seq_ExitDay(const float deltatime);
+
+	//月始まりの強化指定イベントシークエンス
+	bool Seq_SelectEnhance(const float deltatime);
+
+	//キャラクタの強化項目を変更するシークエンス
+	bool Seq_SetEnhance(const float deltatime);
+
+	//所持アイテムを描画するシークエンス
+	bool Seq_SelectItem(const float deltatime);
+
+	//アイテムを使用するシークエンス
+	bool Seq_UseItem(const float deltatime);
 
 	//シークエンスの列挙体
 	enum class sequence {
@@ -294,9 +318,10 @@ private:
 		selectEnhance,
 		Set,
 		selectItem,
-		useItem
+		useItem,
+		init
 	};
-	sequence nowSeq = sequence::main;
+	sequence nowSeq = sequence::init;
 
 	std::vector<std::vector<int>>saveCard = {};
 

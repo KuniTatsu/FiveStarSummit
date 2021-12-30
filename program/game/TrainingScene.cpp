@@ -32,6 +32,13 @@ TrainingScene::TrainingScene()
 	eManager = new EventManager();
 	cMenuManager = new CharaMenuManager();
 
+
+	initMessageFrame_1 = new Menu(1040, 10, 800, 125, "graphics/WindowBase_02.png");
+	initMessageFrame_2 = new Menu(-910, 200, 900, 125, "graphics/WindowBase_02.png");
+
+	//512,384
+	initEnterFrame = new Menu(437,334,150,100, "graphics/WindowBase_02.png");
+
 	cardWindow = new Menu(20, 500, 984, 268, "graphics/WindowBase_03.png");
 	eventFrame = new Menu(312, 171, 400, 340, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
@@ -58,7 +65,7 @@ TrainingScene::TrainingScene()
 	// メニューウィンドウのインスタンス化
 	FrontMenu = new MenuWindow(16, 170, 140, 300, "graphics/WindowBase_02.png", menu_0, 5);
 
-	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10,0, 650, 743, "graphics/WindowBase_02.png");
+	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10, 0, 650, 743, "graphics/WindowBase_02.png");
 
 	cMenuManager->StatusMenuPos.x = charaListMenu->menu_x + (charaListMenu->menu_width / 2);
 
@@ -103,6 +110,16 @@ TrainingScene::TrainingScene()
 	escape_gh = gManager->LoadGraphEx("graphics/button_Escape.png");
 	NewComeDay_gh = gManager->LoadGraphEx("graphics/NewComerDay.png");
 
+	//init_gh_1 = gManager->LoadGraphEx("graphics/init_1.PNG");
+	init_gh_1 = gManager->LoadGraphEx("graphics/init_1b.PNG");
+	init_gh_2 = gManager->LoadGraphEx("graphics/init_2b.PNG");
+
+	init_Message_gh_1 = gManager->LoadGraphEx("graphics/init_Message_1.png");
+	init_Message_gh_2 = gManager->LoadGraphEx("graphics/init_Message_2.png");
+	init_Message_gh_3 = gManager->LoadGraphEx("graphics/init_Message_3.png");
+	init_Message_gh_4 = gManager->LoadGraphEx("graphics/init_Message_4.png");
+
+
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -123,7 +140,11 @@ TrainingScene::TrainingScene()
 	eManager->exEvent->NewMemberComing(3);
 	eManager->exEvent->NewMemberComing(2);
 	gManager->sound->BGM_Play(gManager->sound->bgm_training);
-	
+
+	//もしチュートリアルを終えていたら飛ばす
+	if (gManager->doneTutorial == true) {
+		ChangeSequence(sequence::main);
+	}
 }
 
 TrainingScene::~TrainingScene()
@@ -131,14 +152,50 @@ TrainingScene::~TrainingScene()
 	delete eManager;
 }
 
-//日程カードが選ばれるまでのシークエンス(日数移動済み)
-bool TrainingScene::Seq_Training_Main(const float deltatime)
+bool TrainingScene::Seq_InitSequence(const float deltatime)
 {
 	if (gManager->fControl->doneFade == true) {
 		gManager->fControl->FadeIn();
 	}
-	DrawBackGround();
+	InitImageDraw();
+	//説明画像の描画が終わってなければ下の処理は行わない
+	if (drawDescWindow < 5)return true;
 
+	//ゲーム開始直後の一回目の入学式
+
+	newCharaFrame->menu_live = true;
+	if (!doneInit) {
+		//一年生の追加
+		eManager->exEvent->NewMemberComing(1);
+		t2k::debugTrace("\n入学式イベント実行\n");
+
+		doneInit = true;
+	}
+
+	//ここに条件を足してすぐにmainに行かないようにする
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+
+		newCharaFrame->menu_live = false;
+		//チュートリアル完了フラグをtrueにする
+		gManager->doneTutorial = true;
+		ChangeSequence(sequence::main);
+		return true;
+
+	}
+	return true;
+
+}
+
+//日程カードが選ばれるまでのシークエンス(日数移動済み)
+bool TrainingScene::Seq_Training_Main(const float deltatime)
+{
+	DrawBackGround();
+	/*if (gManager->fControl->doneFade == true) {
+		gManager->fControl->FadeIn();
+		return true;
+	}*/
+	/*InitTrainingScene();
+	if(!doneInit)return true;*/
 
 	//loopdaycountが0でなければシークエンスをLoopDayにする
 	//loopdaycountが0になったらcell_リストの3番目のイベントを読み込む	
@@ -147,8 +204,11 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 		sequenceID = 0;
 	}
 	cardSelect();
+	//メニューを開くキー押下判定
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		//システム音
 		gManager->sound->System_Play(gManager->sound->system_select);
+		//メニューを開く
 		FrontMenu->Open();
 		//メニューをいじるシークエンスに移動する
 		ChangeSequence(sequence::menu_1);
@@ -614,23 +674,25 @@ bool TrainingScene::Seq_NewCharactorComing(const float deltatime)
 {
 	DrawBackGround();
 
-	if (main_sequence_.isStart()) {
+	//return true;
+	//初期シークエンスをを別に作るべき
+	//入学式が2度行われてしまうバグあり
+
+	//学年の増加,一年生の追加を行う
+	if (main_sequence_.isStart() && doneInit) {
 		gManager->stayYearUp();
 
 		newCharaFrame->menu_live = true;
 		eManager->exEvent->NewMemberComing(1);
 		t2k::debugTrace("\n入学式イベント実行\n");
 	}
-	//eventframe->Menu_Draw();
-
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 
 		newCharaFrame->menu_live = false;
 		ChangeSequence(sequence::main);
-
+		return true;
 		//main_sequence_.change(&TrainingScene::Seq_Training_Main);
 	}
-
 	return true;
 }
 
@@ -949,7 +1011,7 @@ void TrainingScene::Update()
 {
 	main_sequence_.update(gManager->deitatime_);
 
-	
+
 
 	//暫定的なキャラ作成
 	//if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
@@ -979,7 +1041,7 @@ void TrainingScene::Update()
 
 void TrainingScene::Draw()
 {
-
+	if (nowSeq == sequence::init) return;
 	int i = 0;
 	for (auto cell : cell_) {
 		cell->pos_ = tbl[i++];
@@ -1041,21 +1103,21 @@ void TrainingScene::Draw()
 	//cMenuManager->DrawWindow();
 
 	//もし今のシークエンスが〇〇なら描画する
-	if (nowSeq == sequence::newChara) {
+	if (nowSeq == sequence::newChara|| nowSeq == sequence::init) {
 
 		newCharaFrame->Menu_Draw();
-		DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width/2, newCharaFrame->menu_y + newCharaFrame->menu_height/2 - 100, 2, 0, NewComeDay_gh, true);
-		DrawStringEx(newCharaFrame->menu_x + newCharaFrame->menu_width / 2-50, newCharaFrame->menu_y + newCharaFrame->menu_height / 2 +50, String_Color_Black, "新1年生が入学しました");
+		DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width / 2, newCharaFrame->menu_y + newCharaFrame->menu_height / 2 - 100, 2, 0, NewComeDay_gh, true);
+		DrawStringEx(newCharaFrame->menu_x + newCharaFrame->menu_width / 2 - 50, newCharaFrame->menu_y + newCharaFrame->menu_height / 2 + 50, String_Color_Black, "新1年生が入学しました");
 
 		auto it = gManager->chara.begin();
 		int count = 0;
 		while (it != gManager->chara.end()) {
 			if ((*it)->charadata->stayYear == 1) {
 				if (count < 5) {
-					DrawRotaGraph(newCharaFrame->menu_x +newCharaFrame->menu_width/2-60+ 30 * count, newCharaFrame->menu_y+ newCharaFrame->menu_height / 2, 1, 0, (*it)->gh[2], true);
+					DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width / 2 - 60 + 30 * count, newCharaFrame->menu_y + newCharaFrame->menu_height / 2, 1, 0, (*it)->gh[2], true);
 				}
 				else {
-					DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width / 2 - 60 + 30 * (count-5), newCharaFrame->menu_y+newCharaFrame->menu_height / 2 +30, 1, 0, (*it)->gh[2], true);
+					DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width / 2 - 60 + 30 * (count - 5), newCharaFrame->menu_y + newCharaFrame->menu_height / 2 + 30, 1, 0, (*it)->gh[2], true);
 
 				}
 				count++;
@@ -1149,17 +1211,58 @@ void TrainingScene::Draw()
 			}
 		}
 	}
-	////強化項目を描画,移動する処理
-	//else if (nowSeq == sequence::Set) {
-	//	enhanceSelect->All();
-
-
-	//}
-
 
 }
 
 
+
+void TrainingScene::InitImageDraw()
+{
+	//冒険者養成学校の説明
+	if (drawDescWindow == 0) {
+		//背景描画
+		DrawRotaGraph(512, 384, 1.15, 0, init_gh_1, false);
+
+		//1つ目のメッセージ描画
+		initMessageFrame_1->Menu_Draw();
+		DrawGraph(initMessageFrame_1->menu_x, initMessageFrame_1->menu_y, init_Message_gh_1, true);
+		DrawGraph(initMessageFrame_1->menu_x, initMessageFrame_1->menu_y+50, init_Message_gh_2, true);
+		if(initMessageFrame_1->menu_x>126){
+		initMessageFrame_1->menu_x -= 5;
+		}
+		//2つ目のメッセージ描画
+		initMessageFrame_2->Menu_Draw();
+		DrawGraph(initMessageFrame_2->menu_x, initMessageFrame_2->menu_y, init_Message_gh_3, true);
+		DrawGraph(initMessageFrame_2->menu_x, initMessageFrame_2->menu_y + 50, init_Message_gh_4, true);
+		if (initMessageFrame_1->menu_x <= 200 && initMessageFrame_2->menu_x < 124) {
+			initMessageFrame_2->menu_x += 5;
+		}
+		//enterを押してくれ画像の描画
+		if (initMessageFrame_1->menu_x <= 200 && initMessageFrame_2->menu_x >= 124) {
+			initEnterFrame->Menu_Draw();
+			DrawStringEx(initEnterFrame->menu_x+20, initEnterFrame->menu_y+10, String_Color_Black, "Enterを押して");
+			DrawStringEx(initEnterFrame->menu_x+55, initEnterFrame->menu_y+30, String_Color_Black, "次へ");
+			DrawRotaGraph(512, 400, 1, 0, enter_gh, false);
+		}
+		//描画する画像を変更する
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+			drawDescWindow = 1;
+		}
+	}
+	//教官として新人を育てる旨を出す
+	else if (drawDescWindow == 1) {
+		//背景描画
+		DrawRotaGraph(512, 384, 1, 0, init_gh_2, false);
+
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+			//説明画像を非表示→入学式へ
+			drawDescWindow = 5;
+		}
+	}
+
+
+
+}
 
 //7つまでログを生成する関数,古い方から消える
 void TrainingScene::addLog(std::string log)
@@ -1324,7 +1427,7 @@ void TrainingScene::DrawWindow()
 
 
 		//DrawGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 50, c->cWindow->windowPos.y + 10, c->gh[2], false);
-		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 140, c->cWindow->windowPos.y + 20, 1, 0, c->gh[1], true);
+		DrawRotaGraph(c->cWindow->windowPos.x - (cMenuManager->CharaWindowWidth / 2) + 140, c->cWindow->windowPos.y + 40, 1, 0, c->gh[1], true);
 
 		DrawAbility(c);
 

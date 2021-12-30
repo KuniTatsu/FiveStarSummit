@@ -25,5 +25,6 @@ public:
     void Draw();    
 
 private:
+    bool init = false;
 
 };

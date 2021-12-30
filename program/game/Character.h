@@ -90,7 +90,7 @@ public:
 
 
 private:
-	int StatusRandom(int maxnum, int randomtype);
+	int StatusRandom(int maxnum, int randomtype,int year);
 
 
 };

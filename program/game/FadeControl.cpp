@@ -57,7 +57,7 @@ void FadeControl::FadeIn()
 	if (screenFade >= 0 && screenFade < 256) {
 		SetDrawBright(screenFade, screenFade, screenFade);
 
-		screenFade += FADESPEED;
+		screenFade += FADEINSPEED;
 	}
 	else {
 		screenFade = 256;

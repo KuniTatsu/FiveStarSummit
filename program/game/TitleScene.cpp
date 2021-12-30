@@ -21,6 +21,7 @@ TitleScene::TitleScene()
 	title_name_gh = gManager->LoadGraphEx("graphics/Title.png");
 
 	title_back = new Menu(384, 334, 250, 80, "graphics/WindowBase_02.png");
+
 }
 
 TitleScene::~TitleScene()
@@ -30,8 +31,18 @@ TitleScene::~TitleScene()
 
 void TitleScene::Update()
 {
-	
-	
+	if (!init) {
+		//フェードイン処理
+		gManager->fControl->FadeIn();
+
+		//もしフェードインが終わったら下の処理に移る,この処理を行わなくする
+		if (gManager->fControl->doneFade == false) {
+			init = true;
+			return;
+		}
+		return;
+	}
+
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 
@@ -61,7 +72,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	
+
 	DrawRotaGraph(512, 384, 1.28, 0, title_gh, true);
 
 	DrawRotaGraph(512, 100, 1, 0, title_name_gh, true);

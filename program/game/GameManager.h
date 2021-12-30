@@ -26,6 +26,9 @@ public:
 
 	Sound* sound = nullptr;
 
+
+	bool doneTutorial = false;
+
 	//在籍するキャラクター
 	std::list<Chara*> chara = {};
 
@@ -38,9 +41,7 @@ public:
 	std::vector<std::vector<int>> haveItem;
 	//itemすべての配列
 	std::vector<std::vector<Item*>> itemList;
-
-	/*int[] haveItem = {};*/
-
+	//ステータスランク画像
 	int statusAlfa_SS_gh = 0;
 	int statusAlfa_S_gh = 0;
 	int statusAlfa_A_gh = 0;
@@ -51,11 +52,9 @@ public:
 	int statusAlfa_F_gh = 0;
 	int statusAlfa_G_gh = 0;
 
-	//ステータス画像のロード
-	void LoadStatusImage();
-
 	float deitatime_;
 
+	//名前を入力するときの変数 **未使用**
 	bool isInput = false;
 	int InputHandle = 0;
 
@@ -130,7 +129,9 @@ private:
 	//c→与えるキャラ,num→ステータス番号
 	void GiveExperience(Chara* c, int num, int PassedDay);
 
+	
 
-
+	//ステータス画像のロード
+	void LoadStatusImage();
 
 };

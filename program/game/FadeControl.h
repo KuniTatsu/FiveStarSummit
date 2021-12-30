@@ -17,15 +17,17 @@ public:
 	void FadeOut();
 	//‰æ–Ê‚ğ™X‚Éo‚·ŠÖ”
 	void FadeIn();
+	//true‚Í^‚ÁˆÃ,false‚Í–¾‚é‚¢
+	bool doneFade = true;
 
-	bool doneFade = false;
 
 private:
 
 	int imageFade = 0;
 	const int FADESPEED = 5;
+	const int FADEINSPEED = 4;
 
-	int screenFade = 256;
+	int screenFade = 0;
 
 
 

@@ -26,12 +26,12 @@ Chara::Chara(std::string name, int year)
 	charadata = new SaveData_t;
 
 	//生成時にランダムで値を決める
-	int rangetype = StatusRandom(2, 0);
-	int stance = StatusRandom(2, 0);
+	int rangetype = StatusRandom(2, 0, year);
+	int stance = StatusRandom(2, 0, year);
 
 	int mainStatus[7] = {};
 	for (int i = 0; i < 7; ++i) {
-		mainStatus[i] = StatusRandom(20, 1);
+		mainStatus[i] = StatusRandom(20, 1, year);
 	}
 	//int atk = StatusRandom(20,1);
 	*charadata = { name,
@@ -45,8 +45,8 @@ Chara::Chara(std::string name, int year)
 					year
 	};
 
-	
-	
+
+
 	//ステータスウィンドウの作成
 	cWindow = new CharaWindow();
 	//charaListWindow = new Menu(cWindow->windowPos.x - (600 / 2), cWindow->windowPos.y, 600, 250, "graphics/WindowBase_02.png");
@@ -79,14 +79,16 @@ void Chara::changeWindowPos(int x, int y, int type)
 
 //randomtype:0→基本ステータス以外のもの
 //randomtype:1→基本ステータス 20~40をとる
-int Chara::StatusRandom(int maxnum, int randomtype)
+int Chara::StatusRandom(int maxnum, int randomtype, int year)
 {
 	int random = 0;
 	if (randomtype == 0) {
 		random = GetRand(maxnum);
 	}
 	else {
-		random = GetRand(maxnum) + 20;//0~20+20
+		//学年ごとに初期ステータスを変化させる
+		//学年*5~25を足す 最大初期ステータスは40+50=90
+		random = GetRand(maxnum) + 20 + ((year - 1) * ((GetRand(4) + 1) * 5));
 	}
 	return random;
 }
