@@ -34,7 +34,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// キー入力制御の初期化
 	t2k::Input::initialize();
 
-	SetMainWindowText("Five Ster Summit");
+	SetMainWindowText("Five Star Summit");
 
 	// メッセージループ
 	while( 1 )

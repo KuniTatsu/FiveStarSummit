@@ -2,8 +2,10 @@
 #include "../library/t2klib.h"
 #include "../support/Support.h"
 #include"SoundManager.h"
+#include"GameManager.h"
 
 //extern Sound* sound;
+extern GameManager* gManager;
 
 Menu::Menu(int menu_window_x, int menu_window_y, int menu_window_width, int menu_window_height, std::string gh_path) {
 
@@ -107,10 +109,13 @@ void MenuWindow::Read() {
 
 		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN)) {
 			SelectNum = (SelectNum + 1) % read_menu_element_num_;//ˆê‚Â‰º‚É‚¸‚ê‚é
+			gManager->sound->System_Play(gManager->sound->system_move);
 			//sound->System_Play(sound->system_move);
 		}
 		else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP)) {
 			SelectNum = (SelectNum + (read_menu_element_num_ - 1)) % read_menu_element_num_;//ˆê‚Âã‚É‚¸‚ê‚é
+			gManager->sound->System_Play(gManager->sound->system_move);
+
 			//sound->System_Play(sound->system_move);
 		}
 		/*if (menuExitFlag == true) {

@@ -7,6 +7,8 @@ class Chara;
 class AbilityManager;
 class DataManager;
 class Item;
+class FadeControl;
+class Sound;
 
 class GameManager {
 
@@ -19,6 +21,10 @@ public:
 	Chara* chara_ = nullptr;
 	AbilityManager* aManager = nullptr;
 	DataManager* dManager = nullptr;
+
+	FadeControl* fControl = nullptr;
+
+	Sound* sound = nullptr;
 
 	//在籍するキャラクター
 	std::list<Chara*> chara = {};

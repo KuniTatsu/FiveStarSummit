@@ -251,6 +251,8 @@ private:
 	int enter_gh = 0;
 	int escape_gh = 0;
 
+	int NewComeDay_gh = 0;
+
 
 	int leftArrow_gh[3] = {};
 	int rightArrow_gh[3] = {};

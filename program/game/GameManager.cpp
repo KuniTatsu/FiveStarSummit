@@ -9,6 +9,8 @@
 #include"Ability.h"
 #include"DataManager.h"
 #include"Item.h"
+#include "FadeControl.h"
+#include "SoundManager.h"
 
 
 
@@ -368,6 +370,8 @@ void GameManager::initGameManager()
 {
 	aManager = new AbilityManager();
 	//dManager = new DataManager();
+	sound = new Sound();
+	fControl = new FadeControl();
 	
 	deitatime_ = 0;
 	loadCharaCsv();

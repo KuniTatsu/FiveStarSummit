@@ -19,6 +19,8 @@
 #include"ForceStopDay.h"
 #include"MenuWindow.h"
 #include"Item.h"
+#include"FadeControl.h"
+#include"SoundManager.h"
 //#include"AbilityManager.h"
 
 extern GameManager* gManager;
@@ -31,7 +33,7 @@ TrainingScene::TrainingScene()
 	cMenuManager = new CharaMenuManager();
 
 	cardWindow = new Menu(20, 500, 984, 268, "graphics/WindowBase_03.png");
-	eventFrame = new Menu(312, 210, 400, 340, "graphics/WindowBase_02.png");
+	eventFrame = new Menu(312, 171, 400, 340, "graphics/WindowBase_02.png");
 	newCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 	exitCharaFrame = new Menu(200, 100, 700, 500, "graphics/WindowBase_02.png");
 
@@ -44,19 +46,20 @@ TrainingScene::TrainingScene()
 
 	selectItemWindow = new Menu(146, 0, 650, 768, "graphics/WindowBase_02.png");
 
-	menuOpenFrame = new Menu(20, 190, 100, 40, "graphics/WindowBase_03.png");
+	menuOpenFrame = new Menu(20, 170, 120, 80, "graphics/WindowBase_03.png");
 
 	MenuWindow::MenuElement_t* menu_0 = new MenuWindow::MenuElement_t[]{
-		{40,50,"候補生一覧",0},
-		{40,100,"訓練内容一覧",1},
-		{40,150,"アイテム",2},
-		{40,200,"セーブ",3},
-		{40,250,"タイトルに戻る",4}
+		{40,190,"候補生一覧",0},
+		{40,240,"訓練内容一覧",1},
+		{40,290,"アイテム",2},
+		{40,340,"セーブ",3},
+		{40,390,"タイトルに戻る",4}
 	};
 	// メニューウィンドウのインスタンス化
-	FrontMenu = new MenuWindow(16, 0, 130, 300, "graphics/WindowBase_02.png", menu_0, 5);
+	FrontMenu = new MenuWindow(16, 170, 140, 300, "graphics/WindowBase_02.png", menu_0, 5);
 
-	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10, FrontMenu->menu_y, 650, 743, "graphics/WindowBase_02.png");
+	charaListMenu = new Menu(FrontMenu->menu_x + FrontMenu->menu_width + 10,0, 650, 743, "graphics/WindowBase_02.png");
+
 	cMenuManager->StatusMenuPos.x = charaListMenu->menu_x + (charaListMenu->menu_width / 2);
 
 	MenuWindow::MenuElement_t* enhance = new MenuWindow::MenuElement_t[]{
@@ -98,6 +101,8 @@ TrainingScene::TrainingScene()
 
 	enter_gh = gManager->LoadGraphEx("graphics/button_Enter.png");
 	escape_gh = gManager->LoadGraphEx("graphics/button_Escape.png");
+	NewComeDay_gh = gManager->LoadGraphEx("graphics/NewComerDay.png");
+
 
 	//最初に7個リストに入れる処理を書く
 	for (int k = 0; k < cellNum; ++k) {
@@ -117,6 +122,8 @@ TrainingScene::TrainingScene()
 	//2年,3年の先輩を生成
 	eManager->exEvent->NewMemberComing(3);
 	eManager->exEvent->NewMemberComing(2);
+	gManager->sound->BGM_Play(gManager->sound->bgm_training);
+	
 }
 
 TrainingScene::~TrainingScene()
@@ -127,6 +134,9 @@ TrainingScene::~TrainingScene()
 //日程カードが選ばれるまでのシークエンス(日数移動済み)
 bool TrainingScene::Seq_Training_Main(const float deltatime)
 {
+	if (gManager->fControl->doneFade == true) {
+		gManager->fControl->FadeIn();
+	}
 	DrawBackGround();
 
 
@@ -138,6 +148,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	}
 	cardSelect();
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		gManager->sound->System_Play(gManager->sound->system_select);
 		FrontMenu->Open();
 		//メニューをいじるシークエンスに移動する
 		ChangeSequence(sequence::menu_1);
@@ -145,6 +156,7 @@ bool TrainingScene::Seq_Training_Main(const float deltatime)
 	}
 	//ループ日数を決定する所
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN) && isnowLoop == false) {
+		gManager->sound->System_Play(gManager->sound->system_select);
 		isnowLoop = true;
 		doneFirstEvent = true;
 		doneEvent = false;
@@ -339,13 +351,13 @@ bool TrainingScene::Seq_LoopDay(const float deltatime)
 				break;
 			}
 			//月始まりの日だったら一旦強化項目を選ぶシークエンスに飛ばす
-			else if (stopday->id >= 900) {
+			/*else if (stopday->id >= 900) {
 				isForcedStopDay = true;
 
 				ChangeSequence(sequence::selectEnhance);
 
 				break;
-			}
+			}*/
 			//main_sequence_.change(&TrainingScene::Seq_NewCharactorComing);
 		}
 
@@ -368,6 +380,7 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 	if (FrontMenu->SelectNum == 0 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		//menuの上下を操作出来なくする
 		FrontMenu->manageSelectFlag = false;
+		gManager->sound->System_Play(gManager->sound->system_select);
 
 		//menu2シークエンスに移動する
 		ChangeSequence(sequence::menu_2);
@@ -377,6 +390,7 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 		//menuの上下を操作出来なくする
 		FrontMenu->manageSelectFlag = false;
+		gManager->sound->System_Play(gManager->sound->system_select);
 
 		//selectEnhanceシークエンスに移動する
 		ChangeSequence(sequence::selectEnhance);
@@ -386,7 +400,7 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 		//menuの上下を操作出来なくする
 		FrontMenu->manageSelectFlag = false;
-
+		gManager->sound->System_Play(gManager->sound->system_select);
 		//selectEnhanceシークエンスに移動する
 		ChangeSequence(sequence::selectItem);
 		return true;
@@ -396,6 +410,7 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 		FrontMenu->menu_live = false;
+		gManager->sound->System_Play(gManager->sound->system_cancel);
 		//メインシークエンスに移動する
 		ChangeSequence(sequence::main);
 		return true;
@@ -420,7 +435,7 @@ bool TrainingScene::Seq_MenuDraw_2(const float deltatime)
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 
-
+		gManager->sound->System_Play(gManager->sound->system_cancel);
 		//menu1シークエンスに移動する
 		FrontMenu->manageSelectFlag = true;
 		cMenuManager->PosReset();
@@ -495,7 +510,7 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	//起きたイベントの内容をログで出力したい
 	//Debug
 	//*************cellEventのログ表示**************
-	addLog("セルのイベントidは" + std::to_string(event) + ',' + std::to_string(rand_cellEvent));
+	//addLog("セルのイベントidは" + std::to_string(event) + ',' + std::to_string(rand_cellEvent));
 	if (eManager->eventList[event][rand_cellEvent]->num_ > 0) {
 		addLog(eManager->eventList[event][rand_cellEvent]->statusName + "が" + std::to_string(eManager->eventList[event][rand_cellEvent]->num_) + "増加した");
 	}
@@ -504,7 +519,7 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 		addLog(eManager->eventList[event][rand_cellEvent]->statusName + "が" + std::to_string(hoge) + "減少した");
 	}
 	//*************cardEventのログ表示**************
-	addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(selectedCardEventId));
+	//addLog("カードのイベントidは" + std::to_string(selectedCardEvent) + ',' + std::to_string(selectedCardEventId));
 
 	{
 
@@ -574,15 +589,16 @@ bool TrainingScene::Seq_EventFrameDraw(const float deltatime)
 	eventFrame->Menu_Draw();
 	//セルイベントの画面表示
 	if (remainEventNum == 2) {
-		DrawRotaGraph(512, 370, 1, 0, enhanceChara_gh, true);
-		DrawStringEx(320, 520, String_Color_Black, "%s", eManager->eventList[event][rand_cellEvent]->eventMessage.c_str());
+		DrawRotaGraph(eventFrame->menu_x + eventFrame->menu_width / 2, eventFrame->menu_y + eventFrame->menu_height / 2, 1, 0, enhanceChara_gh, true);
+		DrawStringEx(eventFrame->menu_x + 10, eventFrame->menu_y + eventFrame->menu_height - 20, String_Color_Black, "%s", eManager->eventList[event][rand_cellEvent]->eventMessage.c_str());
 	}
 	//カードイベントの画面表示
 	else {
-		DrawRotaGraph(512, 370, 1, 0, enhanceChara_gh, true);
-		DrawStringEx(320, 520, String_Color_Black, "%s", eManager->cardEventList[selectedCardEvent][selectedCardEventId]->eventMessage.c_str());
+		DrawRotaGraph(eventFrame->menu_x + eventFrame->menu_width / 2, eventFrame->menu_y + eventFrame->menu_height / 2, 1, 0, enhanceChara_gh, true);
+		DrawStringEx(eventFrame->menu_x + 10, eventFrame->menu_y + eventFrame->menu_height - 20, String_Color_Black, "%s", eManager->cardEventList[selectedCardEvent][selectedCardEventId]->eventMessage.c_str());
 	}
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		gManager->sound->System_Play(gManager->sound->system_statusUp);
 		remainEventNum--;
 		eventFrame->menu_live = false;
 
@@ -653,7 +669,7 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 	//escキーでmenu1へ戻る
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 
-
+		gManager->sound->System_Play(gManager->sound->system_cancel);
 		//menu1シークエンスに移動する
 		FrontMenu->manageSelectFlag = true;
 		cMenuManager->PosReset();
@@ -687,6 +703,7 @@ bool TrainingScene::Seq_SelectEnhance(const float deltatime)
 					////クリックされたことを取得
 					//bool isClick = true;
 
+					gManager->sound->System_Play(gManager->sound->system_select);
 					//今のキャラクタを取得
 					nowChara = c;
 
@@ -709,6 +726,7 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 
 	//enterキーを押したときのSeletNumによってキャラクタの強化項目を変更する
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
+		gManager->sound->System_Play(gManager->sound->system_select);
 		if (enhanceSelect->SelectNum == 0) {
 			nowChara->charadata->myTraining = Chara::trainingAll[0];
 		}
@@ -743,7 +761,7 @@ bool TrainingScene::Seq_SetEnhance(const float deltatime)
 	//選び終わったあと戻る処理
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 
-
+		gManager->sound->System_Play(gManager->sound->system_cancel);
 		//menu1シークエンスに移動する
 		enhanceSelect->menu_live = false;
 		ChangeSequence(sequence::selectEnhance);
@@ -809,6 +827,7 @@ bool TrainingScene::Seq_SelectItem(const float deltatime)
 
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
+		gManager->sound->System_Play(gManager->sound->system_cancel);
 		//menu1シークエンスに移動する
 		FrontMenu->manageSelectFlag = true;
 		ChangeSequence(sequence::menu_1);
@@ -930,6 +949,7 @@ void TrainingScene::Update()
 {
 	main_sequence_.update(gManager->deitatime_);
 
+	
 
 	//暫定的なキャラ作成
 	//if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {
@@ -974,11 +994,11 @@ void TrainingScene::Draw()
 	//cardSelect();
 	//DrawWindow();
 
-	DrawStringEx(900, 150, -1, "%s", month[now_month].c_str());
+	//DrawStringEx(900, 150, -1, "%s", month[now_month].c_str());
 
 
 	//------debug------
-	int k = 0;
+	/*int k = 0;
 	for (auto c : cell_) {
 
 		DrawStringEx(50, 400 + k * 50, -1, "%d", c->eventID);
@@ -1010,9 +1030,9 @@ void TrainingScene::Draw()
 	}
 
 	DrawStringEx(100, 400, -1, "イベントIDは%d", eManager->eventdebugID);
+*/
 
-
-	//--------------------
+//--------------------
 	DrawRotaGraph(410, 105, 1.5, 0, playergh[2], true);
 	LogDraw();
 	arrowAnim();
@@ -1024,6 +1044,26 @@ void TrainingScene::Draw()
 	if (nowSeq == sequence::newChara) {
 
 		newCharaFrame->Menu_Draw();
+		DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width/2, newCharaFrame->menu_y + newCharaFrame->menu_height/2 - 100, 2, 0, NewComeDay_gh, true);
+		DrawStringEx(newCharaFrame->menu_x + newCharaFrame->menu_width / 2-50, newCharaFrame->menu_y + newCharaFrame->menu_height / 2 +50, String_Color_Black, "新1年生が入学しました");
+
+		auto it = gManager->chara.begin();
+		int count = 0;
+		while (it != gManager->chara.end()) {
+			if ((*it)->charadata->stayYear == 1) {
+				if (count < 5) {
+					DrawRotaGraph(newCharaFrame->menu_x +newCharaFrame->menu_width/2-60+ 30 * count, newCharaFrame->menu_y+ newCharaFrame->menu_height / 2, 1, 0, (*it)->gh[2], true);
+				}
+				else {
+					DrawRotaGraph(newCharaFrame->menu_x + newCharaFrame->menu_width / 2 - 60 + 30 * (count-5), newCharaFrame->menu_y+newCharaFrame->menu_height / 2 +30, 1, 0, (*it)->gh[2], true);
+
+				}
+				count++;
+
+				//continue;
+			}
+			it++;
+		}
 	}
 	else if (nowSeq == sequence::eventDraw) {
 		//DrawRotaGraph(512, 384, 2, 0, enhanceChara_gh, true);
@@ -1150,7 +1190,8 @@ void TrainingScene::addLog(std::string log)
 void TrainingScene::LogDraw()
 {
 	for (int i = 0; i < 9; ++i) {
-		DrawStringEx(100, 500 + (i * 20), -1, "%s", Log[i].c_str());
+		//DrawStringEx(100, 500 + (i * 20), -1, "%s", Log[i].c_str());
+		DrawStringEx(cardWindow->menu_x + 20, cardWindow->menu_y + 40 + (i * 20), -1, "%s", Log[i].c_str());
 	}
 }
 
@@ -1159,9 +1200,11 @@ void TrainingScene::cardSelect()
 	//左右キーで選択中のカードを変える処理を書く
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RIGHT)) {
+		gManager->sound->System_Play(gManager->sound->system_move);
 		selectNum = (selectNum + 1) % 5;
 	}
 	else if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_LEFT)) {
+		gManager->sound->System_Play(gManager->sound->system_move);
 		selectNum = (selectNum + 4) % 5;
 	}
 

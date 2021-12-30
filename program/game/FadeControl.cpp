@@ -34,7 +34,35 @@ void FadeControl::imageFadeIn(int x, int y, double rate, int gh)
 
 void FadeControl::imageFadeOut()
 {
+	
 
+}
+
+void FadeControl::FadeOut()
+{
+	if (screenFade > 0 && screenFade <= 256) {
+		SetDrawBright(screenFade, screenFade, screenFade);
+
+		screenFade -= FADESPEED;
+	}
+	else {
+		screenFade = 0;
+		doneFade = true;
+	}
+}
+
+void FadeControl::FadeIn()
+{
+	
+	if (screenFade >= 0 && screenFade < 256) {
+		SetDrawBright(screenFade, screenFade, screenFade);
+
+		screenFade += FADESPEED;
+	}
+	else {
+		screenFade = 256;
+		doneFade = false;
+	}
 
 
 }

@@ -5,9 +5,9 @@ class Sound {
 
 
 public:
-	/*int bgm_global = 0;
-	int bgm_local = 0;
-	int bgm_battle = 0;
+	int bgm_training = 0;
+	/*int bgm_local = 0;
+	int bgm_battle = 0;*/
 	int bgm_title = 0;
 
 	int system_select = 0;
@@ -15,7 +15,9 @@ public:
 	int system_cancel = 0;
 	int system_run = 0;
 
-	int battle_sword = 0;
+	int system_statusUp = 0;
+
+	/*int battle_sword = 0;
 	int battle_sword_after = 0;
 
 	int battle_spear = 0;
