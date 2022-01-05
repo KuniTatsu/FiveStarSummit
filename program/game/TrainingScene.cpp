@@ -538,14 +538,14 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 	DrawBackGround();
 
 	int size = 0;
-	rand_cellEvent = 0;
+	
 	//int rand_cardEvent = 0;
 
 	//イベントを処理するシークエンス
 	//イベントの画像を表示
 	//イベントの内容を文章で表示
-	if (main_sequence_.isStart()) {
-		sequenceID = 2;
+	if (main_sequence_.isStart() && remainEventNum == 2) {
+		rand_cellEvent = 0;
 		if (event == 99) {
 			rand_cellEvent = 99;
 		}
@@ -557,7 +557,7 @@ bool TrainingScene::Seq_DoEvent(const float deltatime)
 			//rand_cardEvent = GetRand(size_card - 1);
 		}
 	}
-
+	sequenceID = 2;
 	//イベント処理シーンのウィンドウを出す
 	//ウィンドウ内メッセージを読む
 	//なにかのキーもしくはクリックでウィンドウが閉じる
