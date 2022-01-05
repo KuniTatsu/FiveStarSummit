@@ -16,17 +16,24 @@ TitleScene::TitleScene()
 	gManager->sound->BGM_Play(gManager->sound->bgm_title);
 	String_Color_Black = GetColor(0, 0, 0);
 
-	title_gh = gManager->LoadGraphEx("graphics/sougenna.jpg");
-	enter_gh = gManager->LoadGraphEx("graphics/button_Enter.png");
-	title_name_gh = gManager->LoadGraphEx("graphics/Title.png");
+	//title_gh = gManager->LoadGraphEx("graphics/sougenna.jpg");
 
-	title_back = new Menu(384, 334, 250, 80, "graphics/WindowBase_02.png");
+	enter_gh = gManager->LoadGraphEx("graphics/button_Enter.png");
+	title_Name_gh = gManager->LoadGraphEx("graphics/Title.png");
+	title_Background_gh = gManager->LoadGraphEx("graphics/title_Background_Edit_2.png");
+
+	title_Menu = new Menu(384, 500, 250, 80, "graphics/WindowBase_02.png");
+	titleBack = new Menu(200, 40, 650, 120, "graphics/WindowBase_01.png");
 
 }
 
 TitleScene::~TitleScene()
 {
+	init = false;
+	nowFade = false;
 	StopSoundMem(gManager->sound->bgm_title);
+	delete title_Menu;
+	delete titleBack;
 }
 
 void TitleScene::Update()
@@ -54,11 +61,12 @@ void TitleScene::Update()
 	if (nowFade) {
 		gManager->fControl->FadeOut();
 	}
+	//ゲームの開始処理
+	//TrainingSceneへ飛ばす
 	if (gManager->fControl->doneFade != true)return;
 	SceneManager::ChangeScene(SceneManager::SCENE::TRAINING);
 	return;
-	//ゲームの開始処理
-	//TrainingSceneへ飛ばす
+	
 
 	//なにかキーボードを押したらorボタンを押したらゲームが終了する
 	//終了する前に以下の情報を外部ファイルに保存する
@@ -73,17 +81,22 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 
-	DrawRotaGraph(512, 384, 1.28, 0, title_gh, true);
-
-	DrawRotaGraph(512, 100, 1, 0, title_name_gh, true);
-
-	title_back->Menu_Draw();
-	DrawRotaGraph(512, 364, 1, 0, enter_gh, true);
-	DrawStringEx(400, 380, String_Color_Black, "Enterを押してゲームスタート");
-
-
+	
+	//背景
+	DrawRotaGraph(512, 384, 1.05, 0, title_Background_gh, true);
+	//タイトルの背景
+	titleBack->Menu_Draw();
+	//タイトル
+	DrawRotaGraph(512, 100, 1.28, 0, title_Name_gh, true);
 
 
-	//タイトル画像の描画
 	//タイトルメニューの描画
+	title_Menu->Menu_Draw();
+
+	//タイトルメニューの要素
+	DrawRotaGraph(title_Menu->menu_x+130, title_Menu->menu_y+20, 1, 0, enter_gh, true);
+	DrawStringEx(title_Menu->menu_x + 10, title_Menu->menu_y+50, String_Color_Black, "Enterを押してゲームスタート");
+	//
+
+
 }

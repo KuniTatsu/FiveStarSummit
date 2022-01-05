@@ -18,10 +18,7 @@ public:
 	EventManager* eManager = nullptr;
 	CharaMenuManager* cMenuManager = nullptr;
 
-	
-
-
-	bool changeSceneFlag = false;
+	//bool changeSceneFlag = false;
 	int playergh[4] = {};
 
 	//新しく一日分のセルを作る関数
@@ -43,51 +40,25 @@ public:
 	//すべてのカードを入れておくリスト
 	std::list<DayCard*> card_;
 
-	////すべてのキャラクターを入れておくリスト
-	//std::list<Chara*> chara_;
-
-	//一番左のマスの画像のx座標
-	const float mass_x = 150;
-	//画像間の距離(画像の大きさは50x50)
-	const float mass_width = 130;
-
-	//マス画像を表示するための中心座標
-	t2k::Vector3 tbl[7] = {
-		{mass_x, 105, 0},
-		{mass_x + mass_width * 1, 105, 0},
-		{mass_x + mass_width * 2, 105, 0},
-		{mass_x + mass_width * 3, 105, 0},
-		{mass_x + mass_width * 4, 105, 0},
-		{mass_x + mass_width * 5, 105, 0},
-		{mass_x + mass_width * 6, 105, 0},
-	};
-	//カードの一番左の画像のx座標
-	const float card_x = 400;
-	//画像感の距離(画像の大きさは40x80)
-	const float card_width = 120;
-
-	//カードを表示するための中心座標
-	t2k::Vector3 cardtbl[5] = {
-		{card_x, 620, 0},
-		{card_x + card_width * 1, 620, 0},
-		{card_x + card_width * 2, 620, 0},
-		{card_x + card_width * 3, 620, 0},
-		{card_x + card_width * 4, 620, 0},
-
-	};
+	
 
 	//月						1		2			3		4		5		6			7		8		9		10			11			12		
 	std::string month[12] = { "火の月","水の月","地の月","風の月","雷の月","光の月","闇の月","銀の月","金の月","黄昏の月","虚無の月","明星の月" };
 
+	//**Debug時はここを変えるとゲーム開始時の日にちが変わる**//
+
 	//今の月
 	int now_month = 2;
+	//今の日
+	int day = 29;//1~30
+	//*******************************************************
 
+	//曜日
 	std::string days[7] = { "月","火","水","木","金","土","日" };
 
 	//一週間のどこにいるか
 	int week = 0;//1~7
-	//今の日
-	int day = 1;//1~30
+
 
 
 	//初期シークエンスを設定
@@ -229,10 +200,42 @@ private:
 	int init_Message_gh_3 = 0;
 	int init_Message_gh_4 = 0;
 
-	
+	//ログメッセージ背景
+	int logBack_gh = 0;
 
 	int leftArrow_gh[3] = {};
 	int rightArrow_gh[3] = {};
+	int EnhanceSelectCursor_gh[6] = {};
+
+	//一番左のマスの画像のx座標
+	const float mass_x = 150;
+	//画像間の距離(画像の大きさは50x50)
+	const float mass_width = 130;
+
+	//マス画像を表示するための中心座標
+	t2k::Vector3 tbl[7] = {
+		{mass_x, 105, 0},
+		{mass_x + mass_width * 1, 105, 0},
+		{mass_x + mass_width * 2, 105, 0},
+		{mass_x + mass_width * 3, 105, 0},
+		{mass_x + mass_width * 4, 105, 0},
+		{mass_x + mass_width * 5, 105, 0},
+		{mass_x + mass_width * 6, 105, 0},
+	};
+	//カードの一番左の画像のx座標
+	const float card_x = 400;
+	//画像感の距離(画像の大きさは40x80)
+	const float card_width = 120;
+
+	//カードを表示するための中心座標
+	t2k::Vector3 cardtbl[5] = {
+		{card_x, 620, 0},
+		{card_x + card_width * 1, 620, 0},
+		{card_x + card_width * 2, 620, 0},
+		{card_x + card_width * 3, 620, 0},
+		{card_x + card_width * 4, 620, 0},
+
+	};
 
 	//アイテム画面の座標(これを動かすと他のアイテムの枠が全部動く)
 	t2k::Vector3 ItemMenuPos = { 146,0,0 };
@@ -260,6 +263,9 @@ private:
 	bool doneInit = false;
 	//最初の説明windowの描画対象の変数
 	int drawDescWindow = 0;//0->2
+
+	//フェード中フラグ 後でまとめる
+	bool nowFade = false;
 
 	//ゲーム開始直後一回だけトレーニングシーンで行う処理
 	void InitImageDraw();
@@ -325,14 +331,14 @@ private:
 
 	std::vector<std::vector<int>>saveCard = {};
 
-	void addLog(std::string log);
+	void addLog(const std::string log);
 	void LogDraw();
 	//選択中のカードを移動する関数
 	void cardSelect();
 
 	//選択中のカードの詳細内容を教えてくれる関数
 	void teachCardRef();
-	t2k::Vector3 teach = {630,450,0};
+	t2k::Vector3 teach = { 630,450,0 };
 
 	//各シークエンスの最後列に描画する関数
 	void DrawBackGround();
@@ -344,14 +350,14 @@ private:
 	void DrawEnhanceWindow();
 
 	//キャラクターの能力値をSABCDで表す関数
-	void DrawStatusAlfa(Chara* c);
-	
+	void DrawStatusAlfa(const Chara* c);
+
 
 	//能力値をSABCDに変換する関数
-	int GetStatusAlfa(int Status);
+	int GetStatusAlfa(const int Status);
 
 	//キャラクターのアビリティ描画関数
-	void DrawAbility(Chara* c);
+	void DrawAbility(const Chara* c);
 
 	void NewCharaWindow();
 	//Sequenceを移動させる関数,enumも一緒に変更する
@@ -363,32 +369,46 @@ private:
 	void CharaSpeak();
 
 
-	//ロード時のカード生成用関数
-	void LoadCreateCard(int EventType, int EventNum, int PassedDay);
-	//ロード時のセル生成用関数
-	void LoadCreateCell(int EventType);
+	////ロード時のカード生成用関数
+	//void LoadCreateCard(int EventType, int EventNum, int PassedDay);
+	////ロード時のセル生成用関数
+	//void LoadCreateCell(int EventType);
 
 	//アイテム選択画面のカーソルを動かす関数
-	void selectItem(int HaveItemNum);
+	void selectItem(const int HaveItemNum);
 	//選択中のアイテムを指す位置
 	int nowSelectNum = 0;
 	//キャラクターのレンジとスタンスを描画する関数
-	void drawRangeAndStance(Chara* c);
+	void drawRangeAndStance(const Chara* c);
 
 	//左右矢印をアニメーションさせる関数
 	void arrowAnim();
-	//int leftArrowPos_x = 0;
-	t2k::Vector3 leftArrowPos = {330,600,0};
+	
+	t2k::Vector3 leftArrowPos = { 330,600,0 };
+
+	//強化選択画面のカーソル表示(いずれ上の関数と一緒にする)
+	void cursorAnim(const int x,const int y);
 
 	//矢印のアニメーションに使う変数
 	int ACT_SPEED = 60;
 	int act_wait = ACT_SPEED;
 	int MAX_MOTION_INDEX = 3;
 
-	int act_index=0;
+	int act_index = 0;
 	int motion_index_left = 0;
 	int motion_index_right = 0;
 
+	//カーソルのアニメーションに使う変数
+	int ACT_SPEED_CURSOR = 180;
+	int act_wait_cursor = ACT_SPEED_CURSOR;
+	int MAX_MOTION_INDEX_CURSOR = 6;
+
+	int act_index_cursor = 0;
+	int motion_index_cursor = 0;
+
+
 	//操作ボタン画像を描画する関数
 	void DrawKeyImage();
+
+	void ReleaseMemory();
 };

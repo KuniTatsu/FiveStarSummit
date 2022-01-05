@@ -21,6 +21,11 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+
+	delete aManager;
+	delete fControl;
+	delete sound;
+
 }
 
 void GameManager::LoadStatusImage()
@@ -55,6 +60,7 @@ void GameManager::ExitCharaVec()
 	auto it = chara.begin();
 	while (it != chara.end()) {
 		if ((*it)->charadata->stayYear == 3) {
+			//卒業生vectorに格納
 			exitChara.emplace_back((*it));
 			it = chara.erase(it);
 			continue;
@@ -62,7 +68,7 @@ void GameManager::ExitCharaVec()
 		it++;
 	}
 }
-
+//キャラクターの名前を入力する関数(未実装)
 void GameManager::InputName(std::string name)
 {
 	isInput = true;
@@ -76,32 +82,6 @@ void GameManager::InputName(std::string name)
 	//以降の入力はすべてInputHandleに行く
 
 	//毎フレーム実行が必要なのでUpdateに移動
-#if 0
-
-	while (!ProcessMessage()) {
-
-
-		//文字入力が終了しているならwhileループを抜ける
-		//if (CheckKeyInput(InputHandle) != 0)break;
-
-		//入力モードの描画↓出ない
-		DrawKeyInputModeString(640, 480);
-		//↓出ない
-		DrawBox(200, 200, 640, 480, -1, true);
-
-		//↓出る
-		//t2k::debugTrace("\n入力中\n");
-
-		//入力途中の文字列の描画↓出ない
-		DrawKeyInputString(0, 0, InputHandle);
-
-	}
-
-	//入力された文字列の取得
-	GetKeyInputString(String, InputHandle);
-
-	DeleteKeyInput(InputHandle);
-#endif
 
 
 }
@@ -116,8 +96,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_ATACK += value;
 			if (c->charadata->EXP_ATACK <= 0)c->charadata->EXP_ATACK = 0;
 			if (c->charadata->EXP_ATACK >= needExp[GetDecNum(c->charadata->ATACK)]) {
-				c->charadata->ATACK += 1;
 				c->charadata->EXP_ATACK = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->ATACK == 100)return;
+				c->charadata->ATACK += 1;
 			}
 		}
 	}
@@ -128,8 +110,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_DEFENCE += value;
 			if (c->charadata->EXP_DEFENCE <= 0)c->charadata->EXP_DEFENCE = 0;
 			if (c->charadata->EXP_DEFENCE >= needExp[GetDecNum(c->charadata->DEFENCE)]) {
-				c->charadata->DEFENCE += 1;
 				c->charadata->EXP_DEFENCE = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->DEFENCE == 100)return;
+				c->charadata->DEFENCE += 1;
 			}
 		}
 	}
@@ -140,8 +124,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_MAGIATACK += value;
 			if (c->charadata->EXP_MAGIATACK <= 0)c->charadata->EXP_MAGIATACK = 0;
 			if (c->charadata->EXP_MAGIATACK >= needExp[GetDecNum(c->charadata->MAGIATACK)]) {
-				c->charadata->MAGIATACK += 1;
 				c->charadata->EXP_MAGIATACK = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->MAGIATACK == 100)return;
+				c->charadata->MAGIATACK += 1;
 			}
 		}
 	}
@@ -152,8 +138,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->MAGIDEFENCE += value;
 			if (c->charadata->EXP_MAGIDEFENCE <= 0)c->charadata->EXP_MAGIDEFENCE = 0;
 			if (c->charadata->EXP_MAGIDEFENCE >= needExp[GetDecNum(c->charadata->MAGIDEFENCE)]) {
-				c->charadata->MAGIDEFENCE += 1;
 				c->charadata->EXP_MAGIDEFENCE = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->MAGIDEFENCE == 100)return;
+				c->charadata->MAGIDEFENCE += 1;
 			}
 		}
 	}
@@ -164,8 +152,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_SPEED += value;
 			if (c->charadata->EXP_SPEED <= 0)c->charadata->EXP_SPEED = 0;
 			if (c->charadata->EXP_SPEED >= needExp[GetDecNum(c->charadata->SPEED)]) {
-				c->charadata->SPEED += 1;
 				c->charadata->EXP_SPEED = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->SPEED == 100)return;
+				c->charadata->SPEED += 1;
 			}
 		}
 	}
@@ -176,8 +166,10 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_MIND += value;
 			if (c->charadata->EXP_MIND <= 0)c->charadata->EXP_MIND = 0;
 			if (c->charadata->EXP_MIND >= needExp[GetDecNum(c->charadata->MIND)]) {
-				c->charadata->MIND += 1;
 				c->charadata->EXP_MIND = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->MIND == 100)return;
+				c->charadata->MIND += 1;
 			}
 		}
 	}
@@ -188,13 +180,15 @@ void GameManager::StatusSet(int setType, int value)
 			c->charadata->EXP_VITALITY += value;
 			if (c->charadata->EXP_VITALITY <= 0)c->charadata->EXP_VITALITY = 0;
 			if (c->charadata->EXP_VITALITY >= needExp[GetDecNum(c->charadata->VITALITY)]) {
-				c->charadata->VITALITY += 1;
 				c->charadata->EXP_VITALITY = 0;
+				//すでに上限なら上昇させない
+				if (c->charadata->VITALITY == 100)return;
+				c->charadata->VITALITY += 1;
 			}
 
 		}
 	}
-	//else if
+	
 
 }
 
@@ -230,38 +224,53 @@ void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd,
 		}
 		//******閾値を突破していたときのステータス上昇処理******//
 		if (c->charadata->EXP_ATACK >= needExp[GetDecNum(c->charadata->ATACK)]) {
-			c->charadata->ATACK += 1;
 			c->charadata->EXP_ATACK = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->ATACK == 100)return;
+			c->charadata->ATACK += 1;
 		}
 
 		if (c->charadata->EXP_DEFENCE >= needExp[GetDecNum(c->charadata->DEFENCE)]) {
-			c->charadata->DEFENCE += 1;
 			c->charadata->EXP_DEFENCE = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->DEFENCE == 100)return;
+			c->charadata->DEFENCE += 1;
 		}
 
 		if (c->charadata->EXP_MAGIATACK >= needExp[GetDecNum(c->charadata->MAGIATACK)]) {
-			c->charadata->MAGIATACK += 1;
 			c->charadata->EXP_MAGIATACK = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->MAGIATACK == 100)return;
+			c->charadata->MAGIATACK += 1;
 		}
 
 		if (c->charadata->EXP_MAGIDEFENCE >= needExp[GetDecNum(c->charadata->MAGIDEFENCE)]) {
-			c->charadata->MAGIDEFENCE += 1;
 			c->charadata->EXP_MAGIDEFENCE = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->MAGIDEFENCE == 100)return;
+			c->charadata->MAGIDEFENCE += 1;
 		}
 
 		if (c->charadata->EXP_SPEED >= needExp[GetDecNum(c->charadata->SPEED)]) {
-			c->charadata->SPEED += 1;
 			c->charadata->EXP_SPEED = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->SPEED == 100)return;
+			c->charadata->SPEED += 1;
 		}
 
 		if (c->charadata->EXP_MIND >= needExp[GetDecNum(c->charadata->MIND)]) {
-			c->charadata->MIND += 1;
 			c->charadata->EXP_MIND = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->MIND == 100)return;
+			c->charadata->MIND += 1;
+
 		}
 
 		if (c->charadata->EXP_VITALITY >= needExp[GetDecNum(c->charadata->VITALITY)]) {
-			c->charadata->VITALITY += 1;
 			c->charadata->EXP_VITALITY = 0;
+			//すでに上限なら上昇させない
+			if (c->charadata->VITALITY == 100)return;
+			c->charadata->VITALITY += 1;
 		}
 		//******************//
 
@@ -273,7 +282,7 @@ void GameManager::StatusSet(int atk, int def, int magiatk, int magidef, int spd,
 
 void GameManager::AbilitySet(int abilityType, int abilityId)
 {
-	//最後のキャラの時点でcountが0ならそのキャラにアビリティを付与する？？
+
 	int count = 0;
 	for (auto c : chara) {
 		//1/10の確率でアビリティを付与する
@@ -317,53 +326,45 @@ void GameManager::TrainingSet(Chara* setChara, int id)
 void GameManager::Update()
 {
 	SceneManager::Update();
+	/*名前入力処理(未実装)
+	//文字入力が終了しているならwhileループを抜ける
+	if (InputHandle != 0 && CheckKeyInput(InputHandle) != 0) {
 
-	////文字入力が終了しているならwhileループを抜ける
-	//if (InputHandle != 0 && CheckKeyInput(InputHandle) != 0) {
+		//入力された文字列の取得
+		GetKeyInputString(String, InputHandle);
 
-	//	//入力された文字列の取得
-	//	GetKeyInputString(String, InputHandle);
+		DeleteKeyInput(InputHandle);
+		InputHandle = 0;
+		//string型に変換
+		std::string name(String, sizeof(String) / sizeof(String[0]));
+		isInput = false;
 
-	//	DeleteKeyInput(InputHandle);
-	//	InputHandle = 0;
-	//	//string型に変換
-	//	std::string name(String, sizeof(String) / sizeof(String[0]));
-	//	isInput = false;
-
-	//	////******debug*****
-	//	//std::string name = "test";
-
-
-	//	chara_ = new Chara(name, 1);
-	//	chara.emplace_back(chara_);
+		******debug*****
+		//std::string name = "test";
 
 
-	//}
-	//else {
-	//	//入力モードの描画
-	//	DrawKeyInputModeString(640, 480);
+		chara_ = new Chara(name, 1);
+		chara.emplace_back(chara_);
 
-	//	//↓出る
-	//	//t2k::debugTrace("\n入力中\n");
 
-	//	//DrawBox(50, 50, 100, 100, -1, true);
-	//	//入力途中の文字列の描画
-	//	DrawKeyInputString(200, 200, InputHandle);
-	//}
+	}
+	else {
+		//入力モードの描画
+		DrawKeyInputModeString(640, 480);
 
+
+		t2k::debugTrace("\n入力中\n");
+
+		//DrawBox(50, 50, 100, 100, -1, true);
+		//入力途中の文字列の描画
+		DrawKeyInputString(200, 200, InputHandle);
+	}
+	*/
 }
 
 void GameManager::Draw()
 {
-	/*if (isInput == false) {
-		DrawStringEx(800, 500, -1, "false");
-	}
-	else {
-		DrawStringEx(800, 500, -1, "true");
-	}*/
 	SceneManager::Render();
-	/*if (chara.empty())return;
-	CharactorStatusDraw();*/
 }
 
 void GameManager::initGameManager()
@@ -372,7 +373,7 @@ void GameManager::initGameManager()
 	//dManager = new DataManager();
 	sound = new Sound();
 	fControl = new FadeControl();
-	
+
 	deitatime_ = 0;
 	loadCharaCsv();
 	SceneManager::ChangeScene(SceneManager::SCENE::TITLE);
@@ -402,7 +403,7 @@ int GameManager::LoadGraphEx(std::string gh)
 
 	return ghmap[gh];
 }
-
+//未実装
 void GameManager::GetSceneData()
 {
 
@@ -451,7 +452,7 @@ void GameManager::loadCharaCsv()
 		charaGh[i - 1].emplace_back(hoge[2]);
 	}
 }
-//id	itemType	setDay	addStatus	addStatusNum	setAbility	setAbilityType	Desc
+
 void GameManager::loadItem()
 {
 	loadItemCsv = t2k::loadCsv("Csv/Item.csv");
@@ -475,7 +476,7 @@ void GameManager::loadItem()
 		int h = std::atoi(loadItemCsv[i][10].c_str());
 
 
-		Item* abi = new Item(a, b, c, d, e, f, g, loadItemCsv[i][7], loadItemCsv[i][8], loadItemCsv[i][9],h);
+		Item* abi = new Item(a, b, c, d, e, f, g, loadItemCsv[i][7], loadItemCsv[i][8], loadItemCsv[i][9], h);
 
 		//abilitytypeごとにリストに格納
 		itemList[b].emplace_back(abi);
@@ -498,7 +499,6 @@ int GameManager::GetDecNum(int nowStatus)
 
 void GameManager::stayYearUp()
 {
-
 	auto it = chara.begin();
 	while (it != chara.end()) {
 		(*it)->charadata->stayYear++;

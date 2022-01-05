@@ -6,25 +6,29 @@ class Menu;
 class TitleScene : public BaseScene {
 public:
 
-    Menu* title_back = nullptr;
+	Menu* title_Menu = nullptr;
 
-    TitleScene();
-    ~TitleScene();
+	TitleScene();
+	~TitleScene();
 
-    int title_gh = 0;
-    int enter_gh = 0;
 
-    int title_name_gh = 0;
 
-    int String_Color_Black;
+	void Update();
 
-    bool nowFade = false;
-
-    void Update();  
-
-    void Draw();    
+	void Draw();
 
 private:
-    bool init = false;
+
+	Menu* titleBack = nullptr;
+
+	bool init = false;
+	int title_gh = 0;
+	int enter_gh = 0;
+
+	int title_Name_gh = 0;
+	int title_Background_gh = 0;
+
+	int String_Color_Black;
+	bool nowFade = false;
 
 };

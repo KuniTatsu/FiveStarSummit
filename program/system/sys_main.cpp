@@ -35,7 +35,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	t2k::Input::initialize();
 
 	SetMainWindowText("Five Star Summit");
-
+	SetWindowIconID(220);
 	// メッセージループ
 	while( 1 )
 	{

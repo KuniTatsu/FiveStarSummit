@@ -103,6 +103,9 @@
     <ClInclude Include="program\support\FrameRateController.h" />
     <ClInclude Include="program\support\Support.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{16B0EE01-D3C9-4C3A-B205-DF401859A35C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

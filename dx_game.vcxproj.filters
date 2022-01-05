@@ -194,4 +194,9 @@
     <ClInclude Include="program\game\FadeControl.h" />
     <ClInclude Include="program\game\Item.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>
