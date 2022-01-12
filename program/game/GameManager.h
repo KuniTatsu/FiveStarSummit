@@ -10,6 +10,8 @@ class Item;
 class FadeControl;
 class Sound;
 
+//enum class sequence;
+
 class GameManager {
 
 public:
@@ -78,7 +80,8 @@ public:
 	//トレーニングを選択する関数
 	void TrainingSet(Chara* setChara, int id);
 
-
+	//Sequenceを移動させる関数,enumも一緒に変更する
+	//void ChangeSequence(sequence seq);
 
 	void Update();
 	void Draw();

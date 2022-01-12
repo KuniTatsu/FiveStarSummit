@@ -267,6 +267,8 @@ private:
 	//フェード中フラグ 後でまとめる
 	bool nowFade = false;
 
+
+
 	//ゲーム開始直後一回だけトレーニングシーンで行う処理
 	void InitImageDraw();
 
@@ -362,6 +364,9 @@ private:
 	void NewCharaWindow();
 	//Sequenceを移動させる関数,enumも一緒に変更する
 	void ChangeSequence(sequence seq);
+
+
+
 	//windowの初期化をまとめた関数
 	void menuInit();
 

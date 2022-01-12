@@ -376,7 +376,7 @@ void GameManager::initGameManager()
 
 	deitatime_ = 0;
 	loadCharaCsv();
-	SceneManager::ChangeScene(SceneManager::SCENE::TITLE);
+	SceneManager::ChangeScene(SceneManager::SCENE::BATTLE);
 
 	itemList.resize(3);
 	loadItem();

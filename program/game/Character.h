@@ -88,6 +88,9 @@ public:
 	//type‚ª1‚È‚çEnhanceWindow‚ÌÀ•W‚ğ•Ï‚¦‚é
 	void changeWindowPos(int x, int y, int type);
 
+	//void CharaStatusDraw();
+
+
 
 private:
 	int StatusRandom(int maxnum, int randomtype,int year);

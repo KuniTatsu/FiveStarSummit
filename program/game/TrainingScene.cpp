@@ -484,14 +484,14 @@ bool TrainingScene::Seq_MenuDraw_1(const float deltatime)
 
 	//タイトルに戻ると例外発生するため未実装
 
-	/*
+	
 	//タイトルへ戻るを選択したら
 	else if (FrontMenu->SelectNum == 4 && t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 		FrontMenu->menu_live = false;
 		nowFade = true;
 		return true;
 	}
-	*/
+	
 
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_ESCAPE)) {
 		FrontMenu->menu_live = false;
@@ -1058,6 +1058,9 @@ void TrainingScene::Update()
 		return;
 	}
 
+	if (nowFade == true)return;
+
+
 	//なぜかタイトルに戻るとここで例外を吐く m_pSceneはTitleになってるはずなのになぜここのUpdateが呼ばれているんだ？？？？？？？？？？？
 	for (auto hoge : cell_) {
 		if (hoge->is_alive_ == false) {
@@ -1074,6 +1077,9 @@ void TrainingScene::Update()
 void TrainingScene::Draw()
 {
 	if (nowSeq == sequence::init) return;
+	//if (nowFade == true)return;
+
+
 	int i = 0;
 	for (auto cell : cell_) {
 		cell->pos_ = tbl[i++];

@@ -77,6 +77,10 @@ void Chara::changeWindowPos(int x, int y, int type)
 	}
 }
 
+//void Chara::CharaStatusDraw()
+//{
+//}
+
 //randomtype:0→基本ステータス以外のもの
 //randomtype:1→基本ステータス 20~40をとる
 int Chara::StatusRandom(int maxnum, int randomtype, int year)
