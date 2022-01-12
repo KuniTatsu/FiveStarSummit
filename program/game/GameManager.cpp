@@ -11,6 +11,7 @@
 #include"Item.h"
 #include "FadeControl.h"
 #include "SoundManager.h"
+#include"SkillManager.h"
 
 
 
@@ -371,6 +372,7 @@ void GameManager::initGameManager()
 {
 	aManager = new AbilityManager();
 	//dManager = new DataManager();
+	skillManager = new SkillManager();
 	sound = new Sound();
 	fControl = new FadeControl();
 

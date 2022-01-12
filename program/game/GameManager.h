@@ -9,6 +9,7 @@ class DataManager;
 class Item;
 class FadeControl;
 class Sound;
+class SkillManager;
 
 //enum class sequence;
 
@@ -23,6 +24,7 @@ public:
 	Chara* chara_ = nullptr;
 	AbilityManager* aManager = nullptr;
 	DataManager* dManager = nullptr;
+	SkillManager* skillManager = nullptr;
 
 	FadeControl* fControl = nullptr;
 

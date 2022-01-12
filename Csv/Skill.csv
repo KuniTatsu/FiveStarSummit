@@ -1,0 +1,6 @@
+id(int),Skill_Type(int),Skill_Name(std::string),EnhanceStatus,IncreaseNum(int %),ChargeTime(float),ReCastTime(float),Range_Width(int),Range_Height(int),Penetrate(bool),KnockBack(bool),Stan(int),Skill_Desc,Desc
+1001,0,‹‡,ATACK,10,0,2,1,1,FALSE,FALSE,0,‘f‘‚¢‹‡a‚è,’ÊíUŒ‚˜g
+1002,0,h“Ë,ATACK,20,0,2,3,1,TRUE,FALSE,0,ˆê’¼ü‚ÉŠÑ’Ê‚·‚éh“Ë,Œ¡§˜g
+1003,0,“ã‚¬•¥‚¢,ATACK,30,0,3,1,3,FALSE,FALSE,1,–Ú‚Ì‘O‚ğ“ã‚¬•¥‚¤,L”ÍˆÍ’ÊíUŒ‚
+1004,0,—ô‹óa,ATACK,40,3,3,2,2,FALSE,TRUE,2,Œ•Œ‚ğ”ò‚Î‚·,‹­—Í‚È”ÍˆÍUŒ‚
+1005,0,^E—ô‹óa,ATACK,50,5,5,2,3,FALSE,TRUE,3,L”ÍˆÍ‚ÉŒ•Œ‚ğ‚«”ò‚Î‚·,’´‹­—Í‚È”ÍˆÍUŒ‚(ULT)

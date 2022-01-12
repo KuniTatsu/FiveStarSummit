@@ -10,6 +10,7 @@ BattleScene::BattleScene()
 	stagetestgh = gManager->LoadGraphEx("graphics/red.png");
 
 	LoadDivGraph("graphics/player_chara_act_right.png", 4, 4, 1, 32, 32, playergh, false);
+	LoadDivGraph("graphics/enemy_BattleTest.png", 3, 3, 1, 32, 32, enemyGh, false);
 
 	colorBlack = GetColor(0, 0, 0);
 	MyStage.resize(9);
@@ -31,13 +32,21 @@ void BattleScene::Draw()
 {
 	DrawStage();
 	DrawRotaGraph(MyStage[characterPosNum][3], MyStage[characterPosNum][4], 1, 0, playergh[0], true);
+	DrawRotaGraph(EnemyStage[enemyPosNum][3], EnemyStage[enemyPosNum][4], 1, 0, enemyGh[0], true);
 }
 
 bool BattleScene::Seq_Main(const float deltatime)
 {
-
-	//DrawBox(200, 200, 600, 600, -1, true);
+	//Character‚ÌˆÚ“®ˆ—
 	MoveCharacter();
+	//enemy‚ÌˆÚ“®ˆ—
+	MoveEnemy();
+
+	//Character‚ÌUŒ‚ˆ—
+
+	//enemy‚ÌUŒ‚ˆ—
+
+
 	return true;
 }
 
@@ -106,13 +115,7 @@ void BattleScene::SetStage(std::vector<std::vector<int>> stage)
 			EnemyStage[i].emplace_back(center_X);
 			EnemyStage[i].emplace_back(center_Y);
 		}
-
-
-
 	}
-
-
-
 }
 
 void BattleScene::DrawStage()
@@ -123,9 +126,6 @@ void BattleScene::DrawStage()
 	for (auto eStage : EnemyStage) {
 		DrawRotaGraph(eStage[3], eStage[4], 1, 0, eStage[2], false);
 	}
-
-
-
 }
 
 void BattleScene::MoveCharacter()
@@ -146,8 +146,29 @@ void BattleScene::MoveCharacter()
 		if (characterPosNum >= 6)return;
 		characterPosNum += 3;
 	}
+}
 
-
-
-
+void BattleScene::MoveEnemy()
+{
+	enemyMoveReCastTime -= gManager->deitatime_;
+	if (enemyMoveReCastTime<0) {
+		enemyMoveReCastTime = ENEMYMOVERECASTTIMEDEFAULT;
+		int rand = GetRand(3);
+		if (rand == 0) {
+			if (enemyPosNum % 3 == 0)return;
+			enemyPosNum -= 1;
+		}
+		else if (rand == 1) {
+			if (enemyPosNum <= 2)return;
+			enemyPosNum -= 3;
+		}
+		else if (rand == 2) {
+			if (enemyPosNum % 3 == 2)return;
+			enemyPosNum += 1;
+		}
+		else if (rand == 3) {
+			if (enemyPosNum >= 6)return;
+			enemyPosNum += 3;
+		}
+	}
 }

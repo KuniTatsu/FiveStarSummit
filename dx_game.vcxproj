@@ -33,6 +33,8 @@
     <ClCompile Include="program\game\Item.cpp" />
     <ClCompile Include="program\game\MenuWindow.cpp" />
     <ClCompile Include="program\game\SceneManager.cpp" />
+    <ClCompile Include="program\game\Skill.cpp" />
+    <ClCompile Include="program\game\SkillManager.cpp" />
     <ClCompile Include="program\game\SoundManager.cpp" />
     <ClCompile Include="program\game\TitleScene.cpp" />
     <ClCompile Include="program\game\TrainingScene.cpp" />
@@ -76,6 +78,8 @@
     <ClInclude Include="program\game\MenuWindow.h" />
     <ClInclude Include="program\game\Scene.h" />
     <ClInclude Include="program\game\SceneManager.h" />
+    <ClInclude Include="program\game\Skill.h" />
+    <ClInclude Include="program\game\SkillManager.h" />
     <ClInclude Include="program\game\SoundManager.h" />
     <ClInclude Include="program\game\TitleScene.h" />
     <ClInclude Include="program\game\TrainingScene.h" />

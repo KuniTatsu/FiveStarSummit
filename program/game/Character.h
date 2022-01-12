@@ -4,6 +4,7 @@
 class CharaWindow;
 class Ability;
 class Menu;
+class Skill;
 
 class Chara {
 
@@ -32,6 +33,7 @@ public:
 	typedef struct {
 		std::string name_;	//名前
 //---------全般ステ-------------------2
+		int WEAPON;		//使用武器 0:剣,2:槍,3:杖,4:弓,5:拳　初期はすべて0
 		int RANGETYPE;	//レンジ適正 0:短,1:中,2:長
 		int STANCE;		//戦闘スタンス 0:速攻,1:堅実,2:反撃,3:普通
 //---------基礎ステ-------------------7
@@ -61,7 +63,8 @@ public:
 		int VSINFIGH;	//対近距離の強さ 0:G,1:F,2:E,3:D,4:C,5:B,6:A
 		int VSRANGE;	//対遠距離の強さ 0:G,1:F,2:E,3:D,4:C,5:B,6:A
 //---------特殊能力-------------------1
-		std::vector<Ability*> Ability;	//所持アビリティ
+		std::vector<Ability*> Ability;	//所持アビリティ パッシブ発動
+		std::vector<Skill*> Skill;	//所持スキル アクティブ発動
 //---------テンション---------------------1
 	//悪い--------------->良い
 		//0...1...2...3...4

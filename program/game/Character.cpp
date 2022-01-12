@@ -4,6 +4,7 @@
 #include"DxLib.h"
 #include"Ability.h"
 #include"MenuWindow.h"
+#include"Skill.h"
 
 std::string Chara::trainingAll[Chara::MENU_MAX] = {
 		"‚¨‚Ü‚©‚¹",
@@ -35,11 +36,11 @@ Chara::Chara(std::string name, int year)
 	}
 	//int atk = StatusRandom(20,1);
 	*charadata = { name,
-					rangetype,stance,
+					0,rangetype,stance,
 					mainStatus[0],mainStatus[1],mainStatus[2],mainStatus[3],mainStatus[4],mainStatus[5],mainStatus[6],
 					0,0,0,0,0,0,0,
 					0,0,0,0,
-					{} ,
+					{},{},
 					2 ,
 					Chara::trainingAll[Chara::‚¨‚Ü‚©‚¹],
 					year

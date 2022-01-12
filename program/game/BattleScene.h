@@ -28,6 +28,14 @@ private:
 	int colorBlack = 0;
 
 	int playergh[4] = {};
+	int enemyGh[3] = {};
+
+	const float MYMOVERECASTTIMEDEFAULT = 2;
+	const float ENEMYMOVERECASTTIMEDEFAULT = 2;
+
+
+	float myMoveReCastTime = 2;
+	float enemyMoveReCastTime = 1;
 
 	//初期シークエンスを設定
 	t2k::Sequence<BattleScene*> main_sequence_ =
@@ -63,5 +71,8 @@ private:
 
 	int characterPosNum = 0;
 	void MoveCharacter();
+
+	int enemyPosNum = 0;
+	void MoveEnemy();
 
 };
