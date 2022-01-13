@@ -4,6 +4,7 @@
 #include<vector>
 #include<string>
 
+class Chara;
 
 class BattleScene : public BaseScene {
 public:
@@ -74,5 +75,8 @@ private:
 
 	int enemyPosNum = 0;
 	void MoveEnemy();
+
+
+	void DrawCharaSkill(Chara* c);
 
 };

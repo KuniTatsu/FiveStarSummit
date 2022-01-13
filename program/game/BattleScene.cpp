@@ -1,6 +1,10 @@
 #include "BattleScene.h"
 #include"GameManager.h"
 #include"DxLib.h"
+#include"Character.h"
+#include"Skill.h"
+#include"../library/t2klib.h"
+#include "../support/Support.h"
 
 extern GameManager* gManager;
 
@@ -17,6 +21,11 @@ BattleScene::BattleScene()
 	EnemyStage.resize(9);
 	SetStage(MyStage);
 	SetStage(EnemyStage);
+
+	//**test テスト用のキャラ作成
+	gManager->MakeCharacter("hogehoge", 1);
+
+	//**
 }
 
 BattleScene::~BattleScene()
@@ -33,6 +42,10 @@ void BattleScene::Draw()
 	DrawStage();
 	DrawRotaGraph(MyStage[characterPosNum][3], MyStage[characterPosNum][4], 1, 0, playergh[0], true);
 	DrawRotaGraph(EnemyStage[enemyPosNum][3], EnemyStage[enemyPosNum][4], 1, 0, enemyGh[0], true);
+
+	for (auto c : gManager->chara) {
+		DrawCharaSkill(c);
+	}
 }
 
 bool BattleScene::Seq_Main(const float deltatime)
@@ -171,4 +184,14 @@ void BattleScene::MoveEnemy()
 			enemyPosNum += 3;
 		}
 	}
+}
+
+void BattleScene::DrawCharaSkill(Chara* c)
+{
+	for (int i = 0; i < c->charadata->Skill.size(); ++i) {
+		DrawStringEx(100, 100 + 20 * i, -1, "%s", c->charadata->Skill[i]->SkillName.c_str());
+	}
+
+
+
 }

@@ -12,6 +12,7 @@
 #include "FadeControl.h"
 #include "SoundManager.h"
 #include"SkillManager.h"
+#include"Skill.h"
 
 
 
@@ -52,6 +53,7 @@ void GameManager::MakeCharacter(const std::string& name, int year)
 
 	chara_->gh = SetCharaGh(random);
 
+	SetWeaponSkill(chara_, chara_->charadata->WEAPON);
 	chara.emplace_back(chara_);
 	//InputName(name);
 }
@@ -189,7 +191,7 @@ void GameManager::StatusSet(int setType, int value)
 
 		}
 	}
-	
+
 
 }
 
@@ -505,6 +507,16 @@ void GameManager::stayYearUp()
 	while (it != chara.end()) {
 		(*it)->charadata->stayYear++;
 		it++;
+	}
+}
+
+void GameManager::SetWeaponSkill(Chara* C, int SkillNum)
+{
+	//SkillNum番のスキル全てをキャラクタのスキルvectorに格納する
+	for (int i = 0; i < skillManager->skillAll[SkillNum].size(); ++i) {
+
+		Skill* skill = skillManager->skillAll[SkillNum][i];
+		C->charadata->Skill.emplace_back(skill);
 	}
 }
 

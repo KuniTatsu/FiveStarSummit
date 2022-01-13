@@ -106,6 +106,8 @@ public:
 
 	//学年を一つ上げる関数
 	void stayYearUp();
+	//武器に応じたスキルをCharacterにわたす関数
+	void SetWeaponSkill(Chara* C,int SkillNum);
 
 private:
 	//char String[256] = {};
